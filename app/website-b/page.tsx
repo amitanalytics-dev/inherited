@@ -122,7 +122,7 @@ export default function WebsiteB() {
           <div className="text-xs font-bold tracking-widest text-gold uppercase mb-3">
             Powered by Aletheia AI · aletheiaai.in
           </div>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">INHERITED · LEELA SKINCARE</h1>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">INHERITED SKINCARE</h1>
           <p className="text-cream/70 text-base">Founder Intelligence Brief — Website Strategy</p>
           <PageTabs />
         </div>

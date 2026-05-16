@@ -82,12 +82,6 @@ const RISKS = [
     description: "If the personalised inserts are printed on low-quality card, they undermine the premium positioning that justifies £25+ price points.",
     mitigation: "Print on minimum 350gsm card with a matte finish. This costs approximately £25–40 for 100 cards at a local printer. Non-negotiable quality signal.",
   },
-  {
-    level: 'LOW' as const,
-    title: 'Two-brand confusion',
-    description: "Customers who discover Inherited Skincare (via the Cleansing Balm) and then find Leela Skincare (via DNC) may be confused about whether they are the same brand. This creates trust hesitation.",
-    mitigation: "Add a subtle 'From the same founder as Leela Skincare' line on Inherited product pages, and vice versa. This turns potential confusion into a credibility signal.",
-  },
 ]
 
 const levelStyle: Record<string, string> = {
@@ -111,7 +105,7 @@ export default function WebsiteA() {
           <div className="text-xs font-bold tracking-widest text-gold uppercase mb-3">
             Powered by Aletheia AI · aletheiaai.in
           </div>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">INHERITED · LEELA SKINCARE</h1>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2">INHERITED SKINCARE</h1>
           <p className="text-cream/70 text-base">Founder Intelligence Brief — Website Strategy</p>
           <PageTabs />
         </div>
@@ -152,7 +146,7 @@ export default function WebsiteA() {
             {/* Section 1: Nav */}
             <div className="bg-white border-b border-slate-100 px-6 py-3 flex items-center justify-between relative">
               <span className="absolute -left-0 top-3 bg-gold text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full ml-2">1</span>
-              <span className="font-serif font-bold text-sm text-ink ml-6">INHERITED · LEELA</span>
+              <span className="font-serif font-bold text-sm text-ink ml-6">INHERITED</span>
               <div className="flex gap-4 text-xs text-ink/60">
                 <span>Shop</span>
                 <span className="font-semibold text-ink">For Eczema</span>

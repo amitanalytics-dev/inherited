@@ -33,7 +33,7 @@ interface FormData {
   s7q6: string; s7q6_notes: string
   s8q1: string
   s8q2: string; s8q2_notes: string
-  s8q3: string; s8q4: string
+  s8q3: string
   s8q5: string; s8q5_notes: string
   s8q6: string
 }
@@ -52,7 +52,7 @@ const INITIAL: FormData = {
   s7q3: [], s7q3_notes: '', s7q4: '', s7q5: '',
   s7q6: '', s7q6_notes: '',
   s8q1: '', s8q2: '', s8q2_notes: '',
-  s8q3: '', s8q4: '', s8q5: '', s8q5_notes: '', s8q6: '',
+  s8q3: '', s8q5: '', s8q5_notes: '', s8q6: '',
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -373,7 +373,7 @@ export default function InheritedForm() {
             Powered by Aletheia AI · aletheiaai.in
           </div>
           <h1 className="font-serif text-3xl md:text-4xl font-bold mb-2 leading-tight">
-            INHERITED · LEELA SKINCARE
+            INHERITED SKINCARE
           </h1>
           <p className="text-cream/70 text-base">Founder Intelligence Brief — Response Form</p>
           <p className="text-cream/40 text-xs mt-4 leading-relaxed max-w-xl">
@@ -815,19 +815,6 @@ Cleansing Balm: £___ (unchanged / changed from £___ on ___, reason: ___)`}
             onSelect={v => set('s8q3', v)}
           />
 
-          <MCQCard
-            section="8" n={4}
-            question="What is the relationship between Inherited Skincare and Leela Skincare? Is there a plan to merge, keep separate, or differentiate further?"
-            why="The two-brand structure creates operational overhead and customer confusion. If they will merge, website design converges. If separate, each needs its own strategy."
-            options={[
-              'Plan to merge into one brand eventually',
-              'Keeping permanently separate',
-              'Actively differentiating further (distinct audiences)',
-              'Undecided — open to strategy input',
-            ]}
-            value={form.s8q4}
-            onSelect={v => set('s8q4', v)}
-          />
 
           <MCQCard
             section="8" n={5}

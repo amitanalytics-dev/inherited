@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
     const { error } = await resend.emails.send({
       from: 'Aletheia AI <onboarding@resend.dev>',
       to: 'amit@vestrs.com',
-      subject: 'Inherited · Leela Skincare — Founder Responses Received',
+      subject: 'Inherited Skincare — Founder Responses Received',
       text: `New founder responses submitted via the Inherited Intelligence Brief form.\n\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Kolkata' })} IST\n\n${body}\n\n---\nPrepared by Aletheia AI · aletheiaai.in`,
     })
 
