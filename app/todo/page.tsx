@@ -2,6 +2,8 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useQuery } from 'convex/react'
+import { api } from '../../convex/_generated/api'
 import PageTabs from '../components/PageTabs'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -490,8 +492,10 @@ function TodoContent() {
   const params = useSearchParams()
   const [data, setData] = useState<FD | null>(null)
   const [ready, setReady] = useState(false)
+  const latest = useQuery(api.responses.getLatest)
 
   useEffect(() => {
+    // 1. URL param (immediate post-submit redirect)
     const encoded = params.get('d')
     if (encoded) {
       try {
@@ -500,8 +504,9 @@ function TodoContent() {
         setReady(true)
         localStorage.setItem('ihf_responses', JSON.stringify(decoded))
         return
-      } catch { /* fall through to localStorage */ }
+      } catch { /* fall through */ }
     }
+    // 2. localStorage (same device, later visit)
     const stored = localStorage.getItem('ihf_responses')
     if (stored) {
       try {
@@ -510,8 +515,14 @@ function TodoContent() {
         return
       } catch { /* fall through */ }
     }
-    setReady(true)
-  }, [params])
+    // 3. Convex (cross-device — waits for query to resolve)
+    if (latest !== undefined) {
+      if (latest?.responses) {
+        setData(latest.responses as FD)
+      }
+      setReady(true)
+    }
+  }, [params, latest])
 
   if (!ready) return <div className="min-h-screen bg-cream" />
   if (!data) return <EmptyState />

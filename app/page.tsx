@@ -1,7 +1,9 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useMutation, useQuery } from 'convex/react'
+import { api } from '../convex/_generated/api'
 import PageTabs from './components/PageTabs'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -245,7 +247,45 @@ function Divider() {
 export default function InheritedForm() {
   const [form, setForm] = useState<FormData>(INITIAL)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle')
+  const [locked, setLocked] = useState(false)
   const router = useRouter()
+  const saveResponse = useMutation(api.responses.save)
+  const latestResponse = useQuery(api.responses.getLatest)
+
+  // Lock the form if responses already exist (localStorage or Convex)
+  useEffect(() => {
+    const stored = localStorage.getItem('ihf_responses')
+    if (stored) { setLocked(true); return }
+  }, [])
+
+  useEffect(() => {
+    if (latestResponse) setLocked(true)
+  }, [latestResponse])
+
+  if (locked) {
+    return (
+      <main className="min-h-screen bg-cream flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <div className="w-14 h-14 rounded-full bg-ink/10 flex items-center justify-center mx-auto mb-5">
+            <svg className="w-7 h-7 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 className="font-serif text-2xl text-ink font-bold mb-3">Responses already submitted.</h1>
+          <p className="text-sm text-ink/60 leading-relaxed mb-6">
+            Your answers have been received and your growth plan has been updated.
+            You cannot resubmit — contact your Aletheia AI advisor to make changes.
+          </p>
+          <a
+            href="/todo"
+            className="inline-block bg-ink text-cream px-8 py-3 rounded-xl text-sm font-semibold hover:bg-ink/80 transition-all"
+          >
+            View your growth plan →
+          </a>
+        </div>
+      </main>
+    )
+  }
 
   const assumptionsRef = useRef<HTMLDivElement>(null)
   const economicsRef = useRef<HTMLDivElement>(null)
@@ -278,6 +318,7 @@ export default function InheritedForm() {
       })
       if (res.ok) {
         localStorage.setItem('ihf_responses', JSON.stringify(payload))
+        await saveResponse({ responses: payload }).catch(() => {/* non-fatal */})
         const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
         router.push(`/todo?d=${encoded}`)
       } else {
