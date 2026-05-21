@@ -7,6 +7,9 @@ const TABS = [
   { label: 'Founder Form', href: '/' },
   { label: 'Website A — Relief', href: '/website-a' },
   { label: 'Website B — Heritage', href: '/website-b' },
+  { label: 'Heritage Strategy', href: '/strategy' },
+  { label: 'Growth Plan', href: '/todo' },
+  { label: 'Command Centre', href: '/command-centre' },
 ]
 
 export default function PageTabs() {

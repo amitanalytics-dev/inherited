@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import PageTabs from './components/PageTabs'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -243,7 +244,8 @@ function Divider() {
 
 export default function InheritedForm() {
   const [form, setForm] = useState<FormData>(INITIAL)
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle')
+  const router = useRouter()
 
   const assumptionsRef = useRef<HTMLDivElement>(null)
   const economicsRef = useRef<HTMLDivElement>(null)
@@ -274,32 +276,16 @@ export default function InheritedForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      if (res.ok) setStatus('success')
-      else setStatus('error')
+      if (res.ok) {
+        localStorage.setItem('ihf_responses', JSON.stringify(payload))
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
+        router.push(`/todo?d=${encoded}`)
+      } else {
+        setStatus('error')
+      }
     } catch {
       setStatus('error')
     }
-  }
-
-  if (status === 'success') {
-    return (
-      <main className="min-h-screen bg-cream flex items-center justify-center p-6">
-        <div className="max-w-md text-center">
-          <div className="w-14 h-14 rounded-full bg-ink/10 flex items-center justify-center mx-auto mb-5">
-            <svg className="w-7 h-7 text-ink" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h1 className="font-serif text-2xl text-ink font-bold mb-3">Responses saved.</h1>
-          <p className="text-sm text-ink/60 leading-relaxed mb-6">
-            Thank you. Aletheia AI will process your answers and return an updated growth plan
-            within 24 hours — with all projections, email timings, subscription pricing, and
-            website recommendation recalculated based on your actual numbers.
-          </p>
-          <p className="text-xs text-ink/30">You may close this page.</p>
-        </div>
-      </main>
-    )
   }
 
   const NAV = [
