@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Root Variables ─────────────────────────────────────────────────────── */
+:root {
+  --brand-cream: #FFFDF8;
+  --brand-dark: #1A0E06;
+  --brand-amber: #C4874A;
+  --brand-warm: #F5EDE0;
+  --brand-muted: #6B5B4E;
+  --brand-green: #3D5A40;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--brand-cream);
+  color: var(--brand-dark);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--brand-amber);
+  color: #fff;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brand-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-amber);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0693a;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+.font-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+/* ─── Prose (blog content) ───────────────────────────────────────────────── */
+.prose-brand {
+  color: var(--brand-dark);
+}
+.prose-brand h1,
+.prose-brand h2,
+.prose-brand h3 {
+  font-family: var(--font-cormorant), Georgia, serif;
+  color: var(--brand-dark);
+}
+.prose-brand p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+.prose-brand a {
+  color: var(--brand-amber);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-brand img {
+  border-radius: 4px;
+  margin: 2rem auto;
+}
+
+/* ─── Marquee ────────────────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Hero gradient overlay ──────────────────────────────────────────────── */
+.hero-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(26, 14, 6, 0.72) 0%,
+    rgba(26, 14, 6, 0.4) 60%,
+    rgba(26, 14, 6, 0.15) 100%
+  );
+}
+
+/* ─── Transition defaults ────────────────────────────────────────────────── */
+* {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* ─── Product card image zoom ────────────────────────────────────────────── */
+.product-image-zoom img {
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-image-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* ─── Link underline animation ───────────────────────────────────────────── */
+.link-hover {
+  position: relative;
+  display: inline-block;
+}
+.link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 300ms ease;
+}
+.link-hover:hover::after {
+  width: 100%;
+}
+
+/* ─── Section paddings ───────────────────────────────────────────────────── */
+.section-pad {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+@media (min-width: 768px) {
+  .section-pad {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
