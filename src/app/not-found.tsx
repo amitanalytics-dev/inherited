@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-brand-cream pt-20 flex items-center">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28 flex items-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div>
@@ -39,7 +39,7 @@ export default function NotFound() {
 
           {/* Decorative image */}
           <div className="relative hidden md:block">
-            <div className="relative aspect-square overflow-hidden">
+            <div className="relative aspect-[4/5] overflow-hidden">
               <Image
                 src="/images/products/5_radiance_serum_HERO.jpg"
                 alt="Inherited Skincare"

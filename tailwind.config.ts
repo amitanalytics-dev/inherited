@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         'brand-cream': '#FFFDF8',
-        'brand-dark': '#1A0E06',
-        'brand-amber': '#C4874A',
+        'brand-dark': '#140A04',
+        'brand-amber': '#D89A5B',
         'brand-warm': '#F5EDE0',
         'brand-muted': '#6B5B4E',
         'brand-green': '#3D5A40',

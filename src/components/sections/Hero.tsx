@@ -4,21 +4,47 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-export default function Hero() {
+type HeroProps = {
+  headline1?: string
+  headline2?: string
+  subline?: string
+  image?: string
+  video?: string
+}
+
+export default function Hero({
+  headline1 = 'Glow Like You',
+  headline2 = 'Inherited It.',
+  subline = 'Ghee-powered Ayurvedic skincare, handmade in the UK.',
+  image = '/images/brand/hero_lifestyle.jpg',
+  video,
+}: HeroProps) {
+  const hasVideo = Boolean(video && video.trim())
   return (
     <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
-      {/* Background image */}
-      <Image
-        src="/images/products/_ALL13.jpg"
-        alt="Inherited Skincare — The Full Ritual"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      {/* Background — video takes priority over image */}
+      {hasVideo ? (
+        <video
+          src={video}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-right"
+        />
+      ) : (
+        <Image
+          src={image}
+          alt="Warm ghee poured into a marble bowl beside the Deep Nourishing Cream on its pomegranate box"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-right"
+        />
+      )}
 
-      {/* Gradient overlay */}
-      <div className="hero-overlay absolute inset-0 z-10" />
+      {/* Soft cream gradient on the left so dark text stays readable */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-brand-cream/90 via-brand-cream/45 to-transparent" />
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -28,7 +54,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-6"
+            className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-6 font-semibold"
           >
             Ayurvedic Ghee Skincare · Made in the UK
           </motion.p>
@@ -38,12 +64,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="font-display font-semibold text-brand-cream leading-[1.05] mb-6"
+            className="font-display font-semibold text-brand-dark leading-[1.05] mb-6"
             style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)' }}
           >
-            Ancient Wisdom.
+            {headline1}
             <br />
-            <em className="italic">Modern Skin.</em>
+            <em className="italic">{headline2}</em>
           </motion.h1>
 
           {/* Sub-heading */}
@@ -51,10 +77,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
-            className="font-body text-base md:text-lg text-brand-cream/80 max-w-md leading-relaxed mb-10"
+            className="font-body text-base md:text-lg text-brand-muted max-w-md leading-relaxed mb-10"
           >
-            Born from a grandmother&rsquo;s recipe. Perfected for modern skin.
-            Ghee-powered formulas rooted in centuries of Ayurvedic wisdom.
+            {subline}
           </motion.p>
 
           {/* CTA buttons */}
@@ -66,15 +91,15 @@ export default function Hero() {
           >
             <Link
               href="/products"
-              className="inline-flex items-center justify-center px-8 py-4 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#a0693a] transition-colors shadow-lg hover:shadow-xl active:scale-95"
+              className="inline-flex w-full sm:w-auto items-center justify-center px-8 py-4 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors shadow-lg hover:shadow-xl"
             >
               Shop the Ritual
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center justify-center px-8 py-4 border border-brand-cream/60 text-brand-cream font-body text-xs tracking-widest uppercase hover:bg-brand-cream/10 transition-colors backdrop-blur-sm"
+              className="inline-flex w-full sm:w-auto items-center justify-center px-8 py-4 border border-brand-dark/50 text-brand-dark font-body text-xs tracking-widest uppercase hover:bg-brand-dark hover:text-brand-cream transition-colors"
             >
-              Discover Our Story
+              Our Story
             </Link>
           </motion.div>
 
@@ -96,8 +121,10 @@ export default function Hero() {
                 </svg>
               ))}
             </div>
-            <p className="font-body text-xs text-brand-cream/60">
-              <span className="text-brand-cream font-medium">4.9/5</span> from 2,000+ happy customers
+            <p className="font-body text-sm text-brand-muted">
+              <span className="text-brand-dark font-semibold">5★ Reviews</span>
+              <span className="mx-2 text-brand-amber">|</span>
+              1,800+ happy customers
             </p>
           </motion.div>
         </div>
@@ -110,13 +137,13 @@ export default function Hero() {
         transition={{ delay: 1.4, duration: 0.6 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
       >
-        <p className="font-body text-[10px] tracking-widest uppercase text-brand-cream/40">
+        <p className="font-body text-[10px] tracking-widest uppercase text-brand-muted/60">
           Scroll
         </p>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-          className="w-px h-8 bg-gradient-to-b from-brand-cream/40 to-transparent"
+          className="w-px h-8 bg-gradient-to-b from-brand-muted/50 to-transparent"
         />
       </motion.div>
     </section>

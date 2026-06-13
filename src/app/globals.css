@@ -5,8 +5,8 @@
 /* ─── Root Variables ─────────────────────────────────────────────────────── */
 :root {
   --brand-cream: #FFFDF8;
-  --brand-dark: #1A0E06;
-  --brand-amber: #C4874A;
+  --brand-dark: #140A04;
+  --brand-amber: #D89A5B;
   --brand-warm: #F5EDE0;
   --brand-muted: #6B5B4E;
   --brand-green: #3D5A40;
@@ -45,7 +45,7 @@ body {
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a0693a;
+  background: #b87f43;
 }
 
 /* ─── Typography ─────────────────────────────────────────────────────────── */
@@ -86,19 +86,32 @@ h1, h2, h3, h4 {
   display: flex;
   width: max-content;
   animation: marquee 30s linear infinite;
+  will-change: transform;
 }
 .marquee-track:hover {
   animation-play-state: paused;
 }
 
+/* ─── Hide scrollbar (quote rail) ────────────────────────────────────────── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* ─── Hero gradient overlay ──────────────────────────────────────────────── */
 .hero-overlay {
-  background: linear-gradient(
-    to right,
-    rgba(26, 14, 6, 0.72) 0%,
-    rgba(26, 14, 6, 0.4) 60%,
-    rgba(26, 14, 6, 0.15) 100%
-  );
+  background:
+    linear-gradient(
+      to top,
+      rgba(20, 10, 4, 0.55) 0%,
+      rgba(20, 10, 4, 0.22) 40%,
+      rgba(20, 10, 4, 0) 70%,
+      rgba(255, 253, 248, 0.05) 100%
+    ),
+    rgba(20, 10, 4, 0.12);
 }
 
 /* ─── Transition defaults ────────────────────────────────────────────────── */
@@ -137,12 +150,63 @@ h1, h2, h3, h4 {
 
 /* ─── Section paddings ───────────────────────────────────────────────────── */
 .section-pad {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 @media (min-width: 768px) {
   .section-pad {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 }
+
+/* ─── Shimmering gold text ───────────────────────────────────────────────── */
+.gold-shimmer {
+  background: linear-gradient(100deg, #8a6a3b 0%, #c9a35c 25%, #f3e3bb 50%, #c9a35c 75%, #8a6a3b 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-shimmer 3.5s linear infinite;
+}
+@keyframes gold-shimmer {
+  to { background-position: 200% center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gold-shimmer { animation: none; }
+}
+
+/* ─── Reduced motion — disable all animation & transitions ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.gold-shimmer-line {
+  background: linear-gradient(100deg, #5e431f 0%, #c9a35c 20%, #f3e3bb 50%, #c9a35c 80%, #5e431f 100%);
+  background-size: 200% auto;
+  animation: gold-shimmer 3.5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) { .gold-shimmer-line { animation: none; } }
+
+.gold-shimmer-logo {
+  display: inline-block;
+  background: linear-gradient(100deg, #5e431f 0%, #8a6a3b 25%, #c9a35c 50%, #8a6a3b 75%, #5e431f 100%);
+  background-size: 200% auto;
+  animation: gold-shimmer 3.5s linear infinite;
+  -webkit-mask-image: url('/images/brand/logo.png');
+  mask-image: url('/images/brand/logo.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+@media (prefers-reduced-motion: reduce) { .gold-shimmer-logo { animation: none; } }

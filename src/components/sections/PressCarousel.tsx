@@ -1,136 +1,124 @@
-'use client'
+import Image from 'next/image'
+import Link from 'next/link'
+import Reveal from '@/components/ui/Reveal'
 
-import { useState, useEffect } from 'react'
-import { clsx } from 'clsx'
+function Stars() {
+  return (
+    <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <svg
+          key={i}
+          className="w-3.5 h-3.5 text-brand-amber fill-current"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
 
-const pressQuotes = [
+const photoReviews = [
   {
+    img: '/images/reviews/review_trisha.jpg',
     quote:
-      'A revelation in a jar. Inherited Skincare\'s Overnight Cream has transformed my dry, dull complexion into something radiant. The ghee formula melts into skin like nothing I\'ve tried before.',
-    publication: 'Vogue UK',
-    author: 'Beauty Director',
+      "Omg I am obsessed. I've been suffering from eczema for years and nothing has helped. It's really helped calm the redness. Also it's not greasy like topical eczema creams. So grateful I found this!",
+    name: 'Trisha M.',
+    concern: 'Eczema',
+    product: 'Deep Nourishing Cream',
   },
   {
+    img: '/images/reviews/review_vandana.jpg',
     quote:
-      'The most luxurious cleanser in my routine. The Ghee & Oat Balm dissolves every trace of makeup while leaving skin impossibly soft — an Ayurvedic gem for modern skincare obsessives.',
-    publication: 'Elle',
-    author: 'Beauty Editor',
+      "Since we discovered Inherited Deep Nourishing Cream, this is the only cream that calms and soothes my daughter's eczema. We've tried so many over the years.",
+    name: 'Vandana R.',
+    concern: 'Child Eczema',
+    product: 'Deep Nourishing Cream',
   },
   {
+    img: '/images/reviews/review_priya.jpg',
     quote:
-      'Inherited Skincare bridges the gap between ancient ritual and modern efficacy. The Radiance Serum is proof that sometimes the oldest ingredients are still the most revolutionary.',
-    publication: 'Grazia',
-    author: 'Wellness Writer',
+      'I love, love, love this serum! Made my skin so much brighter in just a few uses!',
+    name: 'Priya S.',
+    concern: 'Brightening',
+    product: 'Radiance Serum',
   },
   {
+    img: '/images/reviews/review_michelle.jpg',
     quote:
-      'We\'ve tested hundreds of natural skincare brands, but nothing quite compares to the potency and elegance of Inherited Skincare. A true heritage brand for the modern age.',
-    publication: 'Tatler',
-    author: 'Contributing Editor',
-  },
-  {
-    quote:
-      'Finally, Ayurvedic beauty elevated to the standard it deserves. The Deep Nourishing Cream is a daily ritual I\'ve happily surrendered to — skin has never felt more alive.',
-    publication: 'Harper\'s Bazaar',
-    author: 'Beauty & Wellness Editor',
+      'Rich and nourishing, leaves my skin so smooth with a radiant glow. I genuinely look forward to my daily ritual with this serum.',
+    name: 'Michelle',
+    concern: 'Radiant Glow',
+    product: 'Radiance Serum',
   },
 ]
 
 export default function PressCarousel() {
-  const [current, setCurrent] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsTransitioning(true)
-      setTimeout(() => {
-        setCurrent((c) => (c + 1) % pressQuotes.length)
-        setIsTransitioning(false)
-      }, 400)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  function goTo(index: number) {
-    if (index === current) return
-    setIsTransitioning(true)
-    setTimeout(() => {
-      setCurrent(index)
-      setIsTransitioning(false)
-    }, 300)
-  }
-
-  const quote = pressQuotes[current]
-
   return (
-    <section className="section-pad bg-brand-cream border-y border-brand-warm">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="py-10 md:py-12 bg-brand-cream border-y border-brand-warm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-10">
-          As Seen In
-        </p>
-
-        {/* Quote */}
-        <div
-          className={clsx(
-            'transition-all duration-400',
-            isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
-          )}
-          style={{ minHeight: '160px' }}
-        >
-          <svg
-            className="w-8 h-8 text-brand-amber/40 mx-auto mb-5"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-          </svg>
-
-          <blockquote className="font-display italic text-xl md:text-2xl lg:text-3xl text-brand-dark leading-relaxed mb-6">
-            &ldquo;{quote.quote}&rdquo;
-          </blockquote>
-
-          <div className="flex items-center justify-center gap-3">
-            <span className="font-body text-xs tracking-[0.2em] uppercase text-brand-amber font-medium">
-              {quote.publication}
-            </span>
-            <span className="w-1 h-1 rounded-full bg-brand-muted/40" />
-            <span className="font-body text-xs text-brand-muted">
-              {quote.author}
-            </span>
+        <Reveal>
+          <div className="text-center mb-6 md:mb-8">
+            <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-2">
+              Customer Stories
+            </p>
+            <h2 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark">
+              Real Skin, <em className="italic">Real Results</em>
+            </h2>
+            <p className="font-body text-sm text-brand-muted mt-3">
+              5.0★ · Loved by 1,800+ customers
+            </p>
+            <div className="w-16 h-px bg-brand-amber mx-auto mt-4" />
           </div>
-        </div>
+        </Reveal>
 
-        {/* Dots */}
-        <div className="flex items-center justify-center gap-2.5 mt-10">
-          {pressQuotes.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              aria-label={`Go to quote ${i + 1}`}
-              className={clsx(
-                'rounded-full transition-all duration-300',
-                i === current
-                  ? 'bg-brand-amber w-6 h-1.5'
-                  : 'bg-brand-muted/30 w-1.5 h-1.5 hover:bg-brand-amber/50'
-              )}
-            />
+        {/* Photo review cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+          {photoReviews.map((review, i) => (
+            <Reveal key={review.name} delay={i * 0.08}>
+              <div className="bg-white ring-1 ring-brand-warm shadow-sm h-full flex flex-col">
+                <div className="relative aspect-square overflow-hidden bg-brand-warm">
+                  <Image
+                    src={review.img}
+                    alt={`${review.name} — customer photo`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                  <span className="absolute top-3 left-3 font-body text-[10px] tracking-widest uppercase bg-brand-cream/90 text-brand-dark px-2.5 py-1">
+                    {review.concern}
+                  </span>
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <Stars />
+                  <p className="font-body text-sm text-brand-muted leading-relaxed mt-2.5 mb-3 flex-1">
+                    &ldquo;{review.quote}&rdquo;
+                  </p>
+                  <p className="font-body text-xs tracking-[0.15em] uppercase text-brand-dark font-medium">
+                    {review.name}
+                  </p>
+                  <p className="font-body text-[11px] text-brand-muted/70 mt-0.5">
+                    Verified Buyer · {review.product}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
           ))}
         </div>
 
-        {/* Publications list */}
-        <div className="mt-14 flex items-center justify-center gap-8 flex-wrap">
-          {['Vogue', 'Elle', 'Grazia', 'Tatler', "Harper's Bazaar"].map(
-            (pub) => (
-              <span
-                key={pub}
-                className="font-display italic text-lg md:text-xl text-brand-muted/40 tracking-wide"
-              >
-                {pub}
-              </span>
-            )
-          )}
-        </div>
+        {/* Link to all reviews */}
+        <Reveal>
+          <div className="text-center mt-7">
+            <Link
+              href="/reviews"
+              className="inline-block font-body text-xs tracking-widest uppercase text-brand-dark border-b border-brand-amber pb-1 hover:text-brand-amber transition-colors"
+            >
+              Read All Reviews →
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   )

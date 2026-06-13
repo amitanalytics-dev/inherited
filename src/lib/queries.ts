@@ -208,6 +208,28 @@ export async function getProducts(first = 20): Promise<Product[]> {
   return data.products.edges.map((e) => normalizeProduct(e.node))
 }
 
+export async function searchProducts(q: string, first = 24): Promise<Product[]> {
+  const query = `
+    ${PRODUCT_FRAGMENT}
+    query searchProducts($q: String!, $first: Int!) {
+      products(first: $first, query: $q) {
+        edges {
+          node {
+            ...ProductFields
+          }
+        }
+      }
+    }
+  `
+
+  interface Data {
+    products: { edges: { node: ShopifyProductNode }[] }
+  }
+
+  const data = await storefront<Data>(query, { q, first })
+  return data.products.edges.map((e) => normalizeProduct(e.node))
+}
+
 export async function getProduct(handle: string): Promise<Product | null> {
   const query = `
     ${PRODUCT_FRAGMENT}

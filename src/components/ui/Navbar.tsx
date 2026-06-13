@@ -3,19 +3,35 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
-import { Menu, X, ShoppingBag, Search } from 'lucide-react'
+import { Menu, X, ShoppingBag, User, Search, ChevronDown } from 'lucide-react'
+import { motion, useScroll } from 'framer-motion'
 
 const navLinks = [
   { label: 'Shop', href: '/products' },
-  { label: 'Collections', href: '/collections' },
+  { label: 'Skin Quiz', href: '/quiz' },
   { label: 'Our Story', href: '/about' },
-  { label: 'Ritual Quiz', href: '/quiz' },
   { label: 'Journal', href: '/blog' },
+  { label: 'Reviews', href: '/reviews' },
 ]
 
-export default function Navbar() {
+const concernLinks = [
+  { label: 'Sensitive Skin', href: '/collections/sensitive-skin' },
+  { label: 'Dry Skin Repair', href: '/collections/dry-skin-repair' },
+  { label: 'Dullness & Uneven Tone', href: '/collections/pigmentation-dull-skin' },
+]
+
+const DEFAULT_ANNOUNCEMENT =
+  'Free UK shipping over £55 · Handmade in the UK · 5.0★ from 1,800+ customers'
+
+export default function Navbar({
+  announcement = DEFAULT_ANNOUNCEMENT,
+}: {
+  announcement?: string
+}) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [concernOpen, setConcernOpen] = useState(false)
+  const { scrollYProgress } = useScroll()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -32,26 +48,42 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Scroll progress bar */}
+      <motion.div
+        aria-hidden="true"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-brand-amber origin-left z-[60] will-change-transform"
+        style={{ scaleX: scrollYProgress }}
+      />
       <header
         className={clsx(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          scrolled
-            ? 'bg-brand-cream/95 backdrop-blur-md shadow-sm border-b border-brand-warm'
-            : 'bg-transparent'
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-brand-cream/95 backdrop-blur-md',
+          scrolled && 'shadow-sm'
         )}
       >
+        {/* Announcement bar */}
+        <div className="bg-brand-dark text-brand-cream">
+          <p className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-center font-body text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-center">
+            {announcement.split(/(\S*★\S*)/g).map((part, i) =>
+              part.includes('★') ? (
+                <span key={i} className="text-brand-amber">
+                  {part}
+                </span>
+              ) : (
+                <span key={i}>{part}</span>
+              )
+            )}
+          </p>
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 group">
+            <Link href="/" className="flex-shrink-0 group flex items-center gap-3">
               <span
-                className={clsx(
-                  'font-display font-semibold tracking-[0.2em] uppercase text-sm md:text-base transition-colors duration-300',
-                  scrolled ? 'text-brand-dark' : 'text-brand-cream'
-                )}
-              >
-                Inherited Skincare
-              </span>
+                role="img"
+                aria-label="Inherited Skincare"
+                className="gold-shimmer-logo"
+                style={{ width: 176, height: 56 }}
+              />
             </Link>
 
             {/* Desktop Nav */}
@@ -60,41 +92,65 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={clsx(
-                    'font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300',
-                    scrolled
-                      ? 'text-brand-muted hover:text-brand-dark'
-                      : 'text-brand-cream/90 hover:text-brand-cream'
-                  )}
+                  className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
                 >
                   {link.label}
                 </Link>
               ))}
+
+              {/* Shop by Concern Dropdown */}
+              <div className="relative group">
+                <button
+                  onClick={() => setConcernOpen(!concernOpen)}
+                  className="flex items-center gap-1.5 font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                >
+                  Shop by Concern
+                  <ChevronDown
+                    size={14}
+                    className={clsx(
+                      'transition-transform duration-300',
+                      concernOpen && 'rotate-180'
+                    )}
+                  />
+                </button>
+
+                {concernOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-brand-warm shadow-lg z-50">
+                    {concernLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setConcernOpen(false)}
+                        className="block px-4 py-3 font-body text-xs tracking-widest uppercase text-brand-dark hover:bg-brand-warm transition-colors border-b border-brand-warm last:border-b-0"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
-            {/* Right icons */}
-            <div className="flex items-center gap-4">
-              <button
+            {/* Right icons — generous tap targets for mobile */}
+            <div className="flex items-center gap-0.5 sm:gap-1 -mr-2">
+              <Link
+                href="/search"
                 aria-label="Search"
-                className={clsx(
-                  'hidden md:flex transition-colors duration-300',
-                  scrolled
-                    ? 'text-brand-muted hover:text-brand-dark'
-                    : 'text-brand-cream/90 hover:text-brand-cream'
-                )}
+                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
               >
-                <Search size={18} strokeWidth={1.5} />
-              </button>
-
+                <Search size={20} strokeWidth={1.5} />
+              </Link>
+              <Link
+                href="/account"
+                aria-label="Account"
+                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
+              >
+                <User size={20} strokeWidth={1.5} />
+              </Link>
               <Link
                 href="/cart"
                 aria-label="Shopping bag"
-                className={clsx(
-                  'transition-colors duration-300 relative',
-                  scrolled
-                    ? 'text-brand-dark hover:text-brand-amber'
-                    : 'text-brand-cream hover:text-brand-amber'
-                )}
+                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
               >
                 <ShoppingBag size={20} strokeWidth={1.5} />
               </Link>
@@ -103,18 +159,16 @@ export default function Navbar() {
               <button
                 aria-label="Toggle menu"
                 onClick={() => setMobileOpen((o) => !o)}
-                className={clsx(
-                  'md:hidden transition-colors duration-300',
-                  scrolled
-                    ? 'text-brand-dark'
-                    : 'text-brand-cream'
-                )}
+                className="md:hidden p-2.5 transition-colors duration-300 text-brand-dark"
               >
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
         </div>
+
+        {/* Golden shimmering line across the bottom of the header */}
+        <div aria-hidden="true" className="h-[2px] w-full gold-shimmer-line" />
       </header>
 
       {/* Mobile Menu Overlay */}
@@ -149,7 +203,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <nav className="flex flex-col p-6 gap-6">
+          <nav className="flex flex-col p-6 gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -160,6 +214,40 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Mobile Shop by Concern */}
+            <div>
+              <button
+                onClick={() => setConcernOpen(!concernOpen)}
+                className="flex items-center gap-2 font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors w-full"
+              >
+                Shop by Concern
+                <ChevronDown
+                  size={18}
+                  className={clsx(
+                    'transition-transform duration-300',
+                    concernOpen && 'rotate-180'
+                  )}
+                />
+              </button>
+              {concernOpen && (
+                <div className="flex flex-col gap-2 mt-3 pl-4 border-l border-brand-warm">
+                  {concernLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => {
+                        setMobileOpen(false)
+                        setConcernOpen(false)
+                      }}
+                      className="font-body text-sm text-brand-dark hover:text-brand-amber transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="mt-auto p-6 border-t border-brand-warm">

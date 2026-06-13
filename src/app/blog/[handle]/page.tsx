@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticle } from '@/lib/queries'
+import { getFallbackArticle } from '@/lib/fallback'
+import type { Article } from '@/types'
 
 interface PageProps {
   params: { handle: string }
@@ -10,7 +12,10 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const article = await getArticle('news', params.handle)
+    const article =
+      (await getArticle('wise-words', params.handle)) ??
+      (await getArticle('news', params.handle)) ??
+      getFallbackArticle(params.handle)
     if (!article) return { title: 'Article Not Found' }
     return {
       title: article.seo.title ?? article.title,
@@ -33,17 +38,22 @@ function formatDate(dateString: string): string {
 }
 
 export default async function BlogArticlePage({ params }: PageProps) {
-  let article = null
+  let article: Article | null = null
 
   try {
-    // Try common blog handles
-    const blogHandles = ['news', 'journal', 'blog']
+    // Try the store's blog handles ("wise-words" holds all real articles)
+    const blogHandles = ['wise-words', 'news', 'wise-words-1', 'journal', 'blog']
     for (const blogHandle of blogHandles) {
       article = await getArticle(blogHandle, params.handle)
       if (article) break
     }
   } catch {
-    // fallback
+    // fallback handled below
+  }
+
+  // Static fallback when the Storefront API is unavailable
+  if (!article) {
+    article = getFallbackArticle(params.handle)
   }
 
   if (!article) {
@@ -51,7 +61,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-brand-cream pt-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       {/* Hero image */}
       {article.image && (
         <div className="relative h-[50vh] min-h-[350px] overflow-hidden">
@@ -68,7 +78,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
       )}
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 font-body text-xs text-brand-muted mb-8">
           <Link href="/" className="hover:text-brand-amber transition-colors">Home</Link>
@@ -99,19 +109,19 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
         {/* Article body */}
         <div
-          className="prose-brand font-body text-base text-brand-dark leading-relaxed space-y-5 [&_h1]:font-display [&_h1]:text-4xl [&_h1]:text-brand-dark [&_h1]:font-semibold [&_h2]:font-display [&_h2]:text-3xl [&_h2]:text-brand-dark [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:font-display [&_h3]:text-2xl [&_h3]:text-brand-dark [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:mb-5 [&_p]:leading-relaxed [&_a]:text-brand-amber [&_a]:underline [&_a]:underline-offset-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_blockquote]:border-l-4 [&_blockquote]:border-brand-amber [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:font-display [&_blockquote]:text-xl [&_blockquote]:text-brand-dark [&_img]:w-full [&_img]:my-8"
+          className="prose-brand font-body text-base text-brand-dark leading-relaxed space-y-5 break-words [&_h1]:font-display [&_h1]:text-3xl md:[&_h1]:text-4xl [&_h1]:text-brand-dark [&_h1]:font-semibold [&_h2]:font-display [&_h2]:text-2xl md:[&_h2]:text-3xl [&_h2]:text-brand-dark [&_h2]:font-semibold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:font-display [&_h3]:text-xl md:[&_h3]:text-2xl [&_h3]:text-brand-dark [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_p]:mb-5 [&_p]:leading-relaxed [&_a]:text-brand-amber [&_a]:underline [&_a]:underline-offset-3 [&_a]:break-words [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:space-y-2 [&_blockquote]:border-l-4 [&_blockquote]:border-brand-amber [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:font-display [&_blockquote]:text-xl [&_blockquote]:text-brand-dark [&_img]:w-full [&_img]:h-auto [&_img]:my-8 [&_table]:block [&_table]:w-full [&_table]:overflow-x-auto [&_iframe]:max-w-full"
           dangerouslySetInnerHTML={{ __html: article.contentHtml }}
         />
 
         {/* Bottom CTA */}
-        <div className="mt-16 pt-10 border-t border-brand-warm text-center">
+        <div className="mt-10 pt-8 border-t border-brand-warm text-center">
           <p className="font-display italic text-2xl text-brand-dark mb-4">
             Ready to begin your own ritual?
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/quiz"
-              className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#a0693a] transition-colors"
+              className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors"
             >
               Take the Skin Quiz
             </Link>

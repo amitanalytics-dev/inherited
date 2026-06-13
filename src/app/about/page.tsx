@@ -1,48 +1,25 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getSiteSettings } from '@/lib/site-settings'
 
 export const metadata: Metadata = {
   title: 'Our Story',
   description:
-    'The story behind Inherited Skincare — born from a grandmother\'s kitchen, perfected by modern science. Discover our Ayurvedic heritage and the power of ghee for skin.',
+    'The story behind Inherited Skincare — born from Grandma Leela\'s evening ghee ritual. Discover our Ayurvedic heritage and the power of washed ghee for skin.',
 }
 
-const values = [
-  {
-    title: 'Rooted in Ritual',
-    body: 'Every formula begins with an ancient practice. We don\'t invent — we remember, refine, and restore timeless skincare wisdom to modern life.',
-  },
-  {
-    title: 'Honest Ingredients',
-    body: 'No fillers, no parabens, no silicones. Every ingredient earns its place — ethically sourced, clinically validated, and present in meaningful concentrations.',
-  },
-  {
-    title: 'Slow Beauty',
-    body: 'We believe in small batches, careful craftsmanship, and the quiet power of consistency. Real skin transformation happens over time, not overnight.',
-  },
-  {
-    title: 'Community First',
-    body: 'A portion of every purchase supports South Asian women artisans who cultivate the herbs and botanicals at the heart of our formulas.',
-  },
-]
+export const dynamic = 'force-dynamic'
 
-const keyIngredients = [
-  { name: 'Pure Ghee', origin: 'India', benefit: 'Deeply nourishing, repairs barrier' },
-  { name: 'Turmeric', origin: 'India / Sri Lanka', benefit: 'Brightening, anti-inflammatory' },
-  { name: 'Ashwagandha', origin: 'India', benefit: 'Adaptogenic, anti-stress for skin' },
-  { name: 'Neem', origin: 'India', benefit: 'Antibacterial, clears congestion' },
-  { name: 'Rosehip Oil', origin: 'Chile', benefit: 'Vitamin C, anti-ageing' },
-  { name: 'Oat Extract', origin: 'UK', benefit: 'Soothing, anti-itch, calming' },
-]
-
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings()
+  const { values, ingredients: keyIngredients, founderHeadline1, founderHeadline2, founderParagraphs } = settings.pages.about
   return (
-    <div className="min-h-screen bg-brand-cream pt-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       {/* Hero */}
       <div className="relative h-[60vh] min-h-[400px] overflow-hidden">
         <Image
-          src="/images/products/_ALL13.jpg"
+          src={settings.images.aboutHero}
           alt="Inherited Skincare — Our Story"
           fill
           priority
@@ -65,57 +42,40 @@ export default function AboutPage() {
       {/* Founder story */}
       <section className="section-pad">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
               <h2 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark mb-6">
-                Born in a kitchen.
+                {founderHeadline1}
                 <br />
-                <em className="italic text-brand-amber">Raised by a dream.</em>
+                <em className="italic text-brand-amber">{founderHeadline2}</em>
               </h2>
               <div className="space-y-5 font-body text-base text-brand-muted leading-relaxed">
-                <p>
-                  Suruchi Sethi grew up watching her grandmother in a warm kitchen in
-                  Punjab, India. Every evening, before bed, her grandmother would
-                  apply a small amount of clarified butter — ghee — to her face and
-                  hands. Her skin, even in her eighties, was soft, luminous, and
-                  seemingly ageless.
-                </p>
-                <p>
-                  When Suruchi moved to London in her twenties, she struggled to find
-                  products that respected her skin&rsquo;s heritage. Synthetic emollients that
-                  promised hydration but left her skin dull. &ldquo;Luxury&rdquo; creams packed
-                  with fillers. Nothing that carried the wisdom she had inherited.
-                </p>
-                <p>
-                  So she went back to the recipes — and brought them forward. Working
-                  with Ayurvedic formulators in India and dermatologists in the UK,
-                  she spent three years developing formulas that honoured ancient
-                  knowledge without compromising on modern safety and efficacy.
-                </p>
-                <p>
-                  In 2020, Inherited Skincare was born. Named for everything we carry
-                  forward from the women who came before us.
-                </p>
+                {founderParagraphs.map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
               </div>
 
               <div className="mt-8 pt-8 border-t border-brand-warm">
-                <p className="font-display italic text-2xl text-brand-dark">Suruchi Sethi</p>
+                <p className="font-display italic text-2xl text-brand-dark">Suruchi</p>
                 <p className="font-body text-xs text-brand-muted tracking-wide mt-0.5">
-                  Founder & Formulator
+                  Founder
                 </p>
               </div>
             </div>
 
             <div className="relative">
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
-                  src="/images/products/2_deep_cream_HERO.jpg"
-                  alt="The Founder"
+                  src={settings.images.aboutFounder}
+                  alt="Founder Suruchi holding the Inherited Skincare collection"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
               </div>
+              <p className="mt-3 font-body text-xs italic text-brand-muted">
+                Suruchi, founder of Inherited Skincare
+              </p>
               <div className="absolute -bottom-6 -right-6 w-40 h-40 border border-brand-amber/30 hidden lg:block" />
             </div>
           </div>
@@ -125,12 +85,12 @@ export default function AboutPage() {
       {/* Values */}
       <section className="section-pad bg-brand-warm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <h2 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark">
               What We Believe
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
             {values.map((value) => (
               <div key={value.title} className="bg-brand-cream p-8">
                 <h3 className="font-display font-semibold text-2xl text-brand-dark mb-3">
@@ -148,7 +108,7 @@ export default function AboutPage() {
       {/* Key ingredients */}
       <section id="ingredients" className="section-pad bg-brand-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-3">
               The Pantry
             </p>
@@ -189,7 +149,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/quiz"
-              className="inline-flex items-center justify-center px-10 py-4 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#a0693a] transition-colors"
+              className="inline-flex items-center justify-center px-10 py-4 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors"
             >
               Take the Skin Quiz
             </Link>

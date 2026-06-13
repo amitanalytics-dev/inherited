@@ -1,17 +1,23 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import Reveal from '@/components/ui/Reveal'
 
-export default function StorySection() {
+export default function StorySection({
+  image = '/images/brand/suruchi_leela.jpg',
+}: {
+  image?: string
+}) {
   return (
     <section className="section-pad bg-brand-warm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Image */}
+          <Reveal>
           <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden">
+            <div className="relative aspect-[3/2] overflow-hidden border-8 border-brand-cream shadow-lg">
               <Image
-                src="/images/products/2_deep_cream_HERO.jpg"
-                alt="Inherited Skincare — The Founder Story"
+                src={image}
+                alt="Founder Suruchi as a child with her grandmother Leela"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
@@ -20,39 +26,53 @@ export default function StorySection() {
             {/* Decorative amber line */}
             <div className="absolute -bottom-6 -right-6 w-40 h-40 border border-brand-amber/30 hidden lg:block" />
             <div className="absolute -top-6 -left-6 w-20 h-20 border border-brand-amber/20 hidden lg:block" />
+            {/* Brand seal */}
+            <div className="absolute -bottom-7 -left-4 lg:-left-7 z-10">
+              <div className="relative w-[110px] h-[110px] rounded-full overflow-hidden shadow-lg ring-1 ring-brand-amber/30">
+                <Image
+                  src="/images/brand/badge_cream.jpg"
+                  alt="Handmade from glow-rious ghee — Inherited Skincare seal"
+                  fill
+                  sizes="110px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
+          </Reveal>
 
           {/* Right: Story */}
+          <Reveal delay={0.15}>
           <div className="lg:pl-6">
             <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-4">
               Our Heritage
             </p>
             <h2 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark leading-tight mb-6">
               Born from a grandmother&rsquo;s recipe.{' '}
-              <em className="italic">Perfected for modern skin.</em>
+              <em className="italic">Refined for modern skin.</em>
             </h2>
 
             <div className="space-y-4 font-body text-base text-brand-muted leading-relaxed">
               <p>
-                Every jar of Inherited Skincare carries the memory of a kitchen
-                filled with the warm scent of clarified butter, turmeric, and
-                herbs. It was in that kitchen, watching her grandmother blend
-                ingredients with quiet confidence, that our founder discovered
-                the quiet power of Ayurvedic beauty rituals.
+                Every jar of Inherited Skincare carries the memory of an evening
+                ritual. Our founder, Suruchi, grew up watching her Indian
+                grandmother, Leela, press warm ghee into her face and hands
+                before bed — a practice passed down through generations. The
+                brand is literally named in her honour.
               </p>
               <p>
-                These weren&rsquo;t just skincare recipes — they were acts of
-                love passed down through generations of South Asian women who
-                knew that true nourishment comes from within the earth. Pure
-                ghee. Cold-pressed oils. Botanical extracts. No shortcuts.
+                When modern skincare — parabens, synthetic fragrance, harsh
+                actives — left Suruchi&rsquo;s skin reactive, she returned to
+                what she had inherited: ghee. As few ingredients as possible,
+                all natural. No shortcuts.
               </p>
               <p>
-                We took those ancient formulas and worked with modern
-                dermatologists to validate what generations of women already
-                knew: ghee is one of the most bioavailable, skin-loving
-                ingredients on earth. Rich in fatty acids, vitamins A, D, E and
-                K — it feeds the skin barrier in a way no synthetic substitute
-                can replicate.
+                At the heart of every formula is washed ghee — clarified butter
+                washed, traditionally one hundred times in Ayurvedic practice,
+                into a light whipped texture. It penetrates all seven layers of
+                the skin, carrying butyric acid and vitamins A, D, E and K to
+                feed the skin barrier in a way no synthetic substitute can
+                replicate.
               </p>
             </div>
 
@@ -74,13 +94,14 @@ export default function StorySection() {
             {/* Signature */}
             <div className="mt-10 pt-8 border-t border-brand-amber/20">
               <p className="font-display italic text-xl text-brand-dark">
-                Suruchi Sethi
+                Suruchi
               </p>
               <p className="font-body text-xs text-brand-muted tracking-wide mt-0.5">
                 Founder, Inherited Skincare
               </p>
             </div>
           </div>
+          </Reveal>
         </div>
       </div>
     </section>

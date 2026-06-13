@@ -1,10 +1,22 @@
+import Image from 'next/image'
 import Link from 'next/link'
+import Reveal from '@/components/ui/Reveal'
 
 export default function QuizCTA() {
   return (
     <section className="relative section-pad overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-brand-green" />
+      {/* Pomegranate illustration layer — cropped to hide URL strip */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <Image
+          src="/images/brand/quote_1.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-top scale-[1.15] opacity-[0.15]"
+        />
+      </div>
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -13,6 +25,7 @@ export default function QuizCTA() {
       />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Reveal>
         <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-cream/60 mb-4">
           Personalised for You
         </p>
@@ -22,7 +35,7 @@ export default function QuizCTA() {
           Find Your Perfect{' '}
           <em className="italic">Ritual</em>
         </h2>
-        <p className="font-body text-base text-brand-cream/70 max-w-lg mx-auto leading-relaxed mb-10">
+        <p className="font-body text-base text-brand-cream/70 max-w-lg mx-auto leading-relaxed mb-8">
           Answer 3 quick questions about your skin and we&rsquo;ll match you with the
           perfect Inherited Skincare routine — personalised to your skin type,
           concerns, and lifestyle.
@@ -31,7 +44,7 @@ export default function QuizCTA() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/quiz"
-            className="inline-flex items-center justify-center px-10 py-4 bg-brand-cream text-brand-dark font-body text-xs tracking-widest uppercase hover:bg-brand-amber hover:text-white transition-all shadow-lg hover:shadow-xl active:scale-95"
+            className="inline-flex items-center justify-center px-10 py-4 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors shadow-lg hover:shadow-xl"
           >
             Take the Skin Quiz
           </Link>
@@ -44,11 +57,11 @@ export default function QuizCTA() {
         </div>
 
         {/* Quick stats */}
-        <div className="mt-12 flex items-center justify-center gap-8 flex-wrap">
+        <div className="mt-8 flex items-center justify-center gap-8 flex-wrap">
           {[
             '3 Questions',
             'Instant Results',
-            'Expert Matched',
+            'Tailored to You',
           ].map((item) => (
             <div key={item} className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-brand-amber" />
@@ -58,6 +71,7 @@ export default function QuizCTA() {
             </div>
           ))}
         </div>
+        </Reveal>
       </div>
     </section>
   )

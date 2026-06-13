@@ -24,12 +24,16 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
       const cartId = localStorage.getItem('cart_id')
       const line = { merchandiseId: variantId, quantity: 1 }
 
+      let added = false
       if (cartId) {
         const result = await cartLinesAdd(cartId, [line])
-        if (result.userErrors.length > 0) {
-          throw new Error(result.userErrors[0].message)
+        // A stale/expired/completed cart returns no cart — fall through to create
+        if (result.cart?.id && result.userErrors.length === 0) {
+          added = true
         }
-      } else {
+      }
+
+      if (!added) {
         const result = await cartCreate([line])
         if (result.userErrors.length > 0) {
           throw new Error(result.userErrors[0].message)

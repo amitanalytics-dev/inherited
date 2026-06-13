@@ -1,3 +1,6 @@
+import Image from 'next/image'
+import Reveal from '@/components/ui/Reveal'
+
 const pillars = [
   {
     icon: (
@@ -15,7 +18,7 @@ const pillars = [
     ),
     title: 'Ancient Ayurvedic Ingredients',
     body:
-      'Every formula is rooted in Ayurvedic wisdom — pure ghee, turmeric, ashwagandha, neem, and cold-pressed oils sourced from ethical growers across South Asia.',
+      'Every formula is rooted in Ayurvedic wisdom — washed organic ghee, turmeric, saffron, calendula and oat, with as few ingredients as possible and all of them natural.',
   },
   {
     icon: (
@@ -32,9 +35,9 @@ const pillars = [
         <path d="M31 36l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
-    title: 'Clinically Tested Formulas',
+    title: 'CPSR Safety Tested',
     body:
-      'Our formulations are independently tested by UK dermatologists for safety, efficacy, and skin barrier improvement. Science validates what ancestry perfected.',
+      'Every formula carries full Cosmetic Product Safety Report certification — independently safety assessed for the UK market. Modern standards for what ancestry perfected.',
   },
   {
     icon: (
@@ -58,45 +61,60 @@ const pillars = [
 
 export default function ScienceRitual() {
   return (
-    <section className="section-pad bg-brand-dark">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative section-pad bg-brand-dark overflow-hidden">
+      {/* Botanical background — eucalyptus illustration, cropped to hide URL strip */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <Image
+          src="/images/brand/quote_2.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-top scale-[1.15] opacity-[0.12]"
+        />
+        {/* Dark overlay to keep text contrast strong */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/70 via-brand-dark/40 to-brand-dark/70" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-14 md:mb-18">
-          <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-3">
-            Our Philosophy
-          </p>
-          <h2 className="font-display font-semibold text-4xl md:text-5xl lg:text-6xl text-brand-cream">
-            Science <em className="italic">Meets</em> Ritual
-          </h2>
-          <div className="w-16 h-px bg-brand-amber mx-auto mt-5" />
-        </div>
+        <Reveal>
+          <div className="text-center mb-6 md:mb-8">
+            <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-3">
+              Our Philosophy
+            </p>
+            <h2 className="font-display font-semibold text-4xl md:text-5xl lg:text-6xl text-brand-cream">
+              Science <em className="italic">Meets</em> Ritual
+            </h2>
+            <div className="w-16 h-px bg-brand-amber mx-auto mt-5" />
+          </div>
+        </Reveal>
 
         {/* Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 lg:gap-16">
-          {pillars.map((pillar) => (
-            <div
-              key={pillar.title}
-              className="flex flex-col items-center text-center md:items-start md:text-left"
-            >
-              <div className="text-brand-amber mb-5">{pillar.icon}</div>
-              <h3 className="font-display font-semibold text-2xl text-brand-cream mb-3">
-                {pillar.title}
-              </h3>
-              <p className="font-body text-sm text-brand-cream/60 leading-relaxed">
-                {pillar.body}
-              </p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
+          {pillars.map((pillar, i) => (
+            <Reveal key={pillar.title} delay={i * 0.12}>
+              <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                <div className="text-brand-amber mb-5">{pillar.icon}</div>
+                <h3 className="font-display font-semibold text-2xl text-brand-cream mb-3">
+                  {pillar.title}
+                </h3>
+                <p className="font-body text-sm text-brand-cream/60 leading-relaxed">
+                  {pillar.body}
+                </p>
+              </div>
+            </Reveal>
           ))}
         </div>
 
         {/* Bottom stats */}
-        <div className="mt-16 md:mt-20 pt-12 border-t border-white/10">
+        <Reveal delay={0.1}>
+        <div className="mt-10 md:mt-12 pt-8 border-t border-white/10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
+              { stat: '5.0★', label: 'Average Rating' },
+              { stat: '1,800+', label: 'Happy Customers' },
               { stat: '100%', label: 'Natural Ingredients' },
               { stat: '0', label: 'Harsh Chemicals' },
-              { stat: '2000+', label: 'Happy Customers' },
-              { stat: '5★', label: 'Average Rating' },
             ].map((item) => (
               <div key={item.label}>
                 <p className="font-display font-semibold text-4xl md:text-5xl text-brand-amber">
@@ -109,6 +127,7 @@ export default function ScienceRitual() {
             ))}
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   )

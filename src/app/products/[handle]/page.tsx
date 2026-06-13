@@ -3,8 +3,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getProduct, getRelatedProducts } from '@/lib/queries'
+import { getFallbackProduct, getFallbackRelated } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
 import AddToCartButton from './AddToCartButton'
+import type { Product } from '@/types'
 
 interface PageProps {
   params: { handle: string }
@@ -12,7 +14,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const product = await getProduct(params.handle)
+    const product = (await getProduct(params.handle)) ?? getFallbackProduct(params.handle)
     if (!product) return { title: 'Product Not Found' }
     return {
       title: product.seo.title ?? product.title,
@@ -27,8 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ProductPage({ params }: PageProps) {
-  let product = null
-  let related = []
+  let product: Product | null = null
+  let related: Product[] = []
 
   try {
     product = await getProduct(params.handle)
@@ -37,6 +39,14 @@ export default async function ProductPage({ params }: PageProps) {
     }
   } catch {
     // Fallback handled below
+  }
+
+  // Static fallback when the Storefront API is unavailable
+  if (!product) {
+    product = getFallbackProduct(params.handle)
+    if (product) {
+      related = getFallbackRelated(params.handle, 4)
+    }
   }
 
   if (!product) {
@@ -54,19 +64,23 @@ export default async function ProductPage({ params }: PageProps) {
     minimumFractionDigits: 0,
   }).format(parseFloat(price.amount))
 
-  const formattedCompare = compareAtPrice
+  const hasDiscount =
+    compareAtPrice &&
+    parseFloat(compareAtPrice.amount) > parseFloat(price.amount)
+
+  const formattedCompare = hasDiscount
     ? new Intl.NumberFormat('en-GB', {
         style: 'currency',
-        currency: compareAtPrice.currencyCode,
+        currency: compareAtPrice!.currencyCode,
         minimumFractionDigits: 0,
-      }).format(parseFloat(compareAtPrice.amount))
+      }).format(parseFloat(compareAtPrice!.amount))
     : null
 
   const ingredients = product.metafields?.find((m) => m?.key === 'ingredients')
   const howToUse = product.metafields?.find((m) => m?.key === 'how_to_use')
 
   return (
-    <div className="min-h-screen bg-brand-cream pt-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav className="flex items-center gap-2 font-body text-xs text-brand-muted">
@@ -80,10 +94,10 @@ export default async function ProductPage({ params }: PageProps) {
 
       {/* Product main */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Images */}
           <div className="space-y-3">
-            <div className="relative aspect-square overflow-hidden bg-brand-warm">
+            <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm">
               {primaryImage && (
                 <Image
                   src={primaryImage.url}
@@ -104,7 +118,7 @@ export default async function ProductPage({ params }: PageProps) {
                       alt={img.altText ?? `${product.title} view ${i + 2}`}
                       fill
                       sizes="25vw"
-                      className="object-cover"
+                      className="object-contain"
                     />
                   </div>
                 ))}
@@ -180,7 +194,7 @@ export default async function ProductPage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="mt-6 grid grid-cols-3 gap-3 py-5 border-t border-b border-brand-warm">
               {[
-                { icon: '🌿', label: '100% Natural' },
+                { icon: '🌿', label: 'Natural ingredients' },
                 { icon: '🐇', label: 'Cruelty Free' },
                 { icon: '🇬🇧', label: 'Made in UK' },
               ].map((badge) => (
@@ -222,12 +236,12 @@ export default async function ProductPage({ params }: PageProps) {
 
       {/* Related products */}
       {related.length > 0 && (
-        <div className="bg-brand-warm py-16 md:py-20 mt-16">
+        <div className="bg-brand-warm py-10 md:py-12 mt-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-display font-semibold text-3xl md:text-4xl text-brand-dark text-center mb-10">
+            <h2 className="font-display font-semibold text-3xl md:text-4xl text-brand-dark text-center mb-6">
               Complete the Ritual
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

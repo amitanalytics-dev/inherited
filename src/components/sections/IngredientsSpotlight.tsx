@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import Reveal from '@/components/ui/Reveal'
 
 const benefits = [
   {
@@ -20,12 +21,30 @@ const benefits = [
   },
 ]
 
-export default function IngredientsSpotlight() {
+export default function IngredientsSpotlight({
+  image = '/images/products/5_radiance_serum_HERO.jpg',
+}: {
+  image?: string
+}) {
   return (
-    <section className="section-pad bg-brand-warm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <section className="relative section-pad bg-brand-warm overflow-hidden">
+      {/* Botanical background — sea buckthorn illustration, cropped to hide URL strip */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <Image
+          src="/images/brand/quote_3.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-top scale-[1.15] opacity-[0.12]"
+        />
+        {/* Cream overlay to keep readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-warm/80 via-brand-warm/55 to-brand-warm/80" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Content */}
+          <Reveal>
           <div>
             <p className="font-body text-[11px] tracking-[0.3em] uppercase text-brand-amber mb-4">
               The Hero Ingredient
@@ -61,18 +80,20 @@ export default function IngredientsSpotlight() {
             <div className="mt-8">
               <Link
                 href="/about#ingredients"
-                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#a0693a] transition-colors"
+                className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors"
               >
                 Explore All Ingredients
               </Link>
             </div>
           </div>
+          </Reveal>
 
           {/* Right: Image */}
-          <div className="relative order-first lg:order-last">
+          <Reveal delay={0.15} className="order-first lg:order-last">
+          <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden">
               <Image
-                src="/images/products/5_radiance_serum_HERO.jpg"
+                src={image}
                 alt="Radiance Serum — Ghee-powered formula"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -82,6 +103,7 @@ export default function IngredientsSpotlight() {
             {/* Decorative */}
             <div className="absolute -bottom-4 -left-4 w-32 h-32 border border-brand-amber/25 hidden lg:block" />
           </div>
+          </Reveal>
         </div>
       </div>
     </section>

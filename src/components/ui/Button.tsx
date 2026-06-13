@@ -22,11 +22,11 @@ export default function Button({
 
   const variants = {
     primary:
-      'bg-brand-amber text-white hover:bg-[#a0693a] active:scale-95 shadow-sm hover:shadow-md',
+      'bg-brand-amber text-white hover:bg-[#b87f43] active:scale-95 shadow-sm hover:shadow-md',
     outline:
       'border border-brand-amber text-brand-amber hover:bg-brand-amber hover:text-white active:scale-95',
     ghost:
-      'text-brand-amber hover:text-[#a0693a] underline underline-offset-4 decoration-brand-amber/50 hover:decoration-brand-amber',
+      'text-brand-amber hover:text-[#b87f43] underline underline-offset-4 decoration-brand-amber/50 hover:decoration-brand-amber',
     dark:
       'bg-brand-dark text-brand-cream hover:bg-[#2d1a0e] active:scale-95 shadow-sm hover:shadow-md',
   }

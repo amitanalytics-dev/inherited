@@ -1,7 +1,7 @@
 'use client'
 
 const MARQUEE_TEXT =
-  'Ghee-Powered Skincare · Ayurvedic Rituals · Made in the UK · Clinically Tested · Cruelty Free · 100% Natural · '
+  'Ghee-Powered Skincare · Ayurvedic Rituals · Made in the UK · CPSR Safety Tested · Cruelty Free · Natural Ingredients · '
 
 const items = Array.from({ length: 3 }, (_, i) => (
   <span key={i} className="whitespace-nowrap">

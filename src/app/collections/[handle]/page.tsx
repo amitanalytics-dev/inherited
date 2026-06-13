@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCollection } from '@/lib/queries'
+import { getFallbackCollection } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
+import type { Collection } from '@/types'
 
 interface PageProps {
   params: { handle: string }
@@ -9,7 +11,8 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const collection = await getCollection(params.handle)
+    const collection =
+      (await getCollection(params.handle)) ?? getFallbackCollection(params.handle)
     if (!collection) return { title: 'Collection Not Found' }
     return {
       title: collection.seo.title ?? collection.title,
@@ -21,12 +24,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CollectionPage({ params }: PageProps) {
-  let collection = null
+  let collection: Collection | null = null
 
   try {
     collection = await getCollection(params.handle, 24)
   } catch {
-    // fallback
+    // fallback handled below
+  }
+
+  // Static fallback when the Storefront API is unavailable
+  if (!collection) {
+    collection = getFallbackCollection(params.handle)
   }
 
   if (!collection) {
@@ -34,9 +42,9 @@ export default async function CollectionPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-brand-cream pt-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       {/* Header */}
-      <div className="bg-brand-warm border-b border-brand-warm/80 py-16 md:py-20">
+      <div className="bg-brand-warm border-b border-brand-warm/80 py-10 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">
             Collection
@@ -53,26 +61,26 @@ export default async function CollectionPage({ params }: PageProps) {
       </div>
 
       {/* Products */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         {collection.products.length > 0 ? (
           <>
             <p className="font-body text-xs text-brand-muted mb-8">
               {collection.products.length} product{collection.products.length !== 1 ? 's' : ''}
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
               {collection.products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </>
         ) : (
-          <div className="text-center py-20">
+          <div className="text-center py-12">
             <p className="font-display italic text-2xl text-brand-muted">
               This collection is coming soon.
             </p>
             <a
               href="/products"
-              className="mt-6 inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#a0693a] transition-colors"
+              className="mt-6 inline-flex items-center justify-center px-8 py-3.5 bg-brand-amber text-white font-body text-xs tracking-widest uppercase hover:bg-[#b87f43] transition-colors"
             >
               Shop All Products
             </a>

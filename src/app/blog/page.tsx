@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getArticles } from '@/lib/queries'
+import { FALLBACK_ARTICLES } from '@/lib/fallback'
 import type { Article } from '@/types'
 
 export const metadata: Metadata = {
@@ -18,80 +19,25 @@ function formatDate(dateString: string): string {
   })
 }
 
-const fallbackArticles = [
-  {
-    handle: 'the-power-of-ghee-for-skin',
-    blogHandle: 'news',
-    title: 'The Power of Ghee: Why This Ancient Ingredient Is the Future of Skincare',
-    excerpt: 'For over 5,000 years, Ayurvedic healers have known what modern dermatology is only just beginning to confirm: ghee is one of the most bioavailable, skin-loving substances on earth.',
-    publishedAt: '2024-03-15',
-    author: { name: 'Suruchi Sethi' },
-    image: { url: '/images/products/1_night_cream_HERO.jpg', altText: 'Ghee skincare', width: 800, height: 600 },
-  },
-  {
-    handle: 'your-morning-ritual-guide',
-    blogHandle: 'news',
-    title: 'The Perfect Ayurvedic Morning Ritual: 5 Minutes to Radiant Skin',
-    excerpt: 'In Ayurveda, how you begin your morning sets the tone for your entire day — and your skin\'s appearance. Here\'s how to build a morning ritual that works.',
-    publishedAt: '2024-02-28',
-    author: { name: 'Suruchi Sethi' },
-    image: { url: '/images/products/5_radiance_serum_HERO.jpg', altText: 'Morning ritual', width: 800, height: 600 },
-  },
-  {
-    handle: 'understanding-your-skin-type',
-    blogHandle: 'news',
-    title: 'Understanding Your Skin Type Through the Ayurvedic Lens (Doshas)',
-    excerpt: 'Western skincare categorises skin as dry, oily, or combination. Ayurveda goes deeper — your skin type is an expression of your unique constitution, or Prakriti.',
-    publishedAt: '2024-02-10',
-    author: { name: 'Dr. Priya Mehta' },
-    image: { url: '/images/products/2_deep_cream_HERO.jpg', altText: 'Skin types', width: 800, height: 600 },
-  },
-  {
-    handle: 'the-art-of-face-massage',
-    blogHandle: 'news',
-    title: 'The Ancient Art of Abhyanga: Why Face Massage Is the Missing Step in Your Routine',
-    excerpt: 'Abhyanga, the Ayurvedic practice of warm oil massage, has been used for centuries to promote circulation, lymphatic drainage, and a lasting glow.',
-    publishedAt: '2024-01-25',
-    author: { name: 'Suruchi Sethi' },
-    image: { url: '/images/products/6_cleansing_balm_HERO.jpg', altText: 'Face massage', width: 800, height: 600 },
-  },
-  {
-    handle: 'turmeric-for-skin',
-    blogHandle: 'news',
-    title: 'Turmeric for Skin: The Golden Spice That Transforms Complexion',
-    excerpt: 'Long before it became a wellness trend, turmeric was the cornerstone of Ayurvedic beauty rituals. Here\'s the science behind its skin-transforming power.',
-    publishedAt: '2024-01-08',
-    author: { name: 'Dr. Priya Mehta' },
-    image: { url: '/images/products/_ALL13.jpg', altText: 'Turmeric skincare', width: 800, height: 600 },
-  },
-  {
-    handle: 'winter-skincare-routine',
-    blogHandle: 'news',
-    title: 'Winter Ritual: How to Protect and Nourish Your Skin Through the Cold Months',
-    excerpt: 'Winter in the UK is particularly harsh on skin. Ayurvedic tradition has always adapted rituals to the seasons — here\'s your cold-weather protocol.',
-    publishedAt: '2023-11-20',
-    author: { name: 'Suruchi Sethi' },
-    image: { url: '/images/products/3_foot_cream_HERO.jpg', altText: 'Winter skincare', width: 800, height: 600 },
-  },
-]
-
 export default async function BlogPage() {
   let articles: Article[] = []
   try {
-    articles = await getArticles(12)
+    articles = await getArticles(100)
   } catch {
     articles = []
   }
 
-  const displayArticles = articles.length > 0 ? articles : fallbackArticles
+  // Static fallback when the Storefront API is unavailable — every card
+  // links to a real fallback article in /blog/[handle]
+  const displayArticles = articles.length > 0 ? articles : FALLBACK_ARTICLES
 
   const featured = displayArticles[0]
   const rest = displayArticles.slice(1)
 
   return (
-    <div className="min-h-screen bg-brand-cream pt-20">
+    <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       {/* Header */}
-      <div className="bg-brand-warm border-b border-brand-warm/80 py-16 md:py-20">
+      <div className="bg-brand-warm border-b border-brand-warm/80 py-10 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">
             Wisdom & Ritual
@@ -105,15 +51,15 @@ export default async function BlogPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         {/* Featured article */}
         {featured && (
           <Link
             href={`/blog/${featured.handle}`}
-            className="group block mb-14 md:mb-20"
+            className="group block mb-8 md:mb-10"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              <div className="relative aspect-[16/10] overflow-hidden bg-brand-warm">
+              <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm">
                 {featured.image ? (
                   <Image
                     src={featured.image.url}
@@ -155,17 +101,17 @@ export default async function BlogPage() {
         )}
 
         {/* Divider */}
-        <div className="flex items-center gap-4 mb-10">
+        <div className="flex items-center gap-4 mb-6">
           <div className="flex-1 h-px bg-brand-warm" />
           <span className="font-body text-xs tracking-widest uppercase text-brand-muted">All Articles</span>
           <div className="flex-1 h-px bg-brand-warm" />
         </div>
 
         {/* Article grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6">
           {rest.map((article) => (
             <Link key={article.handle} href={`/blog/${article.handle}`} className="group block">
-              <div className="relative aspect-[16/10] overflow-hidden bg-brand-warm mb-5">
+              <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm mb-5">
                 {article.image ? (
                   <Image
                     src={article.image.url}

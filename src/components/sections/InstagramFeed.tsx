@@ -2,12 +2,12 @@ import Image from 'next/image'
 import { Instagram } from 'lucide-react'
 
 const placeholderImages = [
-  { src: '/images/products/1_night_cream_HERO.jpg', alt: 'Night Cream ritual' },
-  { src: '/images/products/5_radiance_serum_HERO.jpg', alt: 'Radiance Serum glow' },
-  { src: '/images/products/_ALL13.jpg', alt: 'Full ritual collection' },
-  { src: '/images/products/6_cleansing_balm_HERO.jpg', alt: 'Cleansing ritual' },
-  { src: '/images/products/2_deep_cream_HERO.jpg', alt: 'Deep nourishing cream' },
-  { src: '/images/products/4_lip_set_HERO.jpg', alt: 'Lip care ritual' },
+  { src: '/images/lifestyle/life_1.jpg', alt: 'Warm ghee in a marble bowl' },
+  { src: '/images/lifestyle/life_2.jpg', alt: 'Open Cleansing Balm with daisies and oats' },
+  { src: '/images/lifestyle/life_3.jpg', alt: 'Radiance Serum flatlay with oats and saffron' },
+  { src: '/images/lifestyle/life_4.jpg', alt: 'The collection in botanical sleeves' },
+  { src: '/images/lifestyle/life_5.jpg', alt: 'Festive gift hamper' },
+  { src: '/images/lifestyle/life_6.jpg', alt: 'Cream applied to skin' },
 ]
 
 export default function InstagramFeed() {
@@ -15,7 +15,7 @@ export default function InstagramFeed() {
     <section className="section-pad bg-brand-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <a
             href="https://www.instagram.com/inheritedskincare"
             target="_blank"
@@ -66,7 +66,7 @@ export default function InstagramFeed() {
         </div>
 
         {/* Follow CTA */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6">
           <a
             href="https://www.instagram.com/inheritedskincare"
             target="_blank"
