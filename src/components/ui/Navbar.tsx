@@ -86,84 +86,87 @@ export default function Navbar({
               />
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
+            {/* Desktop Nav + Icons — Right aligned */}
+            <div className="hidden md:flex items-center gap-8 ml-auto">
+              {/* Desktop Nav */}
+              <nav className="flex items-center gap-8">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                {/* Shop by Concern Dropdown */}
+                <div className="relative group">
+                  <button
+                    onClick={() => setConcernOpen(!concernOpen)}
+                    className="flex items-center gap-1.5 font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                  >
+                    Shop by Concern
+                    <ChevronDown
+                      size={14}
+                      className={clsx(
+                        'transition-transform duration-300',
+                        concernOpen && 'rotate-180'
+                      )}
+                    />
+                  </button>
+
+                  {concernOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-brand-warm shadow-lg z-50">
+                      {concernLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setConcernOpen(false)}
+                          className="block px-4 py-3 font-body text-xs tracking-widest uppercase text-brand-dark hover:bg-brand-warm transition-colors border-b border-brand-warm last:border-b-0"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </nav>
+
+              {/* Icons */}
+              <div className="flex items-center gap-0.5">
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                  href="/search"
+                  aria-label="Search"
+                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
-                  {link.label}
+                  <Search size={20} strokeWidth={1.5} />
                 </Link>
-              ))}
-
-              {/* Shop by Concern Dropdown */}
-              <div className="relative group">
-                <button
-                  onClick={() => setConcernOpen(!concernOpen)}
-                  className="flex items-center gap-1.5 font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                <Link
+                  href="/account"
+                  aria-label="Account"
+                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
-                  Shop by Concern
-                  <ChevronDown
-                    size={14}
-                    className={clsx(
-                      'transition-transform duration-300',
-                      concernOpen && 'rotate-180'
-                    )}
-                  />
-                </button>
-
-                {concernOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-brand-warm shadow-lg z-50">
-                    {concernLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setConcernOpen(false)}
-                        className="block px-4 py-3 font-body text-xs tracking-widest uppercase text-brand-dark hover:bg-brand-warm transition-colors border-b border-brand-warm last:border-b-0"
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                  <User size={20} strokeWidth={1.5} />
+                </Link>
+                <Link
+                  href="/cart"
+                  aria-label="Shopping bag"
+                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
+                >
+                  <ShoppingBag size={20} strokeWidth={1.5} />
+                </Link>
               </div>
-            </nav>
-
-            {/* Right icons — generous tap targets for mobile */}
-            <div className="flex items-center gap-0.5 sm:gap-1 -mr-2">
-              <Link
-                href="/search"
-                aria-label="Search"
-                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
-              >
-                <Search size={20} strokeWidth={1.5} />
-              </Link>
-              <Link
-                href="/account"
-                aria-label="Account"
-                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
-              >
-                <User size={20} strokeWidth={1.5} />
-              </Link>
-              <Link
-                href="/cart"
-                aria-label="Shopping bag"
-                className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
-              >
-                <ShoppingBag size={20} strokeWidth={1.5} />
-              </Link>
-
-              {/* Mobile hamburger */}
-              <button
-                aria-label="Toggle menu"
-                onClick={() => setMobileOpen((o) => !o)}
-                className="md:hidden p-2.5 transition-colors duration-300 text-brand-dark"
-              >
-                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-              </button>
             </div>
+
+            {/* Mobile menu button */}
+            <button
+              aria-label="Toggle menu"
+              onClick={() => setMobileOpen((o) => !o)}
+              className="md:hidden p-2.5 transition-colors duration-300 text-brand-dark ml-auto"
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
 

@@ -6,6 +6,7 @@ import { getProduct, getRelatedProducts } from '@/lib/queries'
 import { getFallbackProduct, getFallbackRelated } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
 import AddToCartButton from './AddToCartButton'
+import RichText from '@/components/ui/RichText'
 import type { Product } from '@/types'
 
 interface PageProps {
@@ -213,9 +214,7 @@ export default async function ProductPage({ params }: PageProps) {
                 <h3 className="font-display font-semibold text-xl text-brand-dark mb-2">
                   How to Use
                 </h3>
-                <p className="font-body text-sm text-brand-muted leading-relaxed">
-                  {howToUse.value}
-                </p>
+                <RichText content={howToUse.value} />
               </div>
             )}
 

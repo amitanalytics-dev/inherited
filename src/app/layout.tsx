@@ -89,11 +89,6 @@ export default async function RootLayout({
         <Navbar announcement={settings.announcementBar} />
         <main className="min-h-screen">{children}</main>
         <Footer />
-        {/* Klaviyo onsite tracking + forms (public site key) */}
-        <Script
-          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WYzZWr"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   )
