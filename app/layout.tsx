@@ -12,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <ConvexClientProvider>{children}</ConvexClientProvider>
+        <p style={{textAlign:'center',fontSize:'12px',color:'#999',padding:'8px 0'}}>Powered by <a href="https://aletheiaai.in" target="_blank" rel="noopener" style={{color:'#FF5722',textDecoration:'none'}}>Aletheiaai.in</a></p>
       </body>
     </html>
   )
