@@ -1,20 +1,23 @@
 'use client'
 
-interface TextNode {
-  type: 'text'
-  value: string
-  bold?: boolean
-  italic?: boolean
-}
+type TextNode = { type: 'text'; value: string; bold?: boolean; italic?: boolean }
+type ListItemNode = { type: 'list-item'; children: TextNode[] }
+type ListNode = { type: 'list'; listType: 'ordered' | 'unordered'; children: ListItemNode[] }
+type ParagraphNode = { type: 'paragraph'; children: TextNode[] }
+type HeadingNode = { type: 'heading'; level: number; children: TextNode[] }
+type ChildNode = ParagraphNode | ListNode | HeadingNode
 
-interface ParagraphNode {
-  type: 'paragraph'
-  children: TextNode[]
-}
+interface RootNode { type: 'root'; children: ChildNode[] }
 
-interface RootNode {
-  type: 'root'
-  children: ParagraphNode[]
+function renderText(nodes: TextNode[]) {
+  return nodes.map((t, i) => (
+    <span
+      key={i}
+      className={[t.bold ? 'font-semibold text-brand-dark' : '', t.italic ? 'italic' : ''].filter(Boolean).join(' ') || undefined}
+    >
+      {t.value}
+    </span>
+  ))
 }
 
 export default function RichText({
@@ -42,24 +45,30 @@ export default function RichText({
 
   return (
     <div className="space-y-3">
-      {data.children.map((node, idx) => {
+      {data.children.map((node, i) => {
         if (node.type === 'paragraph') {
           return (
-            <p key={idx} className={className}>
-              {node.children.map((textNode, tIdx) => {
-                if (textNode.type === 'text') {
-                  return (
-                    <span
-                      key={tIdx}
-                      className={textNode.bold ? 'font-semibold text-brand-dark' : ''}
-                      style={textNode.italic ? { fontStyle: 'italic' } : {}}
-                    >
-                      {textNode.value}
-                    </span>
-                  )
-                }
-                return null
-              })}
+            <p key={i} className={className}>
+              {renderText(node.children as TextNode[])}
+            </p>
+          )
+        }
+        if (node.type === 'list') {
+          const Tag = node.listType === 'ordered' ? 'ol' : 'ul'
+          return (
+            <Tag key={i} className={node.listType === 'ordered' ? 'list-decimal list-inside space-y-1.5' : 'list-none space-y-1.5'}>
+              {(node.children as ListItemNode[]).map((item, j) => (
+                <li key={j} className={className}>
+                  {renderText(item.children as TextNode[])}
+                </li>
+              ))}
+            </Tag>
+          )
+        }
+        if (node.type === 'heading') {
+          return (
+            <p key={i} className="font-semibold text-brand-dark text-sm">
+              {renderText((node as HeadingNode).children)}
             </p>
           )
         }

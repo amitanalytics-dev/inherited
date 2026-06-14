@@ -86,67 +86,40 @@ export default async function ProductPage({ params }: PageProps) {
 
   const ingredients = product.metafields?.find((m) => m?.key === 'ingredients')
   const howToUse = product.metafields?.find((m) => m?.key === 'how_to_use')
-  const whyYouLoveIt = product.metafields?.find((m) => m?.key === 'why_you_love_it')
-  const whoItsGoodFor = product.metafields?.find((m) => m?.key === 'who_its_good_for')
-  const keyIngredientsDetail = product.metafields?.find((m) => m?.key === 'key_ingredients_detail')
-  const theExperience = product.metafields?.find((m) => m?.key === 'the_experience')
-  const productDetails = product.metafields?.find((m) => m?.key === 'product_details')
   const benefitIconsMeta = product.metafields?.find((m) => m?.key === 'benefit_icons')
+  const productDetailsMeta = product.metafields?.find((m) => m?.key === 'product_details')
+  const whyYouLoveIt = product.metafields?.find((m) => m?.key === 'why_you_will_love_it')
+  const whoItsGoodFor = product.metafields?.find((m) => m?.key === 'who_good_for')
+  const keyIngredients = product.metafields?.find((m) => m?.key === 'key_ingredients')
+  const theExperience = product.metafields?.find((m) => m?.key === 'the_experience')
+  const deliveryShipping = product.metafields?.find((m) => m?.key === 'delivery_shipping')
 
   // benefit_icons stored as comma-separated string e.g. "Soothes,Strengthens,Hydrates,Softens"
   const benefitIcons = benefitIconsMeta?.value
     ? benefitIconsMeta.value.split(',').map((s: string) => s.trim()).filter(Boolean)
     : []
 
-  // product_details stored as JSON object
-  let productDetailsObj: Record<string, string> | null = null
-  if (productDetails?.value) {
-    try { productDetailsObj = JSON.parse(productDetails.value) } catch { /* skip */ }
-  }
-
   // Build accordion items — only include sections that have content
   const accordionItems = [
-    ...(productDetailsObj ? [{
+    ...(productDetailsMeta?.value ? [{
       title: 'Product Details',
-      content: (
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-          {Object.entries(productDetailsObj).map(([k, v]) => (
-            <div key={k}>
-              <dt className="font-medium text-brand-dark capitalize">{k.replace(/_/g, ' ')}</dt>
-              <dd className="text-brand-muted">{v}</dd>
-            </div>
-          ))}
-        </dl>
-      ),
+      content: <RichText content={productDetailsMeta.value} />,
     }] : []),
     ...(whyYouLoveIt?.value ? [{
       title: "Why You'll Love It",
-      content: (
-        <ul className="list-disc list-inside space-y-1">
-          {whyYouLoveIt.value.split('\n').filter(Boolean).map((line: string, i: number) => (
-            <li key={i}>{line}</li>
-          ))}
-        </ul>
-      ),
+      content: <RichText content={whyYouLoveIt.value} />,
     }] : []),
     ...(whoItsGoodFor?.value ? [{
       title: "Who It's Good For",
-      content: <p>{whoItsGoodFor.value}</p>,
+      content: <p className="font-body text-sm text-brand-muted leading-relaxed">{whoItsGoodFor.value}</p>,
     }] : []),
-    ...(keyIngredientsDetail?.value ? [{
+    ...(keyIngredients?.value ? [{
       title: 'Key Ingredients',
       content: (
-        <div className="space-y-3">
-          {keyIngredientsDetail.value.split('\n').filter(Boolean).map((line: string, i: number) => {
-            const [name, ...rest] = line.split(':')
-            return (
-              <div key={i}>
-                <span className="font-medium text-brand-dark">{name?.trim()}</span>
-                {rest.length > 0 && <span className="text-brand-muted"> — {rest.join(':').trim()}</span>}
-              </div>
-            )
-          })}
-        </div>
+        <div
+          className="font-body text-sm text-brand-muted leading-relaxed space-y-2 [&_strong]:font-semibold [&_strong]:text-brand-dark [&_p]:mb-2"
+          dangerouslySetInnerHTML={{ __html: keyIngredients.value }}
+        />
       ),
     }] : []),
     ...(theExperience?.value ? [{
@@ -154,21 +127,23 @@ export default async function ProductPage({ params }: PageProps) {
       content: (
         <div className="space-y-1">
           {theExperience.value.split('\n').filter(Boolean).map((line: string, i: number) => (
-            <p key={i}>{line}</p>
+            <p key={i} className="font-body text-sm text-brand-muted">{line}</p>
           ))}
         </div>
       ),
     }] : []),
     {
-      title: 'Delivery & Shipping',
-      content: (
-        <ul className="space-y-1.5">
-          <li>Free tracked UK delivery on orders over £55</li>
-          <li>Ships within 2 working days (Mon–Fri)</li>
-          <li>UK delivery 2–3 working days after dispatch</li>
-          <li>Returns accepted within 14 days of delivery</li>
-        </ul>
-      ),
+      title: 'Delivery & Shipping (UK Only)',
+      content: deliveryShipping?.value
+        ? <RichText content={deliveryShipping.value} />
+        : (
+          <ul className="space-y-1.5 font-body text-sm text-brand-muted">
+            <li>Free tracked UK delivery on orders over £55</li>
+            <li>Ships within 2 working days (Mon–Fri)</li>
+            <li>UK delivery 2–3 working days after dispatch</li>
+            <li>Returns accepted within 14 days of delivery</li>
+          </ul>
+        ),
     },
   ]
 

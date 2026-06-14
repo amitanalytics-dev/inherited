@@ -11,10 +11,10 @@ import { FALLBACK_PRODUCTS } from '@/lib/fallback'
 
 function QuizIcon({ name }: { name: string }) {
   const p = { size: 28, strokeWidth: 1.5 } as const
-  if (name === 'leaf')     return <Leaf     {...p} className="text-brand-green" />
-  if (name === 'sun')      return <Sun      {...p} className="text-brand-amber" />
-  if (name === 'moon')     return <Moon     {...p} className="text-brand-muted" />
-  if (name === 'droplet')  return <Droplets {...p} className="text-sky-500" />
+  if (name === 'leaf')     return <span role="img" aria-label="leaf" className="text-4xl leading-none">🍃</span>
+  if (name === 'sun')      return <span role="img" aria-label="sun" className="text-4xl leading-none">☀️</span>
+  if (name === 'moon')     return <span role="img" aria-label="moon" className="text-4xl leading-none">🌙</span>
+  if (name === 'droplet')  return <span role="img" aria-label="droplet" className="text-4xl leading-none">💧</span>
   if (name === 'shield')   return <Shield   {...p} className="text-brand-green" />
   if (name === 'sparkles') return <Sparkles {...p} className="text-brand-amber" />
   if (name === 'clock')    return <Clock    {...p} className="text-brand-muted" />
