@@ -18,6 +18,20 @@ const BLOG_PLACEHOLDERS = [
   '/images/lifestyle/life_4.jpg',
   '/images/lifestyle/life_5.jpg',
   '/images/lifestyle/life_6.jpg',
+  '/images/brand/hero_lifestyle.jpg',
+  '/images/brand/founder_suruchi.jpg',
+  '/images/brand/suruchi_leela.jpg',
+  '/images/reviews/review_priya.jpg',
+  '/images/reviews/review_michelle.jpg',
+  '/images/reviews/review_vandana.jpg',
+  '/images/reviews/review_trisha.jpg',
+  '/images/reviews/ba_1.jpg',
+  '/images/reviews/ba_2.jpg',
+  '/images/reviews/ba_3.jpg',
+  '/images/reviews/ba_4.jpg',
+  '/images/reviews/ba_5.jpg',
+  '/images/products/1_night_cream_HERO.jpg',
+  '/images/products/2_deep_cream_HERO.jpg',
 ]
 
 function formatDate(dateString: string): string {
