@@ -26,7 +26,7 @@ export default async function AboutPage() {
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/75 via-brand-dark/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent" />
         <div className="relative z-10 h-full flex items-end">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">

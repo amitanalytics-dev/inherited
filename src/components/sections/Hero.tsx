@@ -44,7 +44,7 @@ export default function Hero({
       )}
 
       {/* Soft cream gradient on the left so dark text stays readable */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-brand-cream/90 via-brand-cream/45 to-transparent" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-brand-cream/55 via-brand-cream/10 to-transparent" />
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

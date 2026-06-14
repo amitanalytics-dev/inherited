@@ -43,6 +43,10 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
         }
       }
 
+      const prev = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
+      localStorage.setItem('cart_count', String((isNaN(prev) ? 0 : prev) + 1))
+      window.dispatchEvent(new Event('cart-updated'))
+
       setAdded(true)
       setTimeout(() => setAdded(false), 3000)
     } catch (err) {

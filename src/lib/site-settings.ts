@@ -110,8 +110,8 @@ export const DEFAULT_QUIZ: QuizConfig = {
       title: 'How would you describe your skin type?',
       options: [
         { value: 'dry', label: 'Dry & Tight', icon: '🌵', description: 'Feels rough, flaky, or tight after cleansing' },
-        { value: 'oily', label: 'Oily & Shiny', icon: '✨', description: 'Gets shiny throughout the day, enlarged pores' },
-        { value: 'combination', label: 'Combination', icon: '🌗', description: 'Oily T-zone, dry or normal cheeks' },
+        { value: 'normal', label: 'Normal & balanced', icon: '❤️', description: 'Comfortable most days, no major extremes' },
+        { value: 'combination', label: 'Combination', icon: '☯️', description: 'Drier cheeks, occasional shine in the T-zone' },
         { value: 'sensitive', label: 'Sensitive', icon: '🌸', description: 'Easily irritated, prone to redness or reactions' },
       ],
     },
@@ -149,14 +149,14 @@ export const DEFAULT_QUIZ: QuizConfig = {
       ],
     },
     {
-      key: 'oily',
-      title: 'The Balancing Clarity Ritual',
+      key: 'normal',
+      title: 'The Everyday Glow Ritual',
       description:
-        "Contrary to myth, the right oils balance oily skin. Our ghee formulas work with your skin's sebum, not against it.",
+        'Your balanced skin thrives with gentle nourishment and a touch of radiance. Our ghee formulas keep your glow going day after day.',
       productHandles: [
-        'ghee-oat-cleansing-balm',
-        'radiance-serum',
         'deep-nourishing-cream',
+        'radiance-serum',
+        'ghee-oat-cleansing-balm',
       ],
     },
     {

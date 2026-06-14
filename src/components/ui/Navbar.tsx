@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
-import { Menu, X, ShoppingBag, User, Search, ChevronDown } from 'lucide-react'
+import { Menu, X, ShoppingBag, User, Search } from 'lucide-react'
 import { motion, useScroll } from 'framer-motion'
 
-const navLinks = [
-  { label: 'Shop', href: '/products' },
+const navLinksAfterConcern = [
   { label: 'Skin Quiz', href: '/quiz' },
   { label: 'Our Story', href: '/about' },
   { label: 'Journal', href: '/blog' },
@@ -31,6 +30,7 @@ export default function Navbar({
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [concernOpen, setConcernOpen] = useState(false)
+  const [cartCount, setCartCount] = useState(0)
   const { scrollYProgress } = useScroll()
 
   useEffect(() => {
@@ -44,6 +44,17 @@ export default function Navbar({
     const close = () => setMobileOpen(false)
     window.addEventListener('resize', close)
     return () => window.removeEventListener('resize', close)
+  }, [])
+
+  // Cart count — reads from localStorage, updates on cart-updated event
+  useEffect(() => {
+    const update = () => {
+      const n = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
+      setCartCount(isNaN(n) ? 0 : n)
+    }
+    update()
+    window.addEventListener('cart-updated', update)
+    return () => window.removeEventListener('cart-updated', update)
   }, [])
 
   return (
@@ -90,30 +101,21 @@ export default function Navbar({
             <div className="hidden md:flex items-center gap-8 ml-auto">
               {/* Desktop Nav */}
               <nav className="flex items-center gap-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {/* Shop */}
+                <Link
+                  href="/products"
+                  className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                >
+                  Shop
+                </Link>
 
-                {/* Shop by Concern Dropdown */}
+                {/* Shop by Concern Dropdown — right after Shop */}
                 <div className="relative group">
                   <button
                     onClick={() => setConcernOpen(!concernOpen)}
-                    className="flex items-center gap-1.5 font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                    className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
                   >
                     Shop by Concern
-                    <ChevronDown
-                      size={14}
-                      className={clsx(
-                        'transition-transform duration-300',
-                        concernOpen && 'rotate-180'
-                      )}
-                    />
                   </button>
 
                   {concernOpen && (
@@ -131,6 +133,17 @@ export default function Navbar({
                     </div>
                   )}
                 </div>
+
+                {/* Remaining nav links */}
+                {navLinksAfterConcern.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="font-body text-xs tracking-widest uppercase link-hover transition-colors duration-300 text-brand-dark/80 hover:text-brand-dark"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
 
               {/* Icons */}
@@ -155,6 +168,11 @@ export default function Navbar({
                   className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
                   <ShoppingBag size={20} strokeWidth={1.5} />
+                  {cartCount > 0 && (
+                    <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-brand-amber text-white text-[9px] font-body font-semibold leading-none px-1">
+                      {cartCount > 99 ? '99+' : cartCount}
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>
@@ -207,31 +225,22 @@ export default function Navbar({
           </div>
 
           <nav className="flex flex-col p-6 gap-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {/* Shop */}
+            <Link
+              href="/products"
+              onClick={() => setMobileOpen(false)}
+              className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors"
+            >
+              Shop
+            </Link>
 
-            {/* Mobile Shop by Concern */}
+            {/* Mobile Shop by Concern — right after Shop */}
             <div>
               <button
                 onClick={() => setConcernOpen(!concernOpen)}
-                className="flex items-center gap-2 font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors w-full"
+                className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left"
               >
                 Shop by Concern
-                <ChevronDown
-                  size={18}
-                  className={clsx(
-                    'transition-transform duration-300',
-                    concernOpen && 'rotate-180'
-                  )}
-                />
               </button>
               {concernOpen && (
                 <div className="flex flex-col gap-2 mt-3 pl-4 border-l border-brand-warm">
@@ -251,6 +260,18 @@ export default function Navbar({
                 </div>
               )}
             </div>
+
+            {/* Remaining links */}
+            {navLinksAfterConcern.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="mt-auto p-6 border-t border-brand-warm">

@@ -11,6 +11,15 @@ export const metadata: Metadata = {
     'The Inherited Skincare Journal — Ayurvedic wisdom, skincare rituals, ingredient spotlights, and the science of ghee-based beauty.',
 }
 
+const BLOG_PLACEHOLDERS = [
+  '/images/lifestyle/life_1.jpg',
+  '/images/lifestyle/life_2.jpg',
+  '/images/lifestyle/life_3.jpg',
+  '/images/lifestyle/life_4.jpg',
+  '/images/lifestyle/life_5.jpg',
+  '/images/lifestyle/life_6.jpg',
+]
+
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -60,18 +69,14 @@ export default async function BlogPage() {
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm">
-                {featured.image ? (
-                  <Image
-                    src={featured.image.url}
-                    alt={featured.image.altText ?? featured.title}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-brand-warm" />
-                )}
+                <Image
+                  src={featured.image?.url ?? BLOG_PLACEHOLDERS[0]}
+                  alt={featured.image?.altText ?? featured.title}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
               <div>
                 <p className="font-body text-[10px] tracking-widest uppercase text-brand-amber mb-3">
@@ -109,20 +114,16 @@ export default async function BlogPage() {
 
         {/* Article grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-6">
-          {rest.map((article) => (
+          {rest.map((article, i) => (
             <Link key={article.handle} href={`/blog/${article.handle}`} className="group block">
               <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm mb-5">
-                {article.image ? (
-                  <Image
-                    src={article.image.url}
-                    alt={article.image.altText ?? article.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-brand-warm" />
-                )}
+                <Image
+                  src={article.image?.url ?? BLOG_PLACEHOLDERS[(i + 1) % BLOG_PLACEHOLDERS.length]}
+                  alt={article.image?.altText ?? article.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
               <h3 className="font-display font-semibold text-xl text-brand-dark group-hover:text-brand-amber transition-colors mb-2 leading-snug">
                 {article.title}
