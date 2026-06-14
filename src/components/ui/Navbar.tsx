@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { clsx } from 'clsx'
 import { Menu, X, ShoppingBag, User, Search } from 'lucide-react'
