@@ -17,21 +17,27 @@ interface RootNode {
   children: ParagraphNode[]
 }
 
-export default function RichText({ content }: { content: string | RootNode }) {
+export default function RichText({
+  content,
+  className = 'font-body text-sm text-brand-muted leading-relaxed',
+}: {
+  content: string | RootNode
+  className?: string
+}) {
   let data: RootNode
 
   if (typeof content === 'string') {
     try {
       data = JSON.parse(content)
     } catch {
-      return <p className="font-body text-sm text-brand-muted leading-relaxed">{content}</p>
+      return <p className={className}>{content}</p>
     }
   } else {
     data = content
   }
 
   if (data.type !== 'root' || !data.children) {
-    return <p className="font-body text-sm text-brand-muted leading-relaxed">{String(content)}</p>
+    return <p className={className}>{String(content)}</p>
   }
 
   return (
@@ -39,7 +45,7 @@ export default function RichText({ content }: { content: string | RootNode }) {
       {data.children.map((node, idx) => {
         if (node.type === 'paragraph') {
           return (
-            <p key={idx} className="font-body text-sm text-brand-muted leading-relaxed">
+            <p key={idx} className={className}>
               {node.children.map((textNode, tIdx) => {
                 if (textNode.type === 'text') {
                   return (

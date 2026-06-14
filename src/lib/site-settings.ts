@@ -106,84 +106,64 @@ export const DEFAULT_QUIZ: QuizConfig = {
   },
   questions: [
     {
-      id: 'skin_type',
-      title: 'How would you describe your skin type?',
+      id: 'ritual',
+      title: 'What kind of ritual feels like you?',
       options: [
-        { value: 'dry', label: 'Dry & Tight', icon: '🌵', description: 'Rough, flaky, or tight after cleansing.' },
-        { value: 'normal', label: 'Normal & balanced', icon: '❤️', description: 'Comfortable most days, no extremes.' },
-        { value: 'combination', label: 'Combination', icon: '☯️', description: 'Drier cheeks, T-zone shine.' },
-        { value: 'sensitive', label: 'Sensitive', icon: '🌸', description: 'Easily irritated, prone to redness.' },
+        { value: 'simple', label: 'Keep it simple', icon: 'leaf', description: '1–2 key steps, morning and night.' },
+        { value: 'morning', label: 'Morning glow', icon: 'sun', description: 'Brighten and nourish for the day ahead.' },
+        { value: 'evening', label: 'Evening wind-down', icon: 'moon', description: 'Cleanse and repair while you sleep.' },
+        { value: 'body', label: 'Head to toe', icon: 'droplet', description: 'Soft skin everywhere, not just your face.' },
       ],
     },
     {
       id: 'concern',
       title: "What's your main skin concern?",
       options: [
-        { value: 'dullness', label: 'Dullness & Uneven Tone', icon: '🌟', description: 'Skin looks tired, lacks radiance.' },
-        { value: 'ageing', label: 'Fine Lines & Ageing', icon: '⏳', description: 'Early signs of ageing, loss of firmness.' },
-        { value: 'dryness', label: 'Dryness & Dehydration', icon: '💧', description: 'Skin feels parched, lacks moisture.' },
-        { value: 'texture', label: 'Texture & Congestion', icon: '🔬', description: 'Rough texture, blackheads, or congestion.' },
+        { value: 'sensitivity', label: 'Sensitivity & redness', icon: 'shield', description: 'Reactive skin, a weakened barrier.' },
+        { value: 'dryness', label: 'Dryness & dehydration', icon: 'droplet', description: 'Skin feels parched, lacks moisture.' },
+        { value: 'dullness', label: 'Dullness & uneven tone', icon: 'sparkles', description: 'Skin looks tired, lacks radiance.' },
+        { value: 'ageing', label: 'Fine lines & firmness', icon: 'clock', description: 'Early signs of ageing, loss of firmness.' },
       ],
     },
     {
-      id: 'routine',
-      title: 'How would you describe your ideal skincare routine?',
+      id: 'skin_type',
+      title: 'How would you describe your skin type?',
       options: [
-        { value: 'minimal', label: 'Minimal', icon: '⚡', description: '2–3 steps, quick and effective.' },
-        { value: 'balanced', label: 'Balanced', icon: '🎯', description: '4–5 steps, morning and evening.' },
-        { value: 'full', label: 'Full Ritual', icon: '🕯️', description: 'A complete, indulgent routine.' },
-        { value: 'flexible', label: 'Flexible', icon: '🌊', description: 'Different each day, skin-led.' },
+        { value: 'dry', label: 'Dry & tight', icon: 'cactus', description: 'Feels rough, flaky, or tight after cleansing.' },
+        { value: 'normal', label: 'Normal & balanced', icon: 'heart', description: 'Comfortable most days, no major extremes.' },
+        { value: 'combination', label: 'Combination', icon: 'yin-yang', description: 'Drier cheeks, occasional shine in the T-zone.' },
+        { value: 'sensitive', label: 'Sensitive', icon: 'flower', description: 'Easily irritated, prone to redness or reactions.' },
       ],
     },
   ],
   results: [
     {
-      key: 'dry',
-      title: 'The Deep Nourishment Ritual',
-      description:
-        'Your skin craves intense moisture and barrier repair. Ghee-rich formulas deliver deep nourishment.',
-      productHandles: [
-        'overnight-rejuvenation-cream',
-        'deep-nourishing-cream',
-        'ghee-oat-cleansing-balm',
-      ],
+      key: 'simple',
+      title: 'The Effortless Ritual',
+      description: 'Minimal steps, maximum nourishment. Our hero moisturiser does it all — morning and night.',
+      productHandles: ['deep-nourishing-cream', 'ghee-oat-cleansing-balm'],
     },
     {
-      key: 'normal',
-      title: 'The Everyday Glow Ritual',
-      description:
-        'Balanced skin thrives with gentle nourishment and radiance. Ghee keeps your glow going.',
-      productHandles: [
-        'deep-nourishing-cream',
-        'radiance-serum',
-        'ghee-oat-cleansing-balm',
-      ],
+      key: 'morning',
+      title: 'The Morning Glow Ritual',
+      description: 'Radiance-boosting formulas that brighten and protect for the day ahead.',
+      productHandles: ['radiance-serum', 'deep-nourishing-cream'],
     },
     {
-      key: 'combination',
-      title: 'The Full Ritual',
-      description:
-        'The complete Inherited Skincare experience. Our most beloved trio.',
-      productHandles: [
-        'radiance-serum',
-        'overnight-rejuvenation-cream',
-        'ghee-oat-cleansing-balm',
-      ],
+      key: 'evening',
+      title: 'The Evening Repair Ritual',
+      description: 'Cleanse deeply, then let ghee-rich overnight actives work while you sleep.',
+      productHandles: ['ghee-oat-cleansing-balm', 'overnight-rejuvenation-cream'],
     },
     {
-      key: 'sensitive',
-      title: 'The Calm & Radiance Ritual',
-      description:
-        'Gentle, anti-inflammatory ghee and oat formulas. Calming and brightening.',
-      productHandles: [
-        'ghee-oat-cleansing-balm',
-        'radiance-serum',
-        'deep-nourishing-cream',
-      ],
+      key: 'body',
+      title: 'The Head-to-Toe Ritual',
+      description: 'Deep nourishment from face to feet. Soft, glowing skin all over.',
+      productHandles: ['deep-nourishing-cream', 'overnight-rejuvenation-cream', 'radiance-serum'],
     },
   ],
   resultLogic:
-    "The customer's answer to Question 1 (skin type) picks the result shown at the end. Questions 2–3 personalise the journey and the skin-profile summary.",
+    "The customer's answer to Question 1 (ritual style) picks the result shown at the end. Questions 2–3 personalise the journey.",
 }
 
 export const DEFAULT_PAGES: PageSettings = {

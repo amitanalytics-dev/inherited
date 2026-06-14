@@ -97,7 +97,7 @@ export default async function ProductPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Images */}
-          <div className="space-y-3">
+          <div>
             <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm">
               {primaryImage && (
                 <Image
@@ -110,21 +110,6 @@ export default async function ProductPage({ params }: PageProps) {
                 />
               )}
             </div>
-            {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {product.images.slice(1, 5).map((img, i) => (
-                  <div key={i} className="relative aspect-square overflow-hidden bg-brand-warm">
-                    <Image
-                      src={img.url}
-                      alt={img.altText ?? `${product.title} view ${i + 2}`}
-                      fill
-                      sizes="25vw"
-                      className="object-contain"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Details */}
@@ -208,16 +193,6 @@ export default async function ProductPage({ params }: PageProps) {
               ))}
             </div>
 
-            {/* How to use */}
-            {howToUse?.value && (
-              <div className="mt-6">
-                <h3 className="font-display font-semibold text-xl text-brand-dark mb-2">
-                  How to Use
-                </h3>
-                <RichText content={howToUse.value} />
-              </div>
-            )}
-
             {/* Ingredients */}
             {ingredients?.value && (
               <div className="mt-5">
@@ -231,6 +206,36 @@ export default async function ProductPage({ params }: PageProps) {
             )}
           </div>
         </div>
+
+        {/* Thumbnails + How to Use — symmetric row */}
+        {(product.images.length > 1 || howToUse?.value) && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-3">
+            {/* Thumbnails — left column, mirrors image above */}
+            <div className="grid grid-cols-4 gap-2">
+              {product.images.slice(1, 5).map((img, i) => (
+                <div key={i} className="relative aspect-square overflow-hidden bg-brand-warm">
+                  <Image
+                    src={img.url}
+                    alt={img.altText ?? `${product.title} view ${i + 2}`}
+                    fill
+                    sizes="25vw"
+                    className="object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* How to Use — right column, mirrors details above */}
+            {howToUse?.value && (
+              <div>
+                <h3 className="font-body text-2xl font-medium text-brand-dark mb-2">
+                  How to Use
+                </h3>
+                <RichText content={howToUse.value} className="font-body text-base text-brand-muted leading-relaxed" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Related products */}

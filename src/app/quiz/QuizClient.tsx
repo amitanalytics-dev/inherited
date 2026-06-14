@@ -3,8 +3,27 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import {
+  Leaf, Sun, Moon, Droplets, Shield, Sparkles, Clock, Shrub, Heart, Flower2,
+} from 'lucide-react'
 import type { QuizConfig, QuizResult } from '@/lib/site-settings'
 import { FALLBACK_PRODUCTS } from '@/lib/fallback'
+
+function QuizIcon({ name }: { name: string }) {
+  const p = { size: 28, strokeWidth: 1.5 } as const
+  if (name === 'leaf')     return <Leaf     {...p} className="text-brand-green" />
+  if (name === 'sun')      return <Sun      {...p} className="text-brand-amber" />
+  if (name === 'moon')     return <Moon     {...p} className="text-brand-muted" />
+  if (name === 'droplet')  return <Droplets {...p} className="text-sky-500" />
+  if (name === 'shield')   return <Shield   {...p} className="text-brand-green" />
+  if (name === 'sparkles') return <Sparkles {...p} className="text-brand-amber" />
+  if (name === 'clock')    return <Clock    {...p} className="text-brand-muted" />
+  if (name === 'cactus')   return <Shrub    {...p} className="text-sky-600" />
+  if (name === 'heart')    return <Heart    {...p} className="text-brand-green" />
+  if (name === 'yin-yang') return <span className="text-brand-amber font-bold text-2xl">☯</span>
+  if (name === 'flower')   return <Flower2  {...p} className="text-brand-muted" />
+  return <span className="text-2xl">{name}</span>
+}
 
 type Answers = Record<string, string>
 
@@ -124,19 +143,22 @@ export default function QuizClient({ config }: { config: QuizConfig }) {
                 <button
                   key={option.value}
                   onClick={() => handleAnswer(option.value)}
-                  className="group p-6 border border-brand-warm bg-white text-left hover:border-brand-amber hover:bg-brand-amber/5 transition-all duration-200 active:scale-[0.98]"
+                  className="group p-7 border border-brand-warm rounded-lg bg-white text-left hover:border-brand-amber hover:bg-brand-amber/5 transition-all duration-200 active:scale-[0.98] shadow-sm"
                 >
                   {option.icon && (
-                    <span className="text-3xl block mb-3">{option.icon}</span>
+                    <div className="mb-4">
+                      <QuizIcon name={option.icon} />
+                    </div>
                   )}
-                  <h3 className="font-display font-semibold text-lg text-brand-dark group-hover:text-brand-amber transition-colors mb-1">
+                  <h3 className="font-display font-semibold text-xl text-brand-dark group-hover:text-brand-amber transition-colors mb-2">
                     {option.label}
                   </h3>
                   {option.description && (
-                    <p className="font-body text-xs text-brand-muted leading-relaxed">
+                    <p className="font-body text-sm text-brand-muted leading-relaxed">
                       {option.description}
                     </p>
                   )}
+                  <div className="mt-4 border-t border-brand-warm/60" />
                 </button>
               ))}
             </div>
