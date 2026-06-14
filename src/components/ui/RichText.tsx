@@ -18,11 +18,17 @@ interface RootNode {
 }
 
 export default function RichText({ content }: { content: string | RootNode }) {
-  if (typeof content === 'string') {
-    return <p className="font-body text-sm text-brand-muted leading-relaxed">{content}</p>
-  }
+  let data: RootNode
 
-  const data: RootNode = typeof content === 'string' ? JSON.parse(content) : content
+  if (typeof content === 'string') {
+    try {
+      data = JSON.parse(content)
+    } catch {
+      return <p className="font-body text-sm text-brand-muted leading-relaxed">{content}</p>
+    }
+  } else {
+    data = content
+  }
 
   if (data.type !== 'root' || !data.children) {
     return <p className="font-body text-sm text-brand-muted leading-relaxed">{String(content)}</p>
