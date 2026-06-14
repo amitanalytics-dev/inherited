@@ -72,7 +72,13 @@ const PRODUCT_FRAGMENT = `
     metafields(identifiers: [
       { namespace: "custom", key: "ingredients" },
       { namespace: "custom", key: "how_to_use" },
-      { namespace: "custom", key: "skin_type" }
+      { namespace: "custom", key: "skin_type" },
+      { namespace: "custom", key: "why_you_love_it" },
+      { namespace: "custom", key: "who_its_good_for" },
+      { namespace: "custom", key: "key_ingredients_detail" },
+      { namespace: "custom", key: "the_experience" },
+      { namespace: "custom", key: "product_details" },
+      { namespace: "custom", key: "benefit_icons" }
     ]) {
       key
       value

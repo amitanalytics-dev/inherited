@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Script from 'next/script'
 import { getSiteSettings } from '@/lib/site-settings'
 
 export const metadata: Metadata = {
@@ -13,8 +14,20 @@ export const dynamic = 'force-dynamic'
 export default async function FAQPage() {
   const settings = await getSiteSettings()
   const faqs = settings.pages.faq.items
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  }
+
   return (
     <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
+      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Header */}
       <div className="bg-brand-warm border-b border-brand-warm/80 py-10 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

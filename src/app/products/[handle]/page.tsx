@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { notFound } from 'next/navigation'
 import { getProduct, getRelatedProducts } from '@/lib/queries'
 import { getFallbackProduct, getFallbackRelated } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
 import AddToCartButton from './AddToCartButton'
 import RichText from '@/components/ui/RichText'
+import Accordion from '@/components/ui/Accordion'
+import { SITE_URL } from '@/lib/site-url'
 import type { Product } from '@/types'
 
 interface PageProps {
@@ -17,11 +20,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const product = (await getProduct(params.handle)) ?? getFallbackProduct(params.handle)
     if (!product) return { title: 'Product Not Found' }
+    const canonical = `${SITE_URL}/products/${product.handle}`
     return {
       title: product.seo.title ?? product.title,
       description: product.seo.description ?? product.description,
+      alternates: { canonical },
       openGraph: {
-        images: product.images[0] ? [{ url: product.images[0].url }] : [],
+        type: 'website',
+        url: canonical,
+        images: product.images[0] ? [{ url: product.images[0].url, width: product.images[0].width ?? 800, height: product.images[0].height ?? 800, alt: product.images[0].altText ?? product.title }] : [],
       },
     }
   } catch {
@@ -79,9 +86,127 @@ export default async function ProductPage({ params }: PageProps) {
 
   const ingredients = product.metafields?.find((m) => m?.key === 'ingredients')
   const howToUse = product.metafields?.find((m) => m?.key === 'how_to_use')
+  const whyYouLoveIt = product.metafields?.find((m) => m?.key === 'why_you_love_it')
+  const whoItsGoodFor = product.metafields?.find((m) => m?.key === 'who_its_good_for')
+  const keyIngredientsDetail = product.metafields?.find((m) => m?.key === 'key_ingredients_detail')
+  const theExperience = product.metafields?.find((m) => m?.key === 'the_experience')
+  const productDetails = product.metafields?.find((m) => m?.key === 'product_details')
+  const benefitIconsMeta = product.metafields?.find((m) => m?.key === 'benefit_icons')
+
+  // benefit_icons stored as comma-separated string e.g. "Soothes,Strengthens,Hydrates,Softens"
+  const benefitIcons = benefitIconsMeta?.value
+    ? benefitIconsMeta.value.split(',').map((s: string) => s.trim()).filter(Boolean)
+    : []
+
+  // product_details stored as JSON object
+  let productDetailsObj: Record<string, string> | null = null
+  if (productDetails?.value) {
+    try { productDetailsObj = JSON.parse(productDetails.value) } catch { /* skip */ }
+  }
+
+  // Build accordion items — only include sections that have content
+  const accordionItems = [
+    ...(productDetailsObj ? [{
+      title: 'Product Details',
+      content: (
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+          {Object.entries(productDetailsObj).map(([k, v]) => (
+            <div key={k}>
+              <dt className="font-medium text-brand-dark capitalize">{k.replace(/_/g, ' ')}</dt>
+              <dd className="text-brand-muted">{v}</dd>
+            </div>
+          ))}
+        </dl>
+      ),
+    }] : []),
+    ...(whyYouLoveIt?.value ? [{
+      title: "Why You'll Love It",
+      content: (
+        <ul className="list-disc list-inside space-y-1">
+          {whyYouLoveIt.value.split('\n').filter(Boolean).map((line: string, i: number) => (
+            <li key={i}>{line}</li>
+          ))}
+        </ul>
+      ),
+    }] : []),
+    ...(whoItsGoodFor?.value ? [{
+      title: "Who It's Good For",
+      content: <p>{whoItsGoodFor.value}</p>,
+    }] : []),
+    ...(keyIngredientsDetail?.value ? [{
+      title: 'Key Ingredients',
+      content: (
+        <div className="space-y-3">
+          {keyIngredientsDetail.value.split('\n').filter(Boolean).map((line: string, i: number) => {
+            const [name, ...rest] = line.split(':')
+            return (
+              <div key={i}>
+                <span className="font-medium text-brand-dark">{name?.trim()}</span>
+                {rest.length > 0 && <span className="text-brand-muted"> — {rest.join(':').trim()}</span>}
+              </div>
+            )
+          })}
+        </div>
+      ),
+    }] : []),
+    ...(theExperience?.value ? [{
+      title: 'The Experience',
+      content: (
+        <div className="space-y-1">
+          {theExperience.value.split('\n').filter(Boolean).map((line: string, i: number) => (
+            <p key={i}>{line}</p>
+          ))}
+        </div>
+      ),
+    }] : []),
+    {
+      title: 'Delivery & Shipping',
+      content: (
+        <ul className="space-y-1.5">
+          <li>Free tracked UK delivery on orders over £55</li>
+          <li>Ships within 2 working days (Mon–Fri)</li>
+          <li>UK delivery 2–3 working days after dispatch</li>
+          <li>Returns accepted within 14 days of delivery</li>
+        </ul>
+      ),
+    },
+  ]
+
+  const productUrl = `${SITE_URL}/products/${product.handle}`
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    brand: { '@type': 'Brand', name: product.vendor || 'Inherited Skincare' },
+    url: productUrl,
+    image: product.images.map((img) => img.url),
+    offers: {
+      '@type': 'Offer',
+      url: productUrl,
+      priceCurrency: price.currencyCode,
+      price: parseFloat(price.amount).toFixed(2),
+      availability: product.availableForSale
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: 'Inherited Skincare' },
+    },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
+      { '@type': 'ListItem', position: 3, name: product.title, item: productUrl },
+    ],
+  }
 
   return (
     <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
+      <Script id="product-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav className="flex items-center gap-2 font-body text-xs text-brand-muted">
@@ -193,6 +318,20 @@ export default async function ProductPage({ params }: PageProps) {
               ))}
             </div>
 
+            {/* Benefit icons */}
+            {benefitIcons.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {benefitIcons.map((label: string) => (
+                  <span
+                    key={label}
+                    className="font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-3 py-1.5 border border-brand-green/20"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {/* Ingredients */}
             {ingredients?.value && (
               <div className="mt-5">
@@ -236,6 +375,11 @@ export default async function ProductPage({ params }: PageProps) {
             )}
           </div>
         )}
+
+        {/* Product info accordion */}
+        <div className="max-w-3xl mt-12">
+          <Accordion items={accordionItems} />
+        </div>
       </div>
 
       {/* Related products */}

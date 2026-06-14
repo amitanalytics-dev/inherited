@@ -7,6 +7,45 @@ import Footer from '@/components/ui/Footer'
 import { getSiteSettings } from '@/lib/site-settings'
 import { SITE_URL } from '@/lib/site-url'
 
+const ORG_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#organization`,
+      name: 'Inherited Skincare',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/images/products/_ALL13.jpg`,
+        width: 1200,
+        height: 630,
+      },
+      sameAs: [
+        'https://www.instagram.com/inheritedskincare',
+      ],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: 'suruchi@inheritedskincare.com',
+        availableLanguage: ['English'],
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: 'Inherited Skincare',
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/search?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+  ],
+}
+
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
@@ -39,9 +78,18 @@ export const metadata: Metadata = {
     'inherited skincare',
     'ancient beauty rituals',
   ],
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      'en-GB': SITE_URL,
+      'en-US': SITE_URL,
+      'x-default': SITE_URL,
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
+    alternateLocale: ['en_US'],
     url: SITE_URL,
     siteName: 'Inherited Skincare',
     title: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
@@ -82,9 +130,16 @@ export default async function RootLayout({
   const settings = await getSiteSettings()
   return (
     <html
-      lang="en"
+      lang="en-GB"
       className={`${cormorant.variable} ${dmSans.variable}`}
     >
+      <head>
+        <Script
+          id="org-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }}
+        />
+      </head>
       <body className="bg-brand-cream text-brand-dark font-body antialiased">
         <Navbar announcement={settings.announcementBar} />
         <main className="min-h-screen">{children}</main>

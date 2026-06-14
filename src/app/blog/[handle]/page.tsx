@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { notFound } from 'next/navigation'
 import { getArticle } from '@/lib/queries'
 import { getFallbackArticle } from '@/lib/fallback'
+import { SITE_URL } from '@/lib/site-url'
 import type { Article } from '@/types'
 
 interface PageProps {
@@ -17,11 +19,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       (await getArticle('news', params.handle)) ??
       getFallbackArticle(params.handle)
     if (!article) return { title: 'Article Not Found' }
+    const canonical = `${SITE_URL}/blog/${article.handle}`
     return {
       title: article.seo.title ?? article.title,
       description: article.seo.description ?? article.excerpt ?? '',
+      alternates: { canonical },
       openGraph: {
-        images: article.image ? [{ url: article.image.url }] : [],
+        type: 'article',
+        url: canonical,
+        publishedTime: article.publishedAt,
+        authors: [article.author.name],
+        images: article.image ? [{ url: article.image.url, alt: article.image.altText ?? article.title }] : [],
       },
     }
   } catch {
@@ -60,8 +68,39 @@ export default async function BlogArticlePage({ params }: PageProps) {
     notFound()
   }
 
+  const articleUrl = `${SITE_URL}/blog/${article.handle}`
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    description: article.excerpt ?? '',
+    url: articleUrl,
+    datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
+    author: { '@type': 'Person', name: article.author.name },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Inherited Skincare',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/images/products/_ALL13.jpg` },
+    },
+    ...(article.image ? { image: { '@type': 'ImageObject', url: article.image.url } } : {}),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Journal', item: `${SITE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl },
+    ],
+  }
+
   return (
     <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
+      <Script id="article-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {/* Hero image */}
       {article.image && (
         <div className="relative h-[50vh] min-h-[350px] overflow-hidden">
