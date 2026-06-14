@@ -5,19 +5,19 @@ import Reveal from '@/components/ui/Reveal'
 const benefits = [
   {
     title: 'Deep Nourishment',
-    body: 'Rich in short-chain fatty acids, ghee penetrates the skin barrier to nourish from within — not just on the surface.',
+    body: 'Ghee penetrates the skin barrier. Nourishes from within.',
   },
   {
     title: 'Anti-Inflammatory',
-    body: 'Butyric acid and omega-3s in ghee calm redness, sensitivity, and reactive skin with every application.',
+    body: 'Butyric acid calms redness, sensitivity, and reactive skin.',
   },
   {
     title: 'Vitamin-Dense',
-    body: 'A natural source of vitamins A, D, E and K — essential nutrients that brighten, firm, and protect skin daily.',
+    body: 'Natural vitamins A, D, E & K. Brightens, firms, protects.',
   },
   {
     title: 'Microbiome Friendly',
-    body: 'Unlike synthetic emollients, ghee works with your skin\'s natural microbiome rather than against it.',
+    body: 'Works with your skin\'s microbiome, not against it.',
   },
 ]
 
@@ -54,10 +54,7 @@ export default function IngredientsSpotlight({
               <em className="italic text-brand-amber">Ghee</em>
             </h2>
             <p className="font-body text-base text-brand-muted leading-relaxed mb-8">
-              In Ayurveda, ghee — clarified butter — has been revered for over
-              5,000 years as a substance that nourishes the body at a cellular
-              level. Applied topically, its unique molecular structure allows it
-              to penetrate deeply, delivering nutrients where skin needs them most.
+              Revered in Ayurveda for over 5,000 years. Applied topically, ghee penetrates deeply. Delivers nutrients where skin needs them most.
             </p>
 
             {/* Benefits */}

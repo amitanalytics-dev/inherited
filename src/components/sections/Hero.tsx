@@ -15,7 +15,7 @@ type HeroProps = {
 export default function Hero({
   headline1 = 'Glow Like You',
   headline2 = 'Inherited It.',
-  subline = 'Ghee-powered Ayurvedic skincare, handmade in the UK.',
+  subline = 'Ghee-powered Ayurvedic skincare. Handmade in the UK.',
   image = '/images/brand/hero_lifestyle.jpg',
   video,
 }: HeroProps) {
@@ -56,7 +56,7 @@ export default function Hero({
             transition={{ duration: 0.7, delay: 0.2 }}
             className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-6 font-semibold"
           >
-            Ayurvedic Ghee Skincare · Made in the UK
+            Ayurvedic Ghee Skincare · Made in UK
           </motion.p>
 
           {/* Main heading */}

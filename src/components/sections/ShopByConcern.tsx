@@ -18,19 +18,19 @@ export default function ShopByConcern({
   const concerns = [
     {
       title: 'Sensitive Skin',
-      line: 'Calming ghee & oat formulas for skin that reacts.',
+      line: 'Calming ghee & oat for reactive skin.',
       img: images.sensitive,
       href: '/collections/sensitive-skin',
     },
     {
       title: 'Dry Skin Repair',
-      line: 'Deep, lasting hydration that rebuilds the barrier.',
+      line: 'Deep hydration that rebuilds the barrier.',
       img: images.dry,
       href: '/collections/dry-skin-repair',
     },
     {
       title: 'Dullness & Uneven Tone',
-      line: 'Turmeric & saffron rituals for an even, radiant tone.',
+      line: 'Turmeric & saffron for radiant, even tone.',
       img: images.dullness,
       href: '/collections/pigmentation-dull-skin',
     },
@@ -49,7 +49,7 @@ export default function ShopByConcern({
               Find Your <em className="italic">Fix</em>
             </h2>
             <p className="font-body text-sm text-brand-muted mt-3 max-w-md mx-auto">
-              Whatever your skin is asking for — start here.
+              Whatever your skin needs — start here.
             </p>
             <div className="w-16 h-px bg-brand-amber mx-auto mt-4" />
           </div>

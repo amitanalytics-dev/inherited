@@ -63,7 +63,7 @@ export default async function SearchPage({
               What are you looking for?
             </p>
             <p className="font-body text-sm text-brand-muted">
-              Search our collection of Ayurvedic ghee-based skincare.
+              Search our Ayurvedic ghee skincare collection.
             </p>
           </div>
         ) : products.length > 0 ? (
@@ -88,7 +88,7 @@ export default async function SearchPage({
               No results for &ldquo;{q}&rdquo;
             </h1>
             <p className="font-body text-sm text-brand-muted mb-7">
-              We couldn&rsquo;t find a match. Try a different term or browse the full collection.
+              No match found. Try a different term or browse all.
             </p>
             <Link
               href="/products"

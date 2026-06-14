@@ -19,10 +19,10 @@ export default async function CollectionsPage() {
 
   const fallbackCollections = [
     { handle: 'face-care', title: 'Face Care', description: 'Ghee-powered formulas for radiant, nourished skin.', img: '/images/products/1_night_cream.jpg' },
-    { handle: 'body-care', title: 'Body Care', description: 'Head-to-toe nourishment for skin that glows.', img: '/images/products/3_foot_cream.jpg' },
-    { handle: 'gift-sets', title: 'Gift Sets', description: 'Beautifully curated rituals, ready to gift.', img: '/images/products/7_essentials_gift.jpg' },
+    { handle: 'body-care', title: 'Body Care', description: 'Head-to-toe nourishment for glowing skin.', img: '/images/products/3_foot_cream.jpg' },
+    { handle: 'gift-sets', title: 'Gift Sets', description: 'Curated rituals, beautifully ready to gift.', img: '/images/products/7_essentials_gift.jpg' },
     { handle: 'bundles', title: 'Bundles', description: 'Complete rituals at exceptional value.', img: '/images/products/9_hand_foot_bundle.png' },
-    { handle: 'best-sellers', title: 'Best Sellers', description: 'Our most-loved formulas, loved by 1,800+ customers.', img: '/images/products/_ALL13.jpg' },
+    { handle: 'best-sellers', title: 'Best Sellers', description: 'Our most-loved formulas. Trusted by 1,800+ customers.', img: '/images/products/_ALL13.jpg' },
     { handle: 'new-arrivals', title: 'New Arrivals', description: 'Fresh additions to the ritual.', img: '/images/products/5_radiance_serum.jpg' },
   ]
 
@@ -34,7 +34,7 @@ export default async function CollectionsPage() {
           <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">Curated Rituals</p>
           <h1 className="font-display font-semibold text-5xl md:text-6xl text-brand-dark">Collections</h1>
           <p className="font-body text-base text-brand-muted mt-4 max-w-lg mx-auto">
-            Every collection tells the story of an ancient ritual, reborn for modern skin.
+            Ancient rituals, reborn for modern skin.
           </p>
         </div>
       </div>

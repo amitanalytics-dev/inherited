@@ -20,7 +20,7 @@ const concernLinks = [
 ]
 
 const DEFAULT_ANNOUNCEMENT =
-  'Free UK shipping over £55 · Handmade in the UK · 5.0★ from 1,800+ customers'
+  'Free UK shipping over £55 · Handmade in UK · 5.0★ · 1,800+ customers'
 
 export default function Navbar({
   announcement = DEFAULT_ANNOUNCEMENT,

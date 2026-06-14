@@ -54,25 +54,28 @@ export default function StorySection({
 
             <div className="space-y-4 font-body text-base text-brand-muted leading-relaxed">
               <p>
-                Every jar of Inherited Skincare carries the memory of an evening
-                ritual. Our founder, Suruchi, grew up watching her Indian
-                grandmother, Leela, press warm ghee into her face and hands
-                before bed — a practice passed down through generations. The
-                brand is literally named in her honour.
+                Every jar carries the memory of an evening ritual.
               </p>
               <p>
-                When modern skincare — parabens, synthetic fragrance, harsh
-                actives — left Suruchi&rsquo;s skin reactive, she returned to
-                what she had inherited: ghee. As few ingredients as possible,
-                all natural. No shortcuts.
+                Founder Suruchi watched her grandmother Leela press ghee into skin before bed.
               </p>
               <p>
-                At the heart of every formula is washed ghee — clarified butter
-                washed, traditionally one hundred times in Ayurvedic practice,
-                into a light whipped texture. It penetrates all seven layers of
-                the skin, carrying butyric acid and vitamins A, D, E and K to
-                feed the skin barrier in a way no synthetic substitute can
-                replicate.
+                The brand is named in Leela&rsquo;s honour.
+              </p>
+              <p>
+                Harsh modern skincare left Suruchi&rsquo;s skin reactive.
+              </p>
+              <p>
+                She returned to what she inherited: ghee. All natural. No shortcuts.
+              </p>
+              <p>
+                At the heart of every formula: washed ghee.
+              </p>
+              <p>
+                It penetrates all seven layers of skin.
+              </p>
+              <p>
+                Carries butyric acid and vitamins A, D, E &amp; K.
               </p>
             </div>
 

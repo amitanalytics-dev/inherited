@@ -4,22 +4,22 @@ import Reveal from '@/components/ui/Reveal'
 const ingredients = [
   {
     name: 'Washed Ghee',
-    line: 'Penetrates all seven layers of skin. Rich in butyric acid and vitamins A, D, E & K. Comedogenic rating: 1/5.',
+    line: 'Penetrates all seven skin layers. Vitamins A, D, E & K.',
     img: '/images/brand/quote_1.png',
   },
   {
     name: 'Turmeric',
-    line: 'Brightening and anti-inflammatory. Targets uneven pigmentation at the source.',
+    line: 'Brightening & anti-inflammatory. Targets uneven pigmentation.',
     img: '/images/brand/quote_3.png',
   },
   {
     name: 'Saffron & Liquorice',
-    line: 'Traditional radiance botanicals — for even tone and a calm, healthy glow.',
+    line: 'Radiance botanicals for even tone and healthy glow.',
     img: '/images/brand/quote_2.png',
   },
   {
     name: 'Sea Buckthorn & Calendula',
-    line: 'Antioxidant protection and soothing repair for stressed, sensitive skin.',
+    line: 'Antioxidant protection and repair for sensitive skin.',
     img: '/images/brand/quote_5.png',
   },
 ]
@@ -35,7 +35,7 @@ export default function PositivityQuotes() {
               Inside Every Jar
             </p>
             <h2 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark">
-              The Ingredients That <em className="italic">Do The Work</em>
+              Ingredients That <em className="italic">Do The Work</em>
             </h2>
             <div className="w-16 h-px bg-brand-amber mx-auto mt-4" />
           </div>

@@ -144,9 +144,7 @@ export default function Footer() {
               &ldquo;Ancient Wisdom. Modern Skin.&rdquo;
             </p>
             <p className="font-body text-sm text-brand-cream/60 leading-relaxed max-w-xs">
-              Ayurvedic ghee-based skincare inspired by our founder&rsquo;s
-              grandmother, Leela, and her evening ghee ritual. Crafted with love
-              in the UK, for skin that deserves the best of both worlds.
+              Inspired by Grandma Leela&rsquo;s evening ghee ritual. Crafted with love in the UK.
             </p>
 
             {/* Newsletter */}
@@ -221,8 +219,7 @@ export default function Footer() {
       <div className="relative z-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-brand-cream/30">
-            © {new Date().getFullYear()} Inherited Skincare. All rights reserved.
-            Made with ♥ in the UK.
+            © {new Date().getFullYear()} Inherited Skincare. Made with ♥ in the UK.
           </p>
           <div className="flex items-center gap-4">
             <a

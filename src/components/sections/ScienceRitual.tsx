@@ -18,7 +18,7 @@ const pillars = [
     ),
     title: 'Ancient Ayurvedic Ingredients',
     body:
-      'Every formula is rooted in Ayurvedic wisdom — washed organic ghee, turmeric, saffron, calendula and oat, with as few ingredients as possible and all of them natural.',
+      'Rooted in Ayurveda. Washed ghee, turmeric, saffron, calendula, oat. All natural. Minimal.',
   },
   {
     icon: (
@@ -37,7 +37,7 @@ const pillars = [
     ),
     title: 'CPSR Safety Tested',
     body:
-      'Every formula carries full Cosmetic Product Safety Report certification — independently safety assessed for the UK market. Modern standards for what ancestry perfected.',
+      'Independently certified for the UK market. Modern standards. Ancient wisdom.',
   },
   {
     icon: (
@@ -55,7 +55,7 @@ const pillars = [
     ),
     title: 'Handcrafted in the UK',
     body:
-      'Small-batch, slow-made. Every product is crafted in our UK studio with the care and intention of a grandmother\'s kitchen. No mass-production shortcuts.',
+      'Small-batch, slow-made. Crafted with a grandmother\'s care. No shortcuts.',
   },
 ]
 

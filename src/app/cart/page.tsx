@@ -44,7 +44,7 @@ export default function CartPage() {
         setCart(c)
       }
     } catch {
-      setError('We couldn’t load your bag just now. Please refresh.')
+      setError('Could not load your bag. Please refresh.')
     } finally {
       setLoading(false)
     }
@@ -145,7 +145,7 @@ export default function CartPage() {
             Your Bag is Empty
           </h1>
           <p className="font-body text-base text-brand-muted mb-8">
-            Add products to your bag to begin your ritual.
+            Add products to begin your ritual.
           </p>
           <Link
             href="/products"
@@ -160,7 +160,7 @@ export default function CartPage() {
               Not sure where to start?
             </p>
             <p className="font-body text-sm text-brand-muted mb-5">
-              Take our 3-question skin quiz for personalised recommendations.
+              Take our 3-question quiz for personalised picks.
             </p>
             <Link
               href="/quiz"
@@ -195,7 +195,7 @@ export default function CartPage() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between mb-2">
               <span className="font-body text-sm">
-                Add £{remainingForFreeShipping.toFixed(2)} more for free UK shipping
+                Add £{remainingForFreeShipping.toFixed(2)} more for free shipping
               </span>
               <span className="font-body text-xs text-brand-amber">
                 {Math.round(progress)}%

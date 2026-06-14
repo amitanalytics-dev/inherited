@@ -69,13 +69,10 @@ export default async function ReviewsPage() {
               Real Results
             </p>
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-brand-dark leading-tight mb-4">
-              Results you can <em className="italic">see.</em>
+              Real results you can <em className="italic">see.</em>
             </h2>
             <p className="font-body text-base text-brand-muted leading-relaxed mb-6">
-              From eczema-prone and reactive skin to dullness and dryness —
-              customers across the UK trust washed-ghee rituals that work
-              through all seven layers of skin. These are their words,
-              unedited.
+              From eczema to dullness — ghee rituals that work. Their words, unedited.
             </p>
             <Link
               href="/products"

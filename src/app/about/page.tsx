@@ -144,7 +144,7 @@ export default async function AboutPage() {
             Ready to Begin Your Ritual?
           </h2>
           <p className="font-body text-base text-brand-muted mb-8">
-            Find the perfect formula for your skin with our 3-question ritual quiz.
+            Take our 3-question quiz. Find your formula.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

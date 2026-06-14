@@ -23,7 +23,7 @@ const photoReviews = [
   {
     img: '/images/reviews/review_trisha.jpg',
     quote:
-      "Omg I am obsessed. I've been suffering from eczema for years and nothing has helped. It's really helped calm the redness. Also it's not greasy like topical eczema creams. So grateful I found this!",
+      "Calmed my eczema redness. Not greasy at all. So grateful!",
     name: 'Trisha M.',
     concern: 'Eczema',
     product: 'Deep Nourishing Cream',
@@ -31,7 +31,7 @@ const photoReviews = [
   {
     img: '/images/reviews/review_vandana.jpg',
     quote:
-      "Since we discovered Inherited Deep Nourishing Cream, this is the only cream that calms and soothes my daughter's eczema. We've tried so many over the years.",
+      "The only cream that soothes my daughter's eczema. Nothing else works.",
     name: 'Vandana R.',
     concern: 'Child Eczema',
     product: 'Deep Nourishing Cream',
@@ -47,7 +47,7 @@ const photoReviews = [
   {
     img: '/images/reviews/review_michelle.jpg',
     quote:
-      'Rich and nourishing, leaves my skin so smooth with a radiant glow. I genuinely look forward to my daily ritual with this serum.',
+      'So smooth, radiant glow. I look forward to my daily ritual.',
     name: 'Michelle',
     concern: 'Radiant Glow',
     product: 'Radiance Serum',

@@ -36,9 +36,7 @@ export default function QuizCTA() {
           <em className="italic">Find Your Fix</em>
         </h2>
         <p className="font-body text-base text-brand-cream/70 max-w-lg mx-auto leading-relaxed mb-8">
-          Answer 3 quick questions about your skin and we&rsquo;ll match you with the
-          perfect Inherited Skincare routine — personalised to your skin type,
-          concerns, and lifestyle.
+          Answer 3 questions. Get your personalised skincare routine.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

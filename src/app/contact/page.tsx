@@ -27,8 +27,7 @@ export default async function ContactPage() {
             Contact Us
           </h1>
           <p className="font-body text-base text-brand-muted mt-3 max-w-lg mx-auto">
-            Questions about your order, your skin, or your ritual — our small team replies
-            to every message.
+            Questions about your order or skin? We reply to every message.
           </p>
         </div>
       </div>
@@ -101,7 +100,7 @@ export default async function ContactPage() {
                 Looking for a quick answer?
               </p>
               <p className="font-body text-sm text-brand-muted mb-4">
-                Shipping times, returns, and how to use each product are all covered in our FAQ.
+                Shipping, returns, and product guides are in our FAQ.
               </p>
               <Link
                 href="/faq"

@@ -30,8 +30,7 @@ export default async function ProductsPage() {
             All Products
           </h1>
           <p className="font-body text-base text-brand-muted mt-4 max-w-lg mx-auto">
-            Every formula rooted in Ayurvedic tradition, CPSR safety tested for
-            modern skin.
+            Ayurvedic tradition. CPSR safety tested. For modern skin.
           </p>
         </div>
       </div>

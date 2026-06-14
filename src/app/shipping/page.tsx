@@ -28,7 +28,7 @@ export default async function ShippingPage() {
             Shipping & Returns
           </h1>
           <p className="font-body text-base text-brand-muted mt-3 max-w-lg mx-auto">
-            Handmade in the UK, carefully packed, and shipped Monday to Friday with Royal Mail Tracked 48.
+            Shipped Mon–Fri via Royal Mail Tracked 48.
           </p>
         </div>
       </div>
@@ -79,12 +79,16 @@ export default async function ShippingPage() {
           </div>
           <div className="space-y-3 font-body text-sm text-brand-muted leading-relaxed">
             <p>
-              We ship Monday to Friday with Royal Mail Tracked 48. Orders placed before
-              midday aim to ship the same day. Once your order ships, you&rsquo;ll receive
-              a confirmation email with your tracking details.
+              We ship Mon–Fri via Royal Mail Tracked 48.
             </p>
             <p>
-              During busy periods, please allow 2–3 working days for dispatch.
+              Orders before midday aim to ship same day.
+            </p>
+            <p>
+              You&rsquo;ll receive a tracking email on dispatch.
+            </p>
+            <p>
+              Allow 2–3 working days during busy periods.
             </p>
           </div>
         </section>
@@ -106,6 +110,7 @@ export default async function ShippingPage() {
           <p className="font-display italic text-xl text-brand-dark mb-2">
             Questions about your order?
           </p>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
             <Link
               href="/contact"

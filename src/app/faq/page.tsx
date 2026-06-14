@@ -25,7 +25,7 @@ export default async function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="font-body text-base text-brand-muted mt-3 max-w-lg mx-auto">
-            Everything you need to know about ghee skincare, shipping, and your ritual.
+            Ghee skincare, shipping, and rituals — answered.
           </p>
         </div>
       </div>
@@ -59,7 +59,7 @@ export default async function FAQPage() {
             Still have a question?
           </p>
           <p className="font-body text-sm text-brand-muted mb-4">
-            Our small team replies to every message, usually within one working day.
+            We reply to every message within one working day.
           </p>
           <Link
             href="/contact"
