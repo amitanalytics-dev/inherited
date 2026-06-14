@@ -32,8 +32,8 @@ export default function QuizCTA() {
         <h2 className="font-display font-semibold text-brand-cream leading-tight mb-6"
           style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)' }}
         >
-          Find Your Perfect{' '}
-          <em className="italic">Ritual</em>
+          Find Your Ritual —{' '}
+          <em className="italic">Find Your Fix</em>
         </h2>
         <p className="font-body text-base text-brand-cream/70 max-w-lg mx-auto leading-relaxed mb-8">
           Answer 3 quick questions about your skin and we&rsquo;ll match you with the
