@@ -19,7 +19,7 @@ export default function Accordion({ items }: { items: AccordionItem[] }) {
             className="w-full flex items-center justify-between py-4 text-left"
             aria-expanded={open === i}
           >
-            <span className="font-body text-sm font-medium text-brand-dark tracking-wide">
+            <span className="font-body text-base font-medium text-brand-dark tracking-wide">
               {item.title}
             </span>
             <span

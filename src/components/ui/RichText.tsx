@@ -22,7 +22,7 @@ function renderText(nodes: TextNode[]) {
 
 export default function RichText({
   content,
-  className = 'font-body text-sm text-brand-muted leading-relaxed',
+  className = 'font-body text-base text-brand-muted leading-relaxed',
 }: {
   content: string | RootNode
   className?: string
@@ -67,7 +67,7 @@ export default function RichText({
         }
         if (node.type === 'heading') {
           return (
-            <p key={i} className="font-semibold text-brand-dark text-sm">
+            <p key={i} className="font-semibold text-brand-dark text-base">
               {renderText((node as HeadingNode).children)}
             </p>
           )
