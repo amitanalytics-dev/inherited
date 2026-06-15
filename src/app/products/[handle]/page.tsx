@@ -350,7 +350,6 @@ export default async function ProductPage({ params }: PageProps) {
         {/* Customer reviews */}
         <div className="max-w-3xl">
           <JudgemeReviews
-            productId={product.id}
             ratingValue={ratingValue}
             ratingCount={ratingCount}
             productHandle={product.handle}
