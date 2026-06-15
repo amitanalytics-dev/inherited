@@ -220,7 +220,7 @@ export default function CartPage() {
       )}
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <h1 className="font-display font-semibold text-4xl text-brand-dark mb-10">
+        <h1 className="font-display font-semibold text-3xl sm:text-4xl text-brand-dark mb-8 sm:mb-10">
           Your Bag
         </h1>
 
@@ -238,18 +238,18 @@ export default function CartPage() {
               return (
                 <div
                   key={line.id}
-                  className="flex gap-5 p-5 bg-white border border-brand-warm"
+                  className="flex gap-3 sm:gap-5 p-4 sm:p-5 bg-white border border-brand-warm"
                 >
                   {img && (
                     <Link
                       href={`/products/${line.merchandise.product.handle}`}
-                      className="relative w-20 h-20 flex-shrink-0 overflow-hidden bg-brand-warm"
+                      className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden bg-brand-warm"
                     >
                       <Image
                         src={img.url}
                         alt={img.altText ?? line.merchandise.product.title}
                         fill
-                        sizes="80px"
+                        sizes="(max-width: 640px) 64px, 80px"
                         className="object-cover"
                       />
                     </Link>
@@ -273,9 +273,9 @@ export default function CartPage() {
                           aria-label="Decrease quantity"
                           disabled={busy}
                           onClick={() => updateQty(line.id, line.quantity - 1)}
-                          className="px-2.5 py-1.5 text-brand-muted hover:text-brand-dark disabled:opacity-40"
+                          className="px-3 py-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-brand-muted hover:text-brand-dark disabled:opacity-40"
                         >
-                          <Minus size={13} />
+                          <Minus size={16} />
                         </button>
                         <span className="px-3 font-body text-sm text-brand-dark min-w-[2rem] text-center">
                           {line.quantity}
@@ -284,9 +284,9 @@ export default function CartPage() {
                           aria-label="Increase quantity"
                           disabled={busy}
                           onClick={() => updateQty(line.id, line.quantity + 1)}
-                          className="px-2.5 py-1.5 text-brand-muted hover:text-brand-dark disabled:opacity-40"
+                          className="px-3 py-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-brand-muted hover:text-brand-dark disabled:opacity-40"
                         >
-                          <Plus size={13} />
+                          <Plus size={16} />
                         </button>
                       </div>
                       <div className="flex items-center gap-4">
@@ -314,7 +314,7 @@ export default function CartPage() {
           </div>
 
           {/* Summary */}
-          <div className="bg-brand-warm p-6 h-fit">
+          <div className="bg-brand-warm p-4 sm:p-6 h-fit">
             <h2 className="font-display font-semibold text-xl text-brand-dark mb-5">
               Order Summary
             </h2>

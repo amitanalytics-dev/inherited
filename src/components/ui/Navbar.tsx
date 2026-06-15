@@ -151,21 +151,21 @@ export default function Navbar({
                 <Link
                   href="/search"
                   aria-label="Search"
-                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
+                  className="p-3 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
                   <Search size={20} strokeWidth={1.5} />
                 </Link>
                 <Link
                   href="/account"
                   aria-label="Account"
-                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
+                  className="p-3 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
                   <User size={20} strokeWidth={1.5} />
                 </Link>
                 <Link
                   href="/cart"
                   aria-label="Shopping bag"
-                  className="p-2.5 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
+                  className="p-3 transition-colors duration-300 relative text-brand-dark hover:text-brand-amber"
                 >
                   <ShoppingBag size={20} strokeWidth={1.5} />
                   {cartCount > 0 && (
@@ -181,7 +181,7 @@ export default function Navbar({
             <button
               aria-label="Toggle menu"
               onClick={() => setMobileOpen((o) => !o)}
-              className="md:hidden p-2.5 transition-colors duration-300 text-brand-dark ml-auto"
+              className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors duration-300 text-brand-dark ml-auto"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -208,7 +208,7 @@ export default function Navbar({
         {/* Drawer */}
         <div
           className={clsx(
-            'absolute top-0 right-0 h-full w-72 bg-brand-cream flex flex-col transition-transform duration-500',
+            'absolute top-0 right-0 h-full w-[min(18rem,90vw)] bg-brand-cream flex flex-col transition-transform duration-500',
             mobileOpen ? 'translate-x-0' : 'translate-x-full'
           )}
         >
@@ -218,7 +218,7 @@ export default function Navbar({
             </span>
             <button
               onClick={() => setMobileOpen(false)}
-              className="text-brand-muted hover:text-brand-dark"
+              className="text-brand-muted hover:text-brand-dark p-2 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <X size={20} />
             </button>
@@ -229,7 +229,7 @@ export default function Navbar({
             <Link
               href="/products"
               onClick={() => setMobileOpen(false)}
-              className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors"
+              className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
             >
               Shop
             </Link>
@@ -238,7 +238,7 @@ export default function Navbar({
             <div>
               <button
                 onClick={() => setConcernOpen(!concernOpen)}
-                className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left"
+                className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left py-1"
               >
                 Shop by Concern
               </button>
@@ -267,7 +267,7 @@ export default function Navbar({
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="font-display text-2xl italic text-brand-dark hover:text-brand-amber transition-colors"
+                className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
               >
                 {link.label}
               </Link>

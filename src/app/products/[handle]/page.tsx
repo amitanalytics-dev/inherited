@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: PageProps) {
               </div>
             )}
 
-            <h1 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark leading-tight mb-3">
+            <h1 className="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-brand-dark leading-tight mb-3">
               {product.title}
             </h1>
 
@@ -273,7 +273,7 @@ export default async function ProductPage({ params }: PageProps) {
                     <button
                       key={variant.id}
                       disabled={!variant.availableForSale}
-                      className="px-4 py-2 border border-brand-dark/20 font-body text-sm hover:border-brand-amber hover:text-brand-amber transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="px-4 py-3 min-h-[44px] border border-brand-dark/20 font-body text-sm hover:border-brand-amber hover:text-brand-amber transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {variant.title}
                     </button>
@@ -289,7 +289,7 @@ export default async function ProductPage({ params }: PageProps) {
             />
 
             {/* Trust badges */}
-            <div className="mt-6 grid grid-cols-3 gap-3 py-5 border-t border-b border-brand-warm">
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 py-5 border-t border-b border-brand-warm">
               {[
                 { icon: '🌿', label: 'Natural ingredients' },
                 { icon: '🐇', label: 'Cruelty Free' },

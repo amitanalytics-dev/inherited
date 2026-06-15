@@ -26,7 +26,7 @@ export default async function ProductsPage() {
           <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">
             The Collection
           </p>
-          <h1 className="font-display font-semibold text-5xl md:text-6xl text-brand-dark">
+          <h1 className="font-display font-semibold text-4xl sm:text-5xl md:text-6xl text-brand-dark">
             All Products
           </h1>
           <p className="font-body text-base text-brand-muted mt-4 max-w-lg mx-auto">
