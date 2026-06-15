@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ShoppingBag } from 'lucide-react'
+import { ShoppingBag, Zap } from 'lucide-react'
 import { cartCreate, cartLinesAdd } from '@/lib/shopify'
 
 interface AddToCartButtonProps {
@@ -12,6 +12,7 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ variantId, available }: AddToCartButtonProps) {
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
+  const [buyingNow, setBuyingNow] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   async function handleAddToCart() {
@@ -27,7 +28,6 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
       let added = false
       if (cartId) {
         const result = await cartLinesAdd(cartId, [line])
-        // A stale/expired/completed cart returns no cart — fall through to create
         if (result.cart?.id && result.userErrors.length === 0) {
           added = true
         }
@@ -56,6 +56,27 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
     }
   }
 
+  async function handleBuyNow() {
+    if (!variantId || !available) return
+
+    setBuyingNow(true)
+    setError(null)
+
+    try {
+      const result = await cartCreate([{ merchandiseId: variantId, quantity: 1 }])
+      if (result.userErrors.length > 0) {
+        throw new Error(result.userErrors[0].message)
+      }
+      const checkoutUrl = result.cart?.checkoutUrl
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to proceed to checkout')
+      setBuyingNow(false)
+    }
+  }
+
   return (
     <div className="space-y-3">
       <button
@@ -72,6 +93,17 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
         <ShoppingBag size={16} strokeWidth={1.5} />
         {adding ? 'Adding to Bag...' : added ? 'Added to Bag!' : available ? 'Add to Bag' : 'Sold Out'}
       </button>
+
+      {available && (
+        <button
+          onClick={handleBuyNow}
+          disabled={buyingNow}
+          className="w-full flex items-center justify-center gap-3 py-4 font-body text-sm tracking-widest uppercase bg-brand-amber text-white hover:bg-[#b87f43] active:scale-[0.98] transition-all duration-300 disabled:opacity-60"
+        >
+          <Zap size={16} strokeWidth={1.5} />
+          {buyingNow ? 'Redirecting...' : 'Buy Now'}
+        </button>
+      )}
 
       {error && (
         <p className="font-body text-xs text-red-600 text-center">{error}</p>

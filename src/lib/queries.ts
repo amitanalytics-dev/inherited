@@ -79,7 +79,9 @@ const PRODUCT_FRAGMENT = `
       { namespace: "custom", key: "who_good_for" },
       { namespace: "custom", key: "key_ingredients" },
       { namespace: "custom", key: "the_experience" },
-      { namespace: "custom", key: "delivery_shipping" }
+      { namespace: "custom", key: "delivery_shipping" },
+      { namespace: "reviews", key: "rating" },
+      { namespace: "reviews", key: "rating_count" }
     ]) {
       key
       value
