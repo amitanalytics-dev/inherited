@@ -30,7 +30,7 @@ export default function Accordion({ items }: { items: AccordionItem[] }) {
             </span>
           </button>
           {open === i && (
-            <div className="pb-5 font-body text-sm text-brand-muted leading-relaxed space-y-2">
+            <div className="pb-5 font-body text-base text-brand-muted leading-relaxed space-y-2">
               {item.content}
             </div>
           )}

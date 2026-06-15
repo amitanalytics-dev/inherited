@@ -113,7 +113,7 @@ export default function ScienceRitual() {
             {[
               { stat: '5.0★', label: 'Average Rating' },
               { stat: '1,800+', label: 'Happy Customers' },
-              { stat: '100%', label: 'Natural Ingredients' },
+              { stat: '5,000 Years', label: 'of Ayurvedic Wisdom' },
               { stat: '0', label: 'Harsh Chemicals' },
             ].map((item) => (
               <div key={item.label}>

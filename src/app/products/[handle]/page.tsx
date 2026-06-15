@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import Script from 'next/script'
 import { notFound } from 'next/navigation'
@@ -7,6 +6,8 @@ import { getProduct, getRelatedProducts } from '@/lib/queries'
 import { getFallbackProduct, getFallbackRelated } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
 import AddToCartButton from './AddToCartButton'
+import ProductImageGallery from './ProductImageGallery'
+import JudgemeReviews from './JudgemeReviews'
 import RichText from '@/components/ui/RichText'
 import Accordion from '@/components/ui/Accordion'
 import { SITE_URL } from '@/lib/site-url'
@@ -61,7 +62,6 @@ export default async function ProductPage({ params }: PageProps) {
     notFound()
   }
 
-  const primaryImage = product.images[0]
   const price = product.variants[0]?.price ?? product.priceRange.minVariantPrice
   const compareAtPrice =
     product.variants[0]?.compareAtPrice ?? product.compareAtPriceRange?.minVariantPrice
@@ -118,13 +118,13 @@ export default async function ProductPage({ params }: PageProps) {
     }] : []),
     ...(whoItsGoodFor?.value ? [{
       title: "Who It's Good For",
-      content: <p className="font-body text-sm text-brand-muted leading-relaxed">{whoItsGoodFor.value}</p>,
+      content: <p className="font-body text-base text-brand-muted leading-relaxed">{whoItsGoodFor.value}</p>,
     }] : []),
     ...(keyIngredients?.value ? [{
       title: 'Key Ingredients',
       content: (
         <div
-          className="font-body text-sm text-brand-muted leading-relaxed space-y-2 [&_strong]:font-semibold [&_strong]:text-brand-dark [&_p]:mb-2"
+          className="font-body text-base text-brand-muted leading-relaxed space-y-2 [&_strong]:font-semibold [&_strong]:text-brand-dark [&_p]:mb-2"
           dangerouslySetInnerHTML={{ __html: keyIngredients.value }}
         />
       ),
@@ -134,7 +134,7 @@ export default async function ProductPage({ params }: PageProps) {
       content: (
         <div className="space-y-1">
           {theExperience.value.split('\n').filter(Boolean).map((line: string, i: number) => (
-            <p key={i} className="font-body text-sm text-brand-muted">{line}</p>
+            <p key={i} className="font-body text-base text-brand-muted">{line}</p>
           ))}
         </div>
       ),
@@ -205,18 +205,7 @@ export default async function ProductPage({ params }: PageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Images */}
           <div>
-            <div className="relative aspect-[4/5] overflow-hidden bg-brand-warm">
-              {primaryImage && (
-                <Image
-                  src={primaryImage.url}
-                  alt={primaryImage.altText ?? product.title}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              )}
-            </div>
+            <ProductImageGallery images={product.images} productTitle={product.title} />
           </div>
 
           {/* Details */}
@@ -343,39 +332,24 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Thumbnails + How to Use — symmetric row */}
-        {(product.images.length > 1 || howToUse?.value) && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mt-3">
-            {/* Thumbnails — left column, mirrors image above */}
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.slice(1, 5).map((img, i) => (
-                <div key={i} className="relative aspect-square overflow-hidden bg-brand-warm">
-                  <Image
-                    src={img.url}
-                    alt={img.altText ?? `${product.title} view ${i + 2}`}
-                    fill
-                    sizes="25vw"
-                    className="object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* How to Use — right column, mirrors details above */}
-            {howToUse?.value && (
-              <div>
-                <h3 className="font-body text-2xl font-medium text-brand-dark mb-2">
-                  How to Use
-                </h3>
-                <RichText content={howToUse.value} className="font-body text-base text-brand-muted leading-relaxed" />
-              </div>
-            )}
+        {/* How to Use */}
+        {howToUse?.value && (
+          <div className="mt-10 max-w-3xl">
+            <h3 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark mb-4">
+              How to Use
+            </h3>
+            <RichText content={howToUse.value} className="font-body text-base text-brand-muted leading-relaxed" />
           </div>
         )}
 
         {/* Product info accordion */}
         <div className="max-w-3xl mt-12">
           <Accordion items={accordionItems} />
+        </div>
+
+        {/* Customer reviews */}
+        <div className="max-w-3xl">
+          <JudgemeReviews productId={product.id} />
         </div>
       </div>
 

@@ -37,7 +37,7 @@ const PRODUCT_FRAGMENT = `
         currencyCode
       }
     }
-    images(first: 6) {
+    images(first: 20) {
       edges {
         node {
           url

@@ -117,6 +117,21 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
           </a>
         </p>
       )}
+
+      {/* Payment methods */}
+      <div className="pt-4 mt-1">
+        <p className="font-body text-[10px] tracking-widest uppercase text-brand-muted mb-2 text-center">Secure checkout · We accept</p>
+        <div className="flex flex-wrap justify-center gap-1.5">
+          {['Visa', 'Mastercard', 'Amex', 'Apple Pay', 'Google Pay', 'PayPal', 'Klarna'].map((method) => (
+            <span
+              key={method}
+              className="px-2.5 py-1 border border-brand-warm rounded text-[10px] font-body font-medium text-brand-muted bg-white"
+            >
+              {method}
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
