@@ -61,9 +61,9 @@ async function tryHtmlScrape(productHandle: string): Promise<ParsedReview[]> {
 
     // Extract every JSON-LD block
     const pattern = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g
-    const blocks = [...html.matchAll(pattern)]
+    let block: RegExpExecArray | null
 
-    for (const block of blocks) {
+    while ((block = pattern.exec(html)) !== null) {
       try {
         const raw = JSON.parse(block[1])
         const items: unknown[] = Array.isArray(raw) ? raw : [raw]
