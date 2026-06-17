@@ -62,7 +62,7 @@ export default function JudgemeReviews({ productHandle, ratingValue, ratingCount
       : null)
 
   return (
-    <div className="mt-16">
+    <div className="mt-16" id="reviews">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark">
@@ -165,26 +165,15 @@ export default function JudgemeReviews({ productHandle, ratingValue, ratingCount
             </div>
           )}
 
-          <a
-            href={`https://www.inheritedskincare.com/products/${productHandle}#judgeme_product_reviews`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-6 font-body text-sm text-brand-amber underline underline-offset-4 hover:text-brand-dark transition-colors"
-          >
-            Read all {displayCount > reviews.length ? displayCount : ''} reviews →
-          </a>
+          {displayCount > reviews.length && (
+            <p className="mt-6 font-body text-sm text-brand-muted">
+              Showing {reviews.length} of {displayCount} reviews
+            </p>
+          )}
         </>
       ) : (
-        <div className="py-8 border border-brand-warm text-center space-y-3">
+        <div className="py-8 border border-brand-warm text-center">
           <p className="font-body text-brand-muted">No reviews yet — be the first!</p>
-          <a
-            href={`https://www.inheritedskincare.com/products/${productHandle}#judgeme_product_reviews`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block font-body text-sm text-brand-amber underline underline-offset-4 hover:text-brand-dark transition-colors"
-          >
-            Write a review →
-          </a>
         </div>
       )}
     </div>

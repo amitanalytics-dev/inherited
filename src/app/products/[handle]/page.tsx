@@ -227,7 +227,7 @@ export default async function ProductPage({ params }: PageProps) {
 
             {/* Star rating */}
             {ratingValue !== null && ratingCount !== null && ratingCount > 0 && (
-              <div className="flex items-center gap-2 mb-4">
+              <a href="#reviews" className="flex items-center gap-2 mb-4 w-fit hover:opacity-75 transition-opacity">
                 <div className="flex items-center gap-0.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg key={star} className="w-4 h-4" viewBox="0 0 20 20" fill={star <= Math.round(ratingValue) ? '#C8923A' : 'none'} stroke="#C8923A" strokeWidth="1.5">
@@ -237,7 +237,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </div>
                 <span className="font-body text-sm text-brand-dark font-medium">{ratingValue.toFixed(1)}</span>
                 <span className="font-body text-sm text-brand-muted">({ratingCount} reviews)</span>
-              </div>
+              </a>
             )}
 
             {/* Price */}
