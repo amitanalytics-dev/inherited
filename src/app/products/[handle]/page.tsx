@@ -290,18 +290,31 @@ export default async function ProductPage({ params }: PageProps) {
 
             {/* Trust badges */}
             <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 py-5 border-t border-b border-brand-warm">
-              {[
-                { icon: '🌿', label: 'Natural ingredients' },
-                { icon: '🐇', label: 'Cruelty Free' },
-                { icon: '🇬🇧', label: 'Made in UK' },
-              ].map((badge) => (
-                <div key={badge.label} className="flex flex-col items-center text-center gap-1">
-                  <span className="text-xl">{badge.icon}</span>
-                  <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">
-                    {badge.label}
-                  </span>
-                </div>
-              ))}
+              {/* Natural ingredients */}
+              <div className="flex flex-col items-center text-center gap-2">
+                <svg className="w-7 h-7 text-brand-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22V12M12 12C12 7 7 4 3 5c0 5 3 9 9 7M12 12c0-5 5-8 9-7-1 5-4 8-9 7" />
+                </svg>
+                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Natural ingredients</span>
+              </div>
+              {/* Cruelty free */}
+              <div className="flex flex-col items-center text-center gap-2">
+                <svg className="w-7 h-7 text-brand-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                  <line x1="16" y1="8" x2="2" y2="22" />
+                  <line x1="17.5" y1="15" x2="9" y2="15" />
+                </svg>
+                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Cruelty Free</span>
+              </div>
+              {/* Made in UK */}
+              <div className="flex flex-col items-center text-center gap-2">
+                <svg className="w-7 h-7 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Made in UK</span>
+              </div>
             </div>
 
             {/* Benefit icons */}
