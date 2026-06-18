@@ -21,6 +21,7 @@ import FaqEditor from './pages/FaqEditor'
 import ContactEditor from './pages/ContactEditor'
 import ShippingEditor from './pages/ShippingEditor'
 import ReviewsEditor from './pages/ReviewsEditor'
+import OgImageEditor from './OgImageEditor'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -212,6 +213,16 @@ export default function AdminPage() {
             subtitle="Change the words on your homepage and choose which sections show. No developer needed."
           />
           <EditorPanel />
+        </section>
+
+        {/* Section M — Social Sharing Image */}
+        <section>
+          <SectionHeading
+            kicker="Section M"
+            title="Social Sharing Image"
+            subtitle="The image that appears when someone shares your website link on WhatsApp, Instagram, or Facebook. Upload a 1200×630 px landscape photo."
+          />
+          <OgImageEditor />
         </section>
 
         {/* Section C2 — Traffic & Analytics */}

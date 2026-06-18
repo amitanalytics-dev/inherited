@@ -39,6 +39,8 @@ export default function CartPage() {
       if (!c) {
         // Cart expired or was completed — clear it
         localStorage.removeItem('cart_id')
+        localStorage.removeItem('cart_count')
+        window.dispatchEvent(new Event('cart-updated'))
         setCart(null)
       } else {
         setCart(c)

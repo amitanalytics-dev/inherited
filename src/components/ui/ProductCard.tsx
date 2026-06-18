@@ -66,6 +66,10 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         }
       }
 
+      const prev = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
+      localStorage.setItem('cart_count', String((isNaN(prev) ? 0 : prev) + 1))
+      window.dispatchEvent(new Event('cart-updated'))
+
       setAdded(true)
       setTimeout(() => setAdded(false), 2000)
     } catch (err) {
@@ -89,6 +93,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             src={primaryImage.url}
             alt={primaryImage.altText ?? product.title}
             fill
+            quality={85}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             className={clsx(
               'object-cover transition-all duration-700',

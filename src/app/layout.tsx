@@ -61,65 +61,70 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
-    template: '%s | Inherited Skincare',
-  },
-  description:
-    'Ayurvedic ghee-based skincare crafted for modern skin. Born from a grandmother\'s evening ghee ritual, passed down through generations. Discover the ritual.',
-  keywords: [
-    'Ayurvedic skincare',
-    'ghee skincare',
-    'natural skincare UK',
-    'Ayurvedic beauty',
-    'ghee moisturiser',
-    'inherited skincare',
-    'ancient beauty rituals',
-  ],
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      'en-GB': SITE_URL,
-      'en-US': SITE_URL,
-      'x-default': SITE_URL,
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const ogImg = settings.ogImage || '/images/products/_ALL13.jpg'
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
+      template: '%s | Inherited Skincare',
     },
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'en_GB',
-    alternateLocale: ['en_US'],
-    url: SITE_URL,
-    siteName: 'Inherited Skincare',
-    title: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
     description:
-      'Ayurvedic ghee-based skincare crafted for modern skin. Born from a grandmother\'s evening ghee ritual, passed down through generations.',
-    images: [
-      {
-        url: '/images/products/_ALL13.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Inherited Skincare — The Full Ritual',
-      },
+      'Ayurvedic ghee-based skincare crafted for modern skin. Born from a grandmother\'s evening ghee ritual, passed down through generations. Discover the ritual.',
+    keywords: [
+      'Ayurvedic skincare',
+      'ghee skincare',
+      'natural skincare UK',
+      'Ayurvedic beauty',
+      'ghee moisturiser',
+      'inherited skincare',
+      'ancient beauty rituals',
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
-    description:
-      'Ayurvedic ghee-based skincare crafted for modern skin.',
-    images: ['/images/products/_ALL13.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    alternates: {
+      canonical: SITE_URL,
+      languages: {
+        'en-GB': SITE_URL,
+        'en-US': SITE_URL,
+        'x-default': SITE_URL,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'en_GB',
+      alternateLocale: ['en_US'],
+      url: SITE_URL,
+      siteName: 'Inherited Skincare',
+      title: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
+      description:
+        'Ayurvedic ghee-based skincare crafted for modern skin. Born from a grandmother\'s evening ghee ritual, passed down through generations.',
+      images: [
+        {
+          url: ogImg,
+          width: 1200,
+          height: 630,
+          alt: 'Inherited Skincare — The Full Ritual',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Inherited Skincare — Ancient Wisdom. Modern Skin.',
+      description:
+        'Ayurvedic ghee-based skincare crafted for modern skin.',
+      images: [ogImg],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+      },
     },
-  },
+  }
 }
 
 export default async function RootLayout({

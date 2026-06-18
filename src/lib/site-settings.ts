@@ -72,6 +72,7 @@ export type SiteSettings = {
   heroHeadline2: string
   heroSubline: string
   heroVideo: string
+  ogImage: string
   uspItems: string[]
   sectionOrder: string[]
   showSections: {
@@ -277,6 +278,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   heroHeadline2: 'Inherited It.',
   heroSubline: 'Ghee-powered Ayurvedic skincare. Handmade in the UK.',
   heroVideo: '',
+  ogImage: '/images/products/_ALL13.jpg',
   uspItems: [
     'Natural ingredients',
     'CPSR Safety Tested',
@@ -502,6 +504,7 @@ export function mergeSettings(base: SiteSettings, partial: any): SiteSettings {
     heroHeadline2: str(partial.heroHeadline2, base.heroHeadline2),
     heroSubline: str(partial.heroSubline, base.heroSubline),
     heroVideo: typeof partial.heroVideo === 'string' ? partial.heroVideo : base.heroVideo,
+    ogImage: str(partial.ogImage, base.ogImage),
     uspItems: Array.isArray(partial.uspItems)
       ? base.uspItems.map((d, i) =>
           typeof partial.uspItems[i] === 'string' && partial.uspItems[i].trim()

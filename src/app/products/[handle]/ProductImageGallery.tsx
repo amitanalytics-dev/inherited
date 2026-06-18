@@ -29,6 +29,7 @@ export default function ProductImageGallery({ images, productTitle }: Props) {
             alt={active.altText ?? productTitle}
             fill
             priority
+            quality={90}
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover transition-opacity duration-300"
           />
