@@ -45,7 +45,7 @@ export default function JudgemeReviews({ productHandle, ratingValue, ratingCount
   return (
     <div className="mt-16" id="reviews">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
         <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark">
           Customer Reviews
         </h2>

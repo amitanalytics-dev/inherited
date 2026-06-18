@@ -303,7 +303,7 @@ export default function CartPage() {
                           aria-label="Remove item"
                           disabled={busy}
                           onClick={() => updateQty(line.id, 0)}
-                          className="text-brand-muted/60 hover:text-red-600 transition-colors disabled:opacity-40"
+                          className="min-h-[44px] min-w-[44px] flex items-center justify-center text-brand-muted/60 hover:text-red-600 transition-colors disabled:opacity-40"
                         >
                           <Trash2 size={16} />
                         </button>

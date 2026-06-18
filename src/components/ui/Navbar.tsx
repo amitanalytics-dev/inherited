@@ -259,12 +259,12 @@ export default function Navbar({
             <div>
               <button
                 onClick={() => setConcernOpen(!concernOpen)}
-                className="font-display text-lg sm:text-xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left py-1"
+                className="font-display text-lg sm:text-xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left min-h-[44px] flex items-center"
               >
                 Shop by Concern
               </button>
               {concernOpen && (
-                <div className="flex flex-col gap-2 mt-3 pl-4 border-l border-brand-warm">
+                <div className="flex flex-col mt-1 pl-4 border-l border-brand-warm">
                   {concernLinks.map((link) => (
                     <Link
                       key={link.href}
@@ -273,7 +273,7 @@ export default function Navbar({
                         setMobileOpen(false)
                         setConcernOpen(false)
                       }}
-                      className="font-body text-sm text-brand-dark hover:text-brand-amber transition-colors"
+                      className="font-body text-sm text-brand-dark hover:text-brand-amber transition-colors min-h-[44px] flex items-center"
                     >
                       {link.label}
                     </Link>

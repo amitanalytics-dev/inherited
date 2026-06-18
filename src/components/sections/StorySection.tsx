@@ -67,7 +67,7 @@ export default function StorySection({
               </p>
             </div>
 
-            <div className="mt-8 flex items-center gap-6">
+            <div className="mt-8 flex flex-wrap items-center gap-4 sm:gap-6">
               <Link
                 href="/about"
                 className="inline-flex items-center justify-center px-8 py-3.5 bg-brand-dark text-brand-cream font-body text-xs tracking-widest uppercase hover:bg-brand-amber transition-colors"

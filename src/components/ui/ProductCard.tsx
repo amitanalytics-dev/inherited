@@ -129,11 +129,11 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           )}
         </div>
 
-        {/* Add to cart overlay */}
+        {/* Add to cart overlay — always visible on touch (mobile), hover-reveal on pointer devices */}
         <div
           className={clsx(
             'absolute bottom-0 left-0 right-0 transition-all duration-300',
-            hovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+            'sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100',
           )}
         >
           <button
