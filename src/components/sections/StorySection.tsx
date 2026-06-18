@@ -54,28 +54,16 @@ export default function StorySection({
 
             <div className="space-y-4 font-body text-base text-brand-muted leading-relaxed">
               <p>
-                Every jar carries the memory of an evening ritual.
+                In our home, ghee was never only for cooking. My grandmother Leela used it on her skin too, a little massaged in before bed, the way she&rsquo;d always done. To her it wasn&rsquo;t skincare. It was just ghee, and it worked. Every jar carries the memory of her ritual.
               </p>
               <p>
-                Founder Suruchi watched her grandmother Leela press ghee into skin before bed.
+                I came back to it years later. After a lot of modern products that left my skin reactive, I went back to the simple thing she trusted.
               </p>
               <p>
-                The brand is named in Leela&rsquo;s honour.
+                The brand is named in her honour and for the wisdom I inherited from her.
               </p>
               <p>
-                Harsh modern skincare left Suruchi&rsquo;s skin reactive.
-              </p>
-              <p>
-                She returned to what she inherited: ghee. All natural. No shortcuts.
-              </p>
-              <p>
-                At the heart of every formula: washed ghee.
-              </p>
-              <p>
-                It penetrates all seven layers of skin.
-              </p>
-              <p>
-                Carries butyric acid and vitamins A, D, E &amp; K.
+                Every formula is built around ghee, washed until it turns light, creamy and silky and naturally rich in butyric acid and vitamins A, D, E and K. Nothing complicated. Just what she used, made for skin today.
               </p>
             </div>
 
