@@ -55,7 +55,7 @@ function NewsletterForm() {
   }
 
   return (
-    <form className="flex gap-2" onSubmit={subscribe}>
+    <form className="flex flex-col sm:flex-row gap-2" onSubmit={subscribe}>
       <input
         type="email"
         required
@@ -119,7 +119,7 @@ export default function Footer() {
 
       {/* Main footer */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
           {/* Brand column */}
           <div className="lg:col-span-2">
             {/* Brand seal */}
@@ -137,7 +137,7 @@ export default function Footer() {
                 role="img"
                 aria-label="Inherited Skincare"
                 className="gold-shimmer-logo"
-                style={{ width: 150, height: 48 }}
+                style={{ width: 'clamp(110px, 30vw, 150px)', height: 'clamp(35px, 10vw, 48px)' }}
               />
             </Link>
             <p className="font-display italic text-brand-amber text-base mb-4">

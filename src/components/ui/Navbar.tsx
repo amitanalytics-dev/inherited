@@ -93,7 +93,7 @@ export default function Navbar({
                 role="img"
                 aria-label="Inherited Skincare"
                 className="gold-shimmer-logo"
-                style={{ width: 176, height: 56 }}
+                style={{ width: 'clamp(120px, 35vw, 176px)', height: 'clamp(38px, 11vw, 56px)' }}
               />
             </Link>
 
@@ -177,14 +177,35 @@ export default function Navbar({
               </div>
             </div>
 
-            {/* Mobile menu button */}
-            <button
-              aria-label="Toggle menu"
-              onClick={() => setMobileOpen((o) => !o)}
-              className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors duration-300 text-brand-dark ml-auto"
-            >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            {/* Mobile icons + menu button */}
+            <div className="md:hidden flex items-center gap-0.5 ml-auto">
+              <Link
+                href="/search"
+                aria-label="Search"
+                className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors duration-300 text-brand-dark hover:text-brand-amber"
+              >
+                <Search size={20} strokeWidth={1.5} />
+              </Link>
+              <Link
+                href="/cart"
+                aria-label="Shopping bag"
+                className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors duration-300 text-brand-dark hover:text-brand-amber relative"
+              >
+                <ShoppingBag size={20} strokeWidth={1.5} />
+                {cartCount > 0 && (
+                  <span className="absolute top-1 right-1 min-w-[16px] h-4 flex items-center justify-center rounded-full bg-brand-amber text-white text-[9px] font-body font-semibold leading-none px-1">
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                )}
+              </Link>
+              <button
+                aria-label="Toggle menu"
+                onClick={() => setMobileOpen((o) => !o)}
+                className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors duration-300 text-brand-dark"
+              >
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -229,7 +250,7 @@ export default function Navbar({
             <Link
               href="/products"
               onClick={() => setMobileOpen(false)}
-              className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
+              className="font-display text-lg sm:text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
             >
               Shop
             </Link>
@@ -238,7 +259,7 @@ export default function Navbar({
             <div>
               <button
                 onClick={() => setConcernOpen(!concernOpen)}
-                className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left py-1"
+                className="font-display text-lg sm:text-xl italic text-brand-dark hover:text-brand-amber transition-colors w-full text-left py-1"
               >
                 Shop by Concern
               </button>
@@ -267,7 +288,7 @@ export default function Navbar({
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="font-display text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
+                className="font-display text-lg sm:text-xl italic text-brand-dark hover:text-brand-amber transition-colors py-1"
               >
                 {link.label}
               </Link>

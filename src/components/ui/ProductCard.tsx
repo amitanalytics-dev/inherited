@@ -160,7 +160,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         <p className="font-body text-[10px] tracking-widest uppercase text-brand-muted">
           {product.productType || product.vendor}
         </p>
-        <h3 className="font-display text-lg font-medium text-brand-dark group-hover:text-brand-amber transition-colors leading-snug line-clamp-2 min-h-[3.2rem]">
+        <h3 className="font-display text-base sm:text-lg font-medium text-brand-dark group-hover:text-brand-amber transition-colors leading-snug line-clamp-2 min-h-[2.8rem] sm:min-h-[3.2rem]">
           {product.title}
         </h3>
         <div className="flex items-center gap-2">

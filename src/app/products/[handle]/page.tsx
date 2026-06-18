@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: PageProps) {
               </div>
             )}
 
-            <h1 className="font-display font-semibold text-3xl sm:text-4xl md:text-5xl text-brand-dark leading-tight mb-3">
+            <h1 className="font-display font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-brand-dark leading-tight mb-3">
               {product.title}
             </h1>
 
@@ -242,11 +242,11 @@ export default async function ProductPage({ params }: PageProps) {
 
             {/* Price */}
             <div className="flex items-center gap-3 mb-6">
-              <span className="font-body text-2xl font-medium text-brand-dark">
+              <span className="font-body text-xl sm:text-2xl font-medium text-brand-dark">
                 {formattedPrice}
               </span>
               {formattedCompare && (
-                <span className="font-body text-lg text-brand-muted line-through">
+                <span className="font-body text-base sm:text-lg text-brand-muted line-through">
                   {formattedCompare}
                 </span>
               )}
@@ -289,31 +289,33 @@ export default async function ProductPage({ params }: PageProps) {
             />
 
             {/* Trust badges */}
-            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 py-5 border-t border-b border-brand-warm">
+            <div className="mt-6 flex items-center justify-around py-5 border-t border-b border-brand-warm gap-2">
               {/* Natural ingredients */}
-              <div className="flex flex-col items-center text-center gap-2">
-                <svg className="w-7 h-7 text-brand-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22V12M12 12C12 7 7 4 3 5c0 5 3 9 9 7M12 12c0-5 5-8 9-7-1 5-4 8-9 7" />
                 </svg>
-                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Natural ingredients</span>
+                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Natural<br className="sm:hidden" /> ingredients</span>
               </div>
+              <div className="w-px h-10 bg-brand-warm flex-shrink-0" />
               {/* Cruelty free */}
-              <div className="flex flex-col items-center text-center gap-2">
-                <svg className="w-7 h-7 text-brand-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
                   <line x1="16" y1="8" x2="2" y2="22" />
                   <line x1="17.5" y1="15" x2="9" y2="15" />
                 </svg>
-                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Cruelty Free</span>
+                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Cruelty<br className="sm:hidden" /> Free</span>
               </div>
+              <div className="w-px h-10 bg-brand-warm flex-shrink-0" />
               {/* Made in UK */}
-              <div className="flex flex-col items-center text-center gap-2">
-                <svg className="w-7 h-7 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="2" y1="12" x2="22" y2="12" />
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                 </svg>
-                <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted">Made in UK</span>
+                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Made<br className="sm:hidden" /> in UK</span>
               </div>
             </div>
 
@@ -377,7 +379,7 @@ export default async function ProductPage({ params }: PageProps) {
             <h2 className="font-display font-semibold text-3xl md:text-4xl text-brand-dark text-center mb-6">
               Complete the Ritual
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

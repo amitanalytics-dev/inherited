@@ -26,7 +26,7 @@ export default async function ProductsPage() {
           <p className="font-body text-[11px] tracking-[0.35em] uppercase text-brand-amber mb-3">
             The Collection
           </p>
-          <h1 className="font-display font-semibold text-4xl sm:text-5xl md:text-6xl text-brand-dark">
+          <h1 className="font-display font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-brand-dark">
             All Products
           </h1>
           <p className="font-body text-base text-brand-muted mt-4 max-w-lg mx-auto">
@@ -38,7 +38,7 @@ export default async function ProductsPage() {
       {/* Products grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
