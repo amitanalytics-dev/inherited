@@ -22,6 +22,7 @@ import ContactEditor from './pages/ContactEditor'
 import ShippingEditor from './pages/ShippingEditor'
 import ReviewsEditor from './pages/ReviewsEditor'
 import OgImageEditor from './OgImageEditor'
+import AnnouncementEmailEditor from './AnnouncementEmailEditor'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -346,6 +347,16 @@ export default function AdminPage() {
             subtitle="Add new customer reviews or edit existing ones shown on the Reviews page."
           />
           <ReviewsEditor />
+        </section>
+
+        {/* Section N — Announcement Email */}
+        <section>
+          <SectionHeading
+            kicker="Section N"
+            title="Send Announcement Email"
+            subtitle="Compose an email to all newsletter subscribers. It sends via Klaviyo at 6pm BST — throttled at 100 emails per hour so inboxes stay warm."
+          />
+          <AnnouncementEmailEditor />
         </section>
 
         {/* Section E — Site Health */}
