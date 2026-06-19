@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 const GET_PENDING = `
   query getPendingReviews {
     shop {
+      id
       metafield(namespace: "site", key: "pending_reviews") {
         value
       }
@@ -15,7 +16,8 @@ const GET_PENDING = `
 
 const SET_PENDING = `
   mutation setPendingReviews($metafields: [MetafieldsSetInput!]!) {
-    shopMetafieldsSet(metafields: $metafields) {
+    metafieldsSet(metafields: $metafields) {
+      metafields { id }
       userErrors { field message }
     }
   }
@@ -47,7 +49,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Reviews are not enabled (Shopify admin not configured).' }, { status: 503 })
     }
 
-    const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_PENDING)
+    const data = await adminQuery<{ shop: { id: string; metafield: { value: string } | null } }>(GET_PENDING)
+    const ownerId = data.shop.id
     const existing: PendingReview[] = JSON.parse(data.shop?.metafield?.value ?? '[]')
 
     const review: PendingReview = {
@@ -65,10 +68,10 @@ export async function POST(request: Request) {
     const updated = [review, ...existing].slice(0, 200)
 
     const result = await adminQuery(SET_PENDING, {
-      metafields: [{ namespace: 'site', key: 'pending_reviews', type: 'json', value: JSON.stringify(updated), ownerId: null }],
+      metafields: [{ ownerId, namespace: 'site', key: 'pending_reviews', type: 'json', value: JSON.stringify(updated) }],
     })
 
-    const err = result?.shopMetafieldsSet?.userErrors?.[0]?.message
+    const err = result?.metafieldsSet?.userErrors?.[0]?.message
     if (err) return NextResponse.json({ error: err }, { status: 500 })
 
     return NextResponse.json({ success: true })

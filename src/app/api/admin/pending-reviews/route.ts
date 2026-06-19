@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 const GET_PENDING = `
   query getPendingReviews {
     shop {
+      id
       metafield(namespace: "site", key: "pending_reviews") {
         value
       }
@@ -25,7 +26,8 @@ const GET_APPROVED = `
 
 const SET_METAFIELD = `
   mutation setMetafield($metafields: [MetafieldsSetInput!]!) {
-    shopMetafieldsSet(metafields: $metafields) {
+    metafieldsSet(metafields: $metafields) {
+      metafields { id }
       userErrors { field message }
     }
   }
@@ -57,7 +59,7 @@ export async function GET() {
     return NextResponse.json({ reviews: [], configured: false })
   }
   try {
-    const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_PENDING)
+    const data = await adminQuery<{ shop: { id: string; metafield: { value: string } | null } }>(GET_PENDING)
     const reviews: PendingReview[] = JSON.parse(data.shop?.metafield?.value ?? '[]')
     return NextResponse.json({ reviews, configured: true })
   } catch (e: unknown) {
@@ -75,11 +77,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
     }
 
-    // Load both metafields in parallel
+    // Load shop ID + both metafields in parallel
     const [pendingData, approvedData] = await Promise.all([
-      adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_PENDING),
+      adminQuery<{ shop: { id: string; metafield: { value: string } | null } }>(GET_PENDING),
       adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_APPROVED),
     ])
+    const ownerId = pendingData.shop.id
 
     const pending: PendingReview[] = JSON.parse(pendingData.shop?.metafield?.value ?? '[]')
     const approvedAll: Record<string, ApprovedReview[]> = JSON.parse(approvedData.shop?.metafield?.value ?? '{}')
@@ -88,8 +91,8 @@ export async function PUT(request: Request) {
     if (!review) return NextResponse.json({ error: 'Review not found.' }, { status: 404 })
 
     const updatedPending = pending.filter((r) => r.id !== id)
-    const saves: Array<{ namespace: string; key: string; type: string; value: string; ownerId: null }> = [
-      { namespace: 'site', key: 'pending_reviews', type: 'json', value: JSON.stringify(updatedPending), ownerId: null },
+    const saves: Array<{ ownerId: string; namespace: string; key: string; type: string; value: string }> = [
+      { ownerId, namespace: 'site', key: 'pending_reviews', type: 'json', value: JSON.stringify(updatedPending) },
     ]
 
     if (action === 'approve') {
@@ -104,11 +107,11 @@ export async function PUT(request: Request) {
       }
       const existing = approvedAll[review.productHandle] ?? []
       approvedAll[review.productHandle] = [approved, ...existing]
-      saves.push({ namespace: 'site', key: 'customer_reviews', type: 'json', value: JSON.stringify(approvedAll), ownerId: null })
+      saves.push({ ownerId, namespace: 'site', key: 'customer_reviews', type: 'json', value: JSON.stringify(approvedAll) })
     }
 
     const result = await adminQuery(SET_METAFIELD, { metafields: saves })
-    const err = result?.shopMetafieldsSet?.userErrors?.[0]?.message
+    const err = result?.metafieldsSet?.userErrors?.[0]?.message
     if (err) return NextResponse.json({ error: err }, { status: 500 })
 
     return NextResponse.json({ success: true })

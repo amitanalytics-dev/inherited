@@ -83,7 +83,10 @@ const HEALTH_ITEMS = [
   '9 products',
   'Sitemap — 78 pages',
   'Policies synced from store',
-  'Reviews verified',
+  'Customer review submissions — live on all product pages',
+  'Pending review queue — approve or reject from Section J',
+  'Announcement emails — Suruchi approval required before sending',
+  'Cart badge syncs to live Shopify cart on every page load',
 ]
 
 function SectionHeading({
