@@ -300,6 +300,7 @@ export async function cartLinesAdd(
       cart: {
         id: string
         checkoutUrl: string
+        lines: { edges: { node: { quantity: number } }[] }
       }
       userErrors: { field: string[]; message: string }[]
     }

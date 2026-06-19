@@ -18,10 +18,10 @@ export function middleware(request: NextRequest) {
     const sep = decoded.indexOf(':')
     const user = decoded.slice(0, sep)
     const pass = decoded.slice(sep + 1)
+    const raw = process.env.ADMIN_PASSWORD
+    if (!raw) return new NextResponse('Server misconfiguration', { status: 500 })
     // strip BOM/whitespace that env tooling can introduce around the value
-    const expected = (process.env.ADMIN_PASSWORD ?? 'inherited2026')
-      .replace(/^﻿/, '')
-      .trim()
+    const expected = raw.replace(/^﻿/, '').trim()
     if (user === ADMIN_USER && pass === expected) {
       return NextResponse.next()
     }

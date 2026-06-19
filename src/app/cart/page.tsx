@@ -26,6 +26,7 @@ export default function CartPage() {
   const [error, setError] = useState<string | null>(null)
   const [promo, setPromo] = useState('')
   const [promoError, setPromoError] = useState<string | null>(null)
+  const [staleCart, setStaleCart] = useState(false)
 
   const load = useCallback(async () => {
     const id = localStorage.getItem('cart_id')
@@ -42,6 +43,7 @@ export default function CartPage() {
         localStorage.removeItem('cart_count')
         window.dispatchEvent(new Event('cart-updated'))
         setCart(null)
+        setStaleCart(true)
       } else {
         setCart(c)
       }
@@ -147,7 +149,9 @@ export default function CartPage() {
             Your Bag is Empty
           </h1>
           <p className="font-body text-base text-brand-muted mb-8">
-            Add products to begin your ritual.
+            {staleCart
+              ? 'Your previous session has expired. Add products to begin a new ritual.'
+              : 'Add products to begin your ritual.'}
           </p>
           <Link
             href="/products"

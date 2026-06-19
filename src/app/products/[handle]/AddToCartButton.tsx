@@ -25,26 +25,37 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
       const cartId = localStorage.getItem('cart_id')
       const line = { merchandiseId: variantId, quantity: 1 }
 
-      let added = false
+      let newCartId: string | null = null
+      let lineCount = 0
+
       if (cartId) {
         const result = await cartLinesAdd(cartId, [line])
         if (result.cart?.id && result.userErrors.length === 0) {
-          added = true
+          newCartId = result.cart.id
+          lineCount = result.cart.lines.edges.reduce(
+            (sum: number, e: { node: { quantity: number } }) => sum + e.node.quantity,
+            0
+          )
         }
       }
 
-      if (!added) {
+      if (!newCartId) {
         const result = await cartCreate([line])
         if (result.userErrors.length > 0) {
           throw new Error(result.userErrors[0].message)
         }
-        if (result.cart?.id) {
-          localStorage.setItem('cart_id', result.cart.id)
+        if (!result.cart?.id) {
+          throw new Error('Cart could not be created')
         }
+        newCartId = result.cart.id
+        lineCount = result.cart.lines.edges.reduce(
+          (sum: number, e: { node: { quantity: number } }) => sum + e.node.quantity,
+          0
+        )
       }
 
-      const prev = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
-      localStorage.setItem('cart_count', String((isNaN(prev) ? 0 : prev) + 1))
+      localStorage.setItem('cart_id', newCartId)
+      localStorage.setItem('cart_count', String(lineCount || 1))
       window.dispatchEvent(new Event('cart-updated'))
 
       setAdded(true)

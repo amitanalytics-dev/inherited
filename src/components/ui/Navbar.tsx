@@ -295,7 +295,24 @@ export default function Navbar({
             ))}
           </nav>
 
-          <div className="mt-auto p-6 border-t border-brand-warm">
+          <div className="border-t border-brand-warm">
+            <Link
+              href="/cart"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between px-6 py-4 min-h-[56px] text-brand-dark hover:text-brand-amber transition-colors"
+            >
+              <span className="font-display text-lg italic">Your Bag</span>
+              <span className="flex items-center gap-2">
+                <ShoppingBag size={18} strokeWidth={1.5} />
+                {cartCount > 0 && (
+                  <span className="min-w-[20px] h-5 flex items-center justify-center rounded-full bg-brand-amber text-white text-[10px] font-body font-semibold px-1">
+                    {cartCount}
+                  </span>
+                )}
+              </span>
+            </Link>
+          </div>
+          <div className="p-6 border-t border-brand-warm">
             <p className="font-body text-xs text-brand-muted tracking-widest uppercase">
               Ancient Wisdom. Modern Skin.
             </p>

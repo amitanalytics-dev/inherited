@@ -57,21 +57,38 @@ export default function ProductCard({ product, className }: ProductCardProps) {
       const cartId = localStorage.getItem('cart_id')
       const line = { merchandiseId: defaultVariant.id, quantity: 1 }
 
+      let newCartId: string | null = null
+      let lineCount = 0
+
       if (cartId) {
-        await cartLinesAdd(cartId, [line])
-      } else {
-        const result = await cartCreate([line])
-        if (result.cart?.id) {
-          localStorage.setItem('cart_id', result.cart.id)
+        const result = await cartLinesAdd(cartId, [line])
+        if (result.cart?.id && result.userErrors.length === 0) {
+          newCartId = result.cart.id
+          lineCount = result.cart.lines.edges.reduce(
+            (sum: number, e: { node: { quantity: number } }) => sum + e.node.quantity,
+            0
+          )
         }
       }
 
-      const prev = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
-      localStorage.setItem('cart_count', String((isNaN(prev) ? 0 : prev) + 1))
-      window.dispatchEvent(new Event('cart-updated'))
+      if (!newCartId) {
+        const result = await cartCreate([line])
+        if (result.cart?.id) {
+          newCartId = result.cart.id
+          lineCount = result.cart.lines.edges.reduce(
+            (sum: number, e: { node: { quantity: number } }) => sum + e.node.quantity,
+            0
+          )
+        }
+      }
 
-      setAdded(true)
-      setTimeout(() => setAdded(false), 2000)
+      if (newCartId) {
+        localStorage.setItem('cart_id', newCartId)
+        localStorage.setItem('cart_count', String(lineCount || 1))
+        window.dispatchEvent(new Event('cart-updated'))
+        setAdded(true)
+        setTimeout(() => setAdded(false), 2000)
+      }
     } catch (err) {
       console.error('Add to cart error:', err)
     } finally {

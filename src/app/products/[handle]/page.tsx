@@ -5,13 +5,20 @@ import { notFound } from 'next/navigation'
 import { getProduct, getRelatedProducts } from '@/lib/queries'
 import { getFallbackProduct, getFallbackRelated } from '@/lib/fallback'
 import ProductCard from '@/components/ui/ProductCard'
-import AddToCartButton from './AddToCartButton'
+import ProductActions from './ProductActions'
 import ProductImageGallery from './ProductImageGallery'
 import JudgemeReviews from './JudgemeReviews'
 import RichText from '@/components/ui/RichText'
 import Accordion from '@/components/ui/Accordion'
 import { SITE_URL } from '@/lib/site-url'
 import type { Product } from '@/types'
+
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript\s*:/gi, '')
+}
 
 interface PageProps {
   params: { handle: string }
@@ -125,7 +132,7 @@ export default async function ProductPage({ params }: PageProps) {
       content: (
         <div
           className="font-body text-base text-brand-muted leading-relaxed space-y-2 [&_strong]:font-semibold [&_strong]:text-brand-dark [&_p]:mb-2"
-          dangerouslySetInnerHTML={{ __html: keyIngredients.value }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(keyIngredients.value) }}
         />
       ),
     }] : []),
@@ -262,31 +269,8 @@ export default async function ProductPage({ params }: PageProps) {
               <p>{product.description}</p>
             </div>
 
-            {/* Variant selector */}
-            {product.variants.length > 1 && (
-              <div className="mb-6">
-                <p className="font-body text-xs tracking-widest uppercase text-brand-muted mb-2">
-                  {product.variants[0].selectedOptions[0]?.name ?? 'Option'}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {product.variants.map((variant) => (
-                    <button
-                      key={variant.id}
-                      disabled={!variant.availableForSale}
-                      className="px-4 py-3 min-h-[44px] border border-brand-dark/20 font-body text-sm hover:border-brand-amber hover:text-brand-amber transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      {variant.title}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Add to Cart */}
-            <AddToCartButton
-              variantId={product.variants[0]?.id}
-              available={product.availableForSale}
-            />
+            {/* Variant selector + Add to Cart */}
+            <ProductActions variants={product.variants} />
 
             {/* Trust badges */}
             <div className="mt-6 flex items-center justify-around py-5 border-t border-b border-brand-warm gap-2">

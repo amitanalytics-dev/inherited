@@ -4,8 +4,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.shopify.com', pathname: '/**' },
       { protocol: 'https', hostname: 'leela-skincare.myshopify.com', pathname: '/**' },
-      // Allow any https image URL pasted by the admin in the photo picker
-      { protocol: 'https', hostname: '**' },
+      { protocol: 'https', hostname: '*.myshopify.com', pathname: '/**' },
     ],
   },
   async redirects() {
