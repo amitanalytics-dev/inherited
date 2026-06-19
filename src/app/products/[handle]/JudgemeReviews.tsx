@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import reviewsData from '@/data/reviews.json'
 import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
 import ReviewForm from './ReviewForm'
@@ -134,9 +135,12 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
             <ReviewCard key={review.id} review={review} />
           ))}
           {displayCount > totalCount && (
-            <p className="pt-2 font-body text-sm text-brand-muted">
-              Showing {totalCount} of {displayCount} reviews
-            </p>
+            <Link
+              href="/reviews"
+              className="pt-2 font-body text-sm text-brand-amber hover:underline underline-offset-2"
+            >
+              Showing {totalCount} of {displayCount} reviews — see all
+            </Link>
           )}
         </div>
       ) : (
