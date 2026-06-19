@@ -23,6 +23,7 @@ import ShippingEditor from './pages/ShippingEditor'
 import ReviewsEditor from './pages/ReviewsEditor'
 import OgImageEditor from './OgImageEditor'
 import AnnouncementEmailEditor from './AnnouncementEmailEditor'
+import BlogEditor from './BlogEditor'
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -337,6 +338,16 @@ export default function AdminPage() {
             subtitle="Edit the shipping highlight tiles and returns policy paragraphs."
           />
           <ShippingEditor />
+        </section>
+
+        {/* Section P — Blog Posts */}
+        <section>
+          <SectionHeading
+            kicker="Section P"
+            title="Blog Posts"
+            subtitle="Edit any published article — title, body, excerpt, or toggle it between published and draft."
+          />
+          <BlogEditor />
         </section>
 
         {/* Section J — Customer Reviews */}
