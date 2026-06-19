@@ -27,7 +27,7 @@ export default function StorySection({
             <div className="absolute -bottom-6 -right-6 w-40 h-40 border border-brand-amber/30 hidden lg:block" />
             <div className="absolute -top-6 -left-6 w-20 h-20 border border-brand-amber/20 hidden lg:block" />
             {/* Brand seal */}
-            <div className="absolute -bottom-7 -right-4 lg:-right-7 z-10">
+            <div className="absolute -bottom-7 -left-4 lg:-left-7 z-10">
               <div className="relative w-[110px] h-[110px] rounded-full overflow-hidden shadow-lg ring-1 ring-brand-amber/30">
                 <Image
                   src="/images/brand/badge_cream.jpg"
