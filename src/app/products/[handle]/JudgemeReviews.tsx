@@ -136,7 +136,7 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
           ))}
           {displayCount > totalCount && (
             <Link
-              href="/reviews"
+              href={`/reviews?product=${productHandle}`}
               className="pt-2 font-body text-sm text-brand-amber hover:underline underline-offset-2"
             >
               Showing {totalCount} of {displayCount} reviews — see all
