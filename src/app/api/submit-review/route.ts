@@ -3,6 +3,24 @@ import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
 
 export const dynamic = 'force-dynamic'
 
+// In-memory rate limiter: max 3 submissions per IP per 24 hours.
+// Resets on server restart (acceptable — this is a soft spam guard, not a hard security control).
+const WINDOW_MS = 24 * 60 * 60 * 1000
+const MAX_PER_WINDOW = 3
+const ipLog = new Map<string, { count: number; windowStart: number }>()
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now()
+  const entry = ipLog.get(ip)
+  if (!entry || now - entry.windowStart > WINDOW_MS) {
+    ipLog.set(ip, { count: 1, windowStart: now })
+    return false
+  }
+  if (entry.count >= MAX_PER_WINDOW) return true
+  entry.count++
+  return false
+}
+
 const GET_PENDING = `
   query getPendingReviews {
     shop {
@@ -36,6 +54,14 @@ export interface PendingReview {
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: 'Too many submissions. Please try again in 24 hours.' },
+        { status: 429 }
+      )
+    }
+
     const { productHandle, authorName, rating, title, body } = await request.json()
 
     if (!productHandle || !authorName?.trim() || !body?.trim()) {

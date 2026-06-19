@@ -272,34 +272,46 @@ export default async function ProductPage({ params }: PageProps) {
             {/* Variant selector + Add to Cart */}
             <ProductActions variants={product.variants} />
 
-            {/* Trust badges */}
-            <div className="mt-6 flex items-center justify-around py-5 border-t border-b border-brand-warm gap-2">
-              {/* Natural ingredients */}
-              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22V12M12 12C12 7 7 4 3 5c0 5 3 9 9 7M12 12c0-5 5-8 9-7-1 5-4 8-9 7" />
-                </svg>
-                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Natural<br className="sm:hidden" /> ingredients</span>
-              </div>
-              <div className="w-px h-10 bg-brand-warm flex-shrink-0" />
-              {/* Cruelty free */}
-              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-                  <line x1="16" y1="8" x2="2" y2="22" />
-                  <line x1="17.5" y1="15" x2="9" y2="15" />
-                </svg>
-                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Cruelty<br className="sm:hidden" /> Free</span>
-              </div>
-              <div className="w-px h-10 bg-brand-warm flex-shrink-0" />
-              {/* Made in UK */}
-              <div className="flex flex-col items-center text-center gap-1.5 flex-1">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="2" y1="12" x2="22" y2="12" />
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-                <span className="font-body text-[9px] sm:text-[10px] tracking-wide sm:tracking-widest uppercase text-brand-muted leading-tight">Made<br className="sm:hidden" /> in UK</span>
+            {/* Trust badges — flex-wrap centers any overflow row; 5-col on sm+ */}
+            <div className="mt-6 border-t border-b border-brand-warm py-5">
+              <div className="flex flex-wrap justify-center sm:flex-nowrap gap-y-4">
+                {[
+                  { icon: (
+                    <svg className="w-5 h-5 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22V12M12 12C12 7 7 4 3 5c0 5 3 9 9 7M12 12c0-5 5-8 9-7-1 5-4 8-9 7" />
+                    </svg>
+                  ), label: 'Natural Ingredients' },
+                  { icon: (
+                    <svg className="w-5 h-5 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  ), label: 'CPSR Safety Tested' },
+                  { icon: (
+                    <svg className="w-5 h-5 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                      <line x1="16" y1="8" x2="2" y2="22" />
+                      <line x1="17.5" y1="15" x2="9" y2="15" />
+                    </svg>
+                  ), label: 'Cruelty Free' },
+                  { icon: (
+                    <svg className="w-5 h-5 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  ), label: 'Made in the UK' },
+                  { icon: (
+                    <svg className="w-5 h-5 text-brand-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  ), label: 'Loved by 1,800+' },
+                ].map(({ icon, label }) => (
+                  <div key={label} className="flex flex-col items-center text-center gap-1.5 w-1/3 sm:flex-1 px-1">
+                    {icon}
+                    <span className="font-body text-[9px] tracking-widest uppercase text-brand-muted leading-tight">
+                      {label}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
