@@ -43,7 +43,10 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
   const ratingMeta = product.metafields?.find((m) => m?.namespace === 'reviews' && m?.key === 'rating')
   const ratingCountMeta = product.metafields?.find((m) => m?.namespace === 'reviews' && m?.key === 'rating_count')
-  const shopifyRating = ratingMeta?.value ? parseFloat(ratingMeta.value) : null
+  let shopifyRating: number | null = null
+  if (ratingMeta?.value) {
+    try { const r = parseFloat(JSON.parse(ratingMeta.value).value); shopifyRating = isNaN(r) ? null : r } catch { /* fallback to local */ }
+  }
   const shopifyCount = ratingCountMeta?.value ? parseInt(ratingCountMeta.value, 10) : null
 
   const allReviews = reviewsData as Record<string, { rating: number }[]>
