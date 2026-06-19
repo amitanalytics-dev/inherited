@@ -23,10 +23,10 @@ export default function TrustRow({ items }: { items?: string[] }) {
     <section className="bg-brand-cream border-b border-brand-warm py-5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-6">
-          {usps.map((usp) => (
+          {usps.map((usp, index) => (
             <div
               key={usp.label}
-              className="flex items-center justify-center gap-2.5"
+              className={`flex items-center justify-center gap-2.5${index === 4 ? ' col-span-2 sm:col-span-1' : ''}`}
             >
               <usp.icon
                 size={18}

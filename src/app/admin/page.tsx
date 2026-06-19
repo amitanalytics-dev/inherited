@@ -21,6 +21,7 @@ import FaqEditor from './pages/FaqEditor'
 import ContactEditor from './pages/ContactEditor'
 import ShippingEditor from './pages/ShippingEditor'
 import ReviewsEditor from './pages/ReviewsEditor'
+import PendingReviewsEditor from './pages/PendingReviewsEditor'
 import OgImageEditor from './OgImageEditor'
 import AnnouncementEmailEditor from './AnnouncementEmailEditor'
 import BlogEditor from './BlogEditor'
@@ -350,11 +351,21 @@ export default function AdminPage() {
           <BlogEditor />
         </section>
 
-        {/* Section J — Customer Reviews */}
+        {/* Section J — Pending Reviews (customer submissions awaiting approval) */}
         <section>
           <SectionHeading
             kicker="Section J"
-            title="Customer Reviews"
+            title="Pending Reviews"
+            subtitle="Customer reviews submitted from product pages — approve to publish, reject to discard."
+          />
+          <PendingReviewsEditor />
+        </section>
+
+        {/* Section J2 — Curated Reviews */}
+        <section>
+          <SectionHeading
+            kicker="Section J2"
+            title="Curated Reviews"
             subtitle="Add new customer reviews or edit existing ones shown on the Reviews page."
           />
           <ReviewsEditor />

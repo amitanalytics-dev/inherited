@@ -73,7 +73,7 @@ export default function Navbar({
       >
         {/* Announcement bar */}
         <div className="bg-brand-dark text-brand-cream">
-          <p className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[32px] py-1.5 flex items-center justify-center font-body text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-center leading-tight">
+          <p className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[32px] py-1.5 font-body text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-center leading-tight">
             {announcement.split(/(\S*★\S*)/g).map((part, i) =>
               part.includes('★') ? (
                 <span key={i} className="text-brand-amber">

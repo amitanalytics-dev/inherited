@@ -1,6 +1,6 @@
-'use client'
-
 import reviewsData from '@/data/reviews.json'
+import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
+import ReviewForm from './ReviewForm'
 
 interface StaticReview {
   id: number
@@ -8,6 +8,16 @@ interface StaticReview {
   rating: number
   title: string
   body: string
+  verified: boolean
+}
+
+interface CustomerReview {
+  id: string
+  authorName: string
+  rating: number
+  title: string
+  body: string
+  createdAt: string
   verified: boolean
 }
 
@@ -24,22 +34,79 @@ function Stars({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md' }) 
   )
 }
 
+function ReviewCard({ review }: { review: StaticReview | CustomerReview }) {
+  return (
+    <div className="bg-white border border-brand-warm p-6 sm:p-8">
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <div className="space-y-1.5">
+          <Stars rating={review.rating} />
+          {review.title && (
+            <p className="font-body font-semibold text-brand-dark text-base leading-snug">
+              {review.title}
+            </p>
+          )}
+        </div>
+        <div className="text-right flex-shrink-0">
+          <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
+          {review.verified && (
+            <span className="inline-block mt-1.5 font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-2 py-0.5">
+              Verified
+            </span>
+          )}
+        </div>
+      </div>
+      {review.body && (
+        <p className="font-body text-sm text-brand-muted leading-relaxed">{review.body}</p>
+      )}
+    </div>
+  )
+}
+
+const GET_CUSTOMER_REVIEWS = `
+  query getCustomerReviews {
+    shop {
+      metafield(namespace: "site", key: "customer_reviews") {
+        value
+      }
+    }
+  }
+`
+
+async function fetchCustomerReviews(handle: string): Promise<CustomerReview[]> {
+  if (!adminConfigured()) return []
+  try {
+    const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_CUSTOMER_REVIEWS)
+    const value = data.shop?.metafield?.value
+    if (!value) return []
+    const all: Record<string, CustomerReview[]> = JSON.parse(value)
+    return all[handle] ?? []
+  } catch {
+    return []
+  }
+}
+
 interface Props {
   productHandle: string
   ratingValue: number | null
   ratingCount: number | null
 }
 
-export default function JudgemeReviews({ productHandle, ratingValue, ratingCount }: Props) {
-  const allReviews = reviewsData as Record<string, StaticReview[]>
-  const reviews: StaticReview[] = allReviews[productHandle] ?? []
+export default async function JudgemeReviews({ productHandle, ratingValue, ratingCount }: Props) {
+  const allStaticReviews = reviewsData as Record<string, StaticReview[]>
+  const staticReviews: StaticReview[] = allStaticReviews[productHandle] ?? []
+  const customerReviews = await fetchCustomerReviews(productHandle)
 
-  // Compute aggregate
-  const displayCount = ratingCount ?? reviews.length
+  const totalCount = staticReviews.length + customerReviews.length
+  const allRatings = [
+    ...staticReviews.map((r) => r.rating),
+    ...customerReviews.map((r) => r.rating),
+  ]
+
+  const displayCount = ratingCount ?? totalCount
   const displayRating =
     ratingValue ??
-    (reviews.length > 0
-      ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
+    (allRatings.length > 0
+      ? Math.round((allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length) * 10) / 10
       : null)
 
   return (
@@ -58,42 +125,17 @@ export default function JudgemeReviews({ productHandle, ratingValue, ratingCount
         )}
       </div>
 
-      {reviews.length > 0 ? (
+      {totalCount > 0 ? (
         <div className="space-y-4">
-          {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white border border-brand-warm p-6 sm:p-8"
-            >
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <div className="space-y-1.5">
-                  <Stars rating={review.rating} />
-                  {review.title && (
-                    <p className="font-body font-semibold text-brand-dark text-base leading-snug">
-                      {review.title}
-                    </p>
-                  )}
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
-                  {review.verified && (
-                    <span className="inline-block mt-1.5 font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-2 py-0.5">
-                      Verified
-                    </span>
-                  )}
-                </div>
-              </div>
-              {review.body && (
-                <p className="font-body text-sm text-brand-muted leading-relaxed">
-                  {review.body}
-                </p>
-              )}
-            </div>
+          {customerReviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
-
-          {displayCount > reviews.length && (
+          {staticReviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+          {displayCount > totalCount && (
             <p className="pt-2 font-body text-sm text-brand-muted">
-              Showing {reviews.length} of {displayCount} reviews
+              Showing {totalCount} of {displayCount} reviews
             </p>
           )}
         </div>
@@ -102,6 +144,8 @@ export default function JudgemeReviews({ productHandle, ratingValue, ratingCount
           <p className="font-body text-brand-muted">No reviews yet — be the first!</p>
         </div>
       )}
+
+      <ReviewForm productHandle={productHandle} />
     </div>
   )
 }

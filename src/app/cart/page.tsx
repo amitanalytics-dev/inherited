@@ -46,6 +46,13 @@ export default function CartPage() {
         setStaleCart(true)
       } else {
         setCart(c)
+        // Sync badge to actual cart quantity so stale counts are corrected
+        const count = c.lines.edges.reduce((sum, e) => sum + e.node.quantity, 0)
+        const stored = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
+        if (stored !== count) {
+          localStorage.setItem('cart_count', count.toString())
+          window.dispatchEvent(new Event('cart-updated'))
+        }
       }
     } catch {
       setError('Could not load your bag. Please refresh.')
