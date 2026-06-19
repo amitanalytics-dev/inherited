@@ -1,65 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { storefront } from '@/lib/shopify'
 import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const LIST_QUERY = `{
-  blogs(first: 10) {
-    nodes {
-      id
-      title
-      articles(first: 250, sortKey: PUBLISHED_AT, reverse: true) {
-        nodes {
+// Read via Storefront API — same source as the website, no extra scopes needed.
+// Fetches up to 250 articles across all blogs sorted newest-first.
+const LIST_QUERY = `
+  query listArticles($first: Int!) {
+    articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
+      edges {
+        node {
           id
           title
           handle
           publishedAt
-          bodyHtml
-          excerptHtml
+          contentHtml
+          excerpt
           image { url altText }
+          blog { handle title }
+          seo { title description }
         }
       }
     }
   }
-}`
+`
 
-type ArticleNode = {
+type StorefrontArticle = {
   id: string
   title: string
   handle: string
-  publishedAt: string | null
-  bodyHtml: string
-  excerptHtml: string | null
+  publishedAt: string
+  contentHtml: string
+  excerpt: string | null
   image: { url: string; altText: string | null } | null
-}
-
-type BlogNode = {
-  id: string
-  title: string
-  articles: { nodes: ArticleNode[] }
+  blog: { handle: string; title: string }
+  seo: { title: string | null; description: string | null } | null
 }
 
 export async function GET() {
-  if (!adminConfigured()) {
-    return NextResponse.json({ configured: false, articles: [] })
-  }
   try {
-    const data = await adminQuery<{ blogs: { nodes: BlogNode[] } }>(LIST_QUERY)
-    const articles = (data.blogs?.nodes ?? []).flatMap((blog) =>
-      (blog.articles?.nodes ?? []).map((a) => ({
-        id: a.id,
-        blogId: blog.id,
-        blogTitle: blog.title,
-        title: a.title,
-        handle: a.handle,
-        publishedAt: a.publishedAt,
-        published: !!a.publishedAt,
-        bodyHtml: a.bodyHtml ?? '',
-        excerptHtml: a.excerptHtml ?? '',
-        image: a.image?.url ?? null,
-      }))
-    )
+    const data = await storefront<{
+      articles: { edges: { node: StorefrontArticle }[] }
+    }>(LIST_QUERY, { first: 250 }, { noStore: true })
+
+    const articles = (data.articles?.edges ?? []).map(({ node: a }) => ({
+      id: a.id,
+      title: a.title,
+      handle: a.handle,
+      publishedAt: a.publishedAt,
+      published: true, // Storefront only returns published articles
+      bodyHtml: a.contentHtml ?? '',
+      excerptHtml: a.excerpt ?? '',
+      image: a.image?.url ?? null,
+      blogHandle: a.blog?.handle ?? '',
+      blogTitle: a.blog?.title ?? '',
+    }))
+
     return NextResponse.json({ configured: true, articles })
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : 'Failed to load articles'
@@ -67,6 +65,7 @@ export async function GET() {
   }
 }
 
+// Write via Admin API — requires write_content scope on the Shopify app.
 const ARTICLE_UPDATE = `mutation articleUpdate($id: ID!, $article: ArticleInput!) {
   articleUpdate(id: $id, article: $article) {
     article { id title publishedAt }
@@ -76,7 +75,7 @@ const ARTICLE_UPDATE = `mutation articleUpdate($id: ID!, $article: ArticleInput!
 
 export async function PATCH(request: NextRequest) {
   if (!adminConfigured()) {
-    return NextResponse.json({ success: false, error: 'Shopify not connected.' }, { status: 400 })
+    return NextResponse.json({ success: false, error: 'Shopify admin credentials not configured.' }, { status: 400 })
   }
   try {
     const body = await request.json()
