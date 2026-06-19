@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Send, Clock, Users, AlertCircle, CheckCircle2, Loader2, ExternalLink } from 'lucide-react'
+import { Send, Clock, Users, AlertCircle, CheckCircle2, Loader2, Mail } from 'lucide-react'
 
 const THROTTLE_OPTIONS = [
   { label: '10% per hour  (~100/hr for 1,000 subscribers)', value: 10 },
@@ -16,14 +16,14 @@ function todayISO() {
 }
 
 export default function AnnouncementEmailEditor() {
-  const [subject, setSubject] = useState('')
-  const [preheader, setPreheader] = useState('')
-  const [body, setBody] = useState('')
-  const [scheduleDate, setScheduleDate] = useState(todayISO)
+  const [subject, setSubject]               = useState('')
+  const [preheader, setPreheader]           = useState('')
+  const [body, setBody]                     = useState('')
+  const [scheduleDate, setScheduleDate]     = useState(todayISO)
   const [throttlePercent, setThrottlePercent] = useState(10)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [resultMsg, setResultMsg] = useState('')
-  const [campaignId, setCampaignId] = useState('')
+  const [status, setStatus]                 = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [resultMsg, setResultMsg]           = useState('')
+  const [emailSent, setEmailSent]           = useState(true)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -31,10 +31,9 @@ export default function AnnouncementEmailEditor() {
 
     setStatus('loading')
     setResultMsg('')
-    setCampaignId('')
 
     try {
-      const res = await fetch('/api/admin/send-announcement', {
+      const res = await fetch('/api/admin/email-drafts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -47,21 +46,13 @@ export default function AnnouncementEmailEditor() {
       })
 
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`)
+      if (!res.ok || !data.success) throw new Error(data.error ?? `HTTP ${res.status}`)
 
-      const dt = new Date(data.sendAt)
-      const formatted = dt.toLocaleString('en-GB', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZoneName: 'short',
-        timeZone: 'Europe/London',
-      })
-      setCampaignId(data.campaignId)
-      setResultMsg(`Scheduled for ${formatted} (6pm BST). Sending ${throttlePercent}% of recipients per hour.`)
+      setEmailSent(data.emailSent ?? true)
+      setResultMsg(data.emailSent
+        ? 'Approval email sent to suruchi@inheritedskincare.com — the email will only go to subscribers once she clicks Approve.'
+        : `Draft saved but the approval email could not be sent (${data.emailError ?? 'unknown error'}). Please check RESEND_API_KEY in Vercel env vars.`
+      )
       setStatus('success')
     } catch (err: unknown) {
       setStatus('error')
@@ -72,17 +63,30 @@ export default function AnnouncementEmailEditor() {
   function handleReset() {
     setStatus('idle')
     setResultMsg('')
-    setCampaignId('')
     setSubject('')
     setPreheader('')
     setBody('')
     setScheduleDate(todayISO())
     setThrottlePercent(10)
+    setEmailSent(true)
   }
 
   return (
     <div className="bg-white border border-brand-warm rounded-2xl p-6 md:p-8 shadow-sm">
-      {/* Audience info */}
+      {/* Approval notice */}
+      <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+        <Mail size={16} className="text-amber-600 mt-0.5 flex-shrink-0" />
+        <div>
+          <p className="font-body text-sm font-semibold text-amber-800">
+            Approval required before sending
+          </p>
+          <p className="font-body text-xs text-amber-700 mt-0.5">
+            Submitting this form sends an approval request to <strong>suruchi@inheritedskincare.com</strong>. The email will only go to subscribers after she clicks Approve.
+          </p>
+        </div>
+      </div>
+
+      {/* Audience */}
       <div className="flex items-start gap-3 bg-brand-warm/50 border border-brand-amber/20 rounded-xl p-4 mb-6">
         <Users size={16} className="text-brand-amber mt-0.5 flex-shrink-0" />
         <div>
@@ -90,28 +94,25 @@ export default function AnnouncementEmailEditor() {
             Audience: Newsletter list (all subscribers)
           </p>
           <p className="font-body text-xs text-brand-muted mt-0.5">
-            Sends to every subscriber on your Klaviyo Newsletter list. Set the send rate below — 10% per hour means roughly 100 emails/hr for a 1,000-person list.
+            Sends to every subscriber on your Klaviyo Newsletter list at the throttle rate below.
           </p>
         </div>
       </div>
 
       {status === 'success' ? (
         <div className="space-y-5">
-          <div className="flex items-start gap-3 bg-green-50 border border-green-200 rounded-xl p-5">
-            <CheckCircle2 size={20} className="text-green-600 mt-0.5 flex-shrink-0" />
+          <div className={`flex items-start gap-3 rounded-xl p-5 border ${emailSent ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+            {emailSent
+              ? <CheckCircle2 size={20} className="text-green-600 mt-0.5 flex-shrink-0" />
+              : <AlertCircle size={20} className="text-amber-600 mt-0.5 flex-shrink-0" />
+            }
             <div>
-              <p className="font-body text-sm font-semibold text-green-800 mb-1">Campaign scheduled!</p>
-              <p className="font-body text-sm text-green-700 leading-relaxed">{resultMsg}</p>
-              {campaignId && (
-                <a
-                  href="https://www.klaviyo.com/campaigns/email"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-body text-xs text-brand-amber underline mt-3"
-                >
-                  View campaign in Klaviyo <ExternalLink size={11} />
-                </a>
-              )}
+              <p className={`font-body text-sm font-semibold mb-1 ${emailSent ? 'text-green-800' : 'text-amber-800'}`}>
+                {emailSent ? 'Approval request sent!' : 'Draft saved — approval email failed'}
+              </p>
+              <p className={`font-body text-sm leading-relaxed ${emailSent ? 'text-green-700' : 'text-amber-700'}`}>
+                {resultMsg}
+              </p>
             </div>
           </div>
           <button
@@ -165,14 +166,14 @@ export default function AnnouncementEmailEditor() {
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              placeholder={`Write your email here. Leave a blank line between paragraphs.\n\nFor example:\n\nDear [first_name|friend],\n\nOur new website is live! ...\n\nWith love,\nSuruchi`}
+              placeholder={`Write your email here. Leave a blank line between paragraphs.\n\nFor example:\n\nDear {{ first_name|friend }},\n\nOur new website is live! ...\n\nWith love,\nSuruchi`}
               required
               rows={12}
               disabled={status === 'loading'}
               className="w-full border border-brand-warm bg-brand-cream/50 rounded-lg px-4 py-3 font-body text-sm text-brand-dark focus:outline-none focus:border-brand-amber transition-colors resize-y disabled:opacity-50"
             />
             <p className="font-body text-[11px] text-brand-muted mt-1.5">
-              Plain text only — blank lines become paragraph breaks. You can use <code className="bg-brand-warm px-1 rounded text-[10px]">&#123;&#123; first_name|friend &#125;&#125;</code> for personalisation.
+              Plain text only — blank lines become paragraph breaks. Use <code className="bg-brand-warm px-1 rounded text-[10px]">&#123;&#123; first_name|friend &#125;&#125;</code> for personalisation.
             </p>
           </div>
 
@@ -190,7 +191,7 @@ export default function AnnouncementEmailEditor() {
                 className="w-full border border-brand-warm bg-brand-cream/50 rounded-lg px-4 py-3 font-body text-sm text-brand-dark focus:outline-none focus:border-brand-amber transition-colors disabled:opacity-50"
               />
               <p className="font-body text-[11px] text-brand-muted mt-1.5">
-                Sending starts at <strong>6pm BST</strong> on this date.
+                Sends at <strong>6pm BST</strong> on this date, after approval.
               </p>
             </div>
             <div>
@@ -204,9 +205,7 @@ export default function AnnouncementEmailEditor() {
                 className="w-full border border-brand-warm bg-brand-cream/50 rounded-lg px-4 py-3 font-body text-sm text-brand-dark focus:outline-none focus:border-brand-amber transition-colors disabled:opacity-50"
               >
                 {THROTTLE_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
+                  <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
               </select>
             </div>
@@ -217,7 +216,7 @@ export default function AnnouncementEmailEditor() {
             <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
               <AlertCircle size={16} className="text-red-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-body text-sm font-semibold text-red-800">Could not schedule campaign</p>
+                <p className="font-body text-sm font-semibold text-red-800">Could not submit for approval</p>
                 <p className="font-body text-xs text-red-700 mt-0.5">{resultMsg}</p>
               </div>
             </div>
@@ -235,11 +234,11 @@ export default function AnnouncementEmailEditor() {
               ) : (
                 <Send size={14} />
               )}
-              {status === 'loading' ? 'Scheduling…' : 'Schedule for 6pm BST'}
+              {status === 'loading' ? 'Submitting…' : 'Submit for Suruchi\'s Approval'}
             </button>
             <span className="flex items-center gap-1.5 font-body text-xs text-brand-muted">
               <Clock size={13} />
-              {throttlePercent}% / hr · starts 6pm BST
+              {throttlePercent}% / hr · 6pm BST
             </span>
           </div>
         </form>
