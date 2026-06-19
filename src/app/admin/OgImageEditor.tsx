@@ -14,6 +14,7 @@ export default function OgImageEditor() {
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [uploadMsg, setUploadMsg] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function OgImageEditor() {
   async function uploadImage(file: File) {
     setUploading(true)
     setUploadMsg(null)
+    setUploadError(null)
     try {
       const body = new FormData()
       body.append('file', file)
@@ -43,10 +45,10 @@ export default function OgImageEditor() {
         setOgImage(json.url)
         setUploadMsg('Image uploaded — click Save to publish it.')
       } else {
-        setUploadMsg(json.error || 'Upload failed — please try again.')
+        setUploadError(json.error || 'Upload failed — please try again.')
       }
     } catch {
-      setUploadMsg('Upload failed — please try again.')
+      setUploadError('Upload failed — could not reach the server.')
     } finally {
       setUploading(false)
     }
@@ -132,7 +134,7 @@ export default function OgImageEditor() {
             )}
             {/* WhatsApp-style overlay badge */}
             <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-3 py-2">
-              <p className="font-body text-[11px] text-white/90 truncate">shop.inheritedskincare.com</p>
+              <p className="font-body text-[11px] text-white/90 truncate">inheritedskincare.com</p>
               <p className="font-body text-[10px] text-white/60 truncate">Inherited Skincare — Ancient Wisdom. Modern Skin.</p>
             </div>
           </div>
@@ -178,7 +180,23 @@ export default function OgImageEditor() {
           </div>
 
           {uploadMsg && (
-            <p className="font-body text-[11px] text-brand-green mt-2">{uploadMsg}</p>
+            <p className="font-body text-[11px] text-green-700 mt-2">{uploadMsg}</p>
+          )}
+
+          {uploadError && (
+            <div className="mt-3 bg-red-50 border border-red-200 rounded-xl p-4 space-y-2">
+              <p className="font-body text-xs font-semibold text-red-800">Upload failed</p>
+              <p className="font-body text-xs text-red-700 leading-relaxed">{uploadError}</p>
+              <div className="border-t border-red-200 pt-2 mt-2">
+                <p className="font-body text-xs font-semibold text-red-800 mb-1">Quick workaround:</p>
+                <ol className="font-body text-xs text-red-700 space-y-1 list-decimal list-inside leading-relaxed">
+                  <li>Open <strong>Shopify Admin → Content → Files</strong></li>
+                  <li>Click <strong>Upload files</strong> and pick your image</li>
+                  <li>Once uploaded, click the three dots → <strong>Copy link</strong></li>
+                  <li>Paste that link in the Image URL field below and click Save</li>
+                </ol>
+              </div>
+            </div>
           )}
 
           {/* URL field */}
@@ -188,13 +206,13 @@ export default function OgImageEditor() {
                 <ImageIcon size={12} /> Image URL
               </span>
               <span className="block font-body text-xs text-brand-muted mt-0.5 mb-2">
-                Paste a direct link to a hosted image (must start with https://). The preview above updates when you save.
+                Paste a direct link to a hosted image (must start with https://). Upload to <strong>Shopify Admin → Content → Files</strong> first if you don&apos;t have a URL yet.
               </span>
               <input
                 type="url"
                 value={ogImage}
                 disabled={readOnly}
-                onChange={(e) => setOgImage(e.target.value)}
+                onChange={(e) => { setOgImage(e.target.value); setUploadError(null) }}
                 placeholder="https://cdn.shopify.com/..."
                 className="w-full rounded-lg border border-brand-warm bg-white px-4 py-3 font-body text-sm text-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-amber/50 disabled:bg-brand-warm/40 disabled:text-brand-muted"
               />

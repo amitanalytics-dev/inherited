@@ -79,7 +79,10 @@ export async function POST(request: Request) {
     })
 
     const err = staged.stagedUploadsCreate.userErrors?.[0]?.message
-    if (err) return NextResponse.json({ error: err }, { status: 500 })
+    if (err) return NextResponse.json({ error: `Shopify upload error: ${err}` }, { status: 500 })
+    if (!staged.stagedUploadsCreate.stagedTargets?.length) {
+      return NextResponse.json({ error: 'Shopify did not return an upload target. The Admin API token may be missing the write_files scope. As a workaround, upload the image in Shopify Admin → Content → Files, then paste the CDN link into the Image URL field.' }, { status: 500 })
+    }
 
     const target = staged.stagedUploadsCreate.stagedTargets[0]
     if (!target) {
