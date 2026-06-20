@@ -82,19 +82,22 @@ h1, h2, h3, h4 {
 }
 
 /* ─── Marquee ────────────────────────────────────────────────────────────── */
+:root {
+  --marquee-speed: 30s;
+}
+@media (max-width: 768px) {
+  :root {
+    --marquee-speed: 60s;
+  }
+}
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marquee var(--marquee-speed) linear infinite;
   will-change: transform;
 }
 .marquee-track:hover {
   animation-play-state: paused;
-}
-@media (max-width: 768px) {
-  .marquee-track {
-    animation-duration: 60s;
-  }
 }
 
 /* ─── Hide scrollbar (quote rail) ────────────────────────────────────────── */
