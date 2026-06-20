@@ -1,8 +1,11 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+
+const PHOTO_HOLD_MS = 5000 // how long the photo shows between video plays
 
 type HeroProps = {
   headline1?: string
@@ -17,31 +20,44 @@ export default function Hero({
   headline2 = 'Inherited It.',
   subline = 'Ghee-powered Ayurvedic skincare. Handmade in the UK.',
   image = '/images/brand/hero_lifestyle.jpg',
-  video,
+  video: videoProp = '',
 }: HeroProps) {
-  const hasVideo = Boolean(video && video.trim())
+  const video = videoProp?.trim() || '/videos/hero.mov'
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [showVideo, setShowVideo] = useState(true)
+
+  const handleVideoEnded = () => {
+    setShowVideo(false)
+    setTimeout(() => {
+      setShowVideo(true)
+      videoRef.current?.play()
+    }, PHOTO_HOLD_MS)
+  }
+
+  useEffect(() => {
+    videoRef.current?.play()
+  }, [])
+
   return (
     <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
-      {/* Background — video takes priority over image */}
-      {hasVideo ? (
-        <video
-          src={video}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover object-right"
-        />
-      ) : (
-        <Image
-          src={image}
-          alt="Warm ghee poured into a marble bowl beside the Deep Nourishing Cream on its pomegranate box"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center sm:object-right"
-        />
-      )}
+      {/* Background — image always present; video fades over it */}
+      <Image
+        src={image}
+        alt="Warm ghee poured into a marble bowl beside the Deep Nourishing Cream on its pomegranate box"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center sm:object-right"
+      />
+      <video
+        ref={videoRef}
+        src={video}
+        muted
+        playsInline
+        onEnded={handleVideoEnded}
+        className="absolute inset-0 w-full h-full object-cover object-right transition-opacity duration-1000"
+        style={{ opacity: showVideo ? 1 : 0 }}
+      />
 
       {/* Soft cream gradient on the left so dark text stays readable */}
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-brand-cream/55 via-brand-cream/10 to-transparent" />
