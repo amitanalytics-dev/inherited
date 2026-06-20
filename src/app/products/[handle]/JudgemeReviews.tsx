@@ -154,22 +154,32 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
             <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark">
               Customer Reviews
             </h2>
-            {/* Judge.me verified badge */}
+            {/* Judge.me verified badge — inline SVG seal */}
             <a
               href="https://judge.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 flex flex-col items-center gap-0.5 group"
+              className="flex-shrink-0 flex flex-col items-center gap-0.5 group opacity-80 group-hover:opacity-100 transition-opacity"
               title="Verified by Judge.me"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://cdn.judge.me/assets/badges/judgment_day_seal_v2_on_transparent.png"
-                alt="Judge.me verified reviews seal"
-                width={56}
-                height={56}
-                className="opacity-90 group-hover:opacity-100 transition-opacity"
-              />
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Outer seal ring */}
+                <circle cx="30" cy="30" r="28" fill="#C8923A" />
+                <circle cx="30" cy="30" r="24" fill="none" stroke="#fff" strokeWidth="1.5" />
+                {/* Star burst points */}
+                {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg, i) => {
+                  const r1 = 28, r2 = 22
+                  const a1 = (deg * Math.PI) / 180
+                  const a2 = ((deg + 15) * Math.PI) / 180
+                  const x1 = 30 + r1 * Math.sin(a1), y1 = 30 - r1 * Math.cos(a1)
+                  const x2 = 30 + r2 * Math.sin(a2), y2 = 30 - r2 * Math.cos(a2)
+                  return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#fff" strokeWidth="1" opacity="0.5" />
+                })}
+                {/* Checkmark */}
+                <path d="M19 30.5l7.5 7.5 14.5-15" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                {/* Text */}
+                <text x="30" y="52" textAnchor="middle" fill="#fff" fontSize="6" fontFamily="Arial, sans-serif" fontWeight="bold" letterSpacing="0.5">JUDGE.ME</text>
+              </svg>
             </a>
           </div>
 
