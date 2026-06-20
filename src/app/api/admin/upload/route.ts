@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     }
 
     const isVideo = file.type.startsWith('video/')
-    const resource = isVideo ? 'VIDEO' : 'IMAGE'
+    const resource = isVideo ? 'VIDEO' : 'FILE'
     const contentType = isVideo ? 'VIDEO' : 'IMAGE'
 
     // 1. Ask Shopify for a staged upload target
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     const err = staged.stagedUploadsCreate.userErrors?.[0]?.message
     if (err) return NextResponse.json({ error: `Shopify upload error: ${err}` }, { status: 500 })
     if (!staged.stagedUploadsCreate.stagedTargets?.length) {
-      return NextResponse.json({ error: 'Shopify did not return an upload target. The Admin API token may be missing the write_files scope. As a workaround, upload the image in Shopify Admin → Content → Files, then paste the CDN link into the Image URL field.' }, { status: 500 })
+      return NextResponse.json({ error: 'Shopify did not return an upload target. To fix this, add write_files scope to the Admin API token in your Shopify Partner Dashboard app settings, then reinstall the app. Workaround: upload the image in Shopify Admin → Content → Files, then paste the CDN URL into the Image URL field below.' }, { status: 500 })
     }
 
     const target = staged.stagedUploadsCreate.stagedTargets[0]
@@ -129,7 +129,7 @@ export async function POST(request: Request) {
     // 4. Poll until Shopify finishes processing and gives a permanent URL
     if (!url && id) {
       const token = await getAdminToken()
-      for (let i = 0; i < 18 && !url; i++) {
+      for (let i = 0; i < 10 && !url; i++) {
         await sleep(2500)
         const res = await fetch(ADMIN_ENDPOINT, {
           method: 'POST',
