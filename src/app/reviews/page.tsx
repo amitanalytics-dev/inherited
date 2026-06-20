@@ -198,6 +198,11 @@ export default async function ReviewsPage({
                             Verified
                           </span>
                         )}
+                        {'createdAt' in review && review.createdAt && (
+                          <p className="font-body text-[11px] text-brand-muted mt-1">
+                            {new Date(review.createdAt as string).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </p>
+                        )}
                       </div>
                     </div>
                     {review.body && (
