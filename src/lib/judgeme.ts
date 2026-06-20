@@ -1,6 +1,3 @@
-const SHOP_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN ?? ''
-const TOKEN = process.env.JUDGEME_PUBLIC_TOKEN ?? ''
-
 export interface JudgemeReview {
   id: number
   title: string
@@ -12,7 +9,10 @@ export interface JudgemeReview {
 }
 
 export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview[]> {
-  if (!TOKEN || !SHOP_DOMAIN) return []
+  // Read at call-time so env vars are never frozen by the bundler
+  const token = process.env.JUDGEME_PUBLIC_TOKEN ?? ''
+  const shopDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN ?? ''
+  if (!token || !shopDomain) return []
 
   const reviews: JudgemeReview[] = []
   let page = 1
@@ -20,8 +20,8 @@ export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview
 
   try {
     while (true) {
-      const url = `https://judge.me/api/v1/reviews?api_token=${TOKEN}&shop_domain=${SHOP_DOMAIN}&handle=${handle}&per_page=${perPage}&page=${page}`
-      const res = await fetch(url, { next: { revalidate: 3600 } })
+      const url = `https://judge.me/api/v1/reviews?api_token=${token}&shop_domain=${shopDomain}&per_page=${perPage}&page=${page}`
+      const res = await fetch(url, { cache: 'no-store' })
       if (!res.ok) break
       const data = await res.json()
       const batch = (data.reviews ?? []) as Array<{
@@ -31,8 +31,10 @@ export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview
         rating: number
         reviewer: { name: string; verified_buyer: boolean }
         created_at: string
+        product_handle: string
       }>
       for (const r of batch) {
+        if (r.product_handle !== handle) continue
         reviews.push({
           id: r.id,
           title: r.title ?? '',
