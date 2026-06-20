@@ -10,8 +10,8 @@ export interface JudgemeReview {
 
 export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview[]> {
   // Read at call-time so env vars are never frozen by the bundler
-  const token = process.env.JUDGEME_PUBLIC_TOKEN ?? ''
-  const shopDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN ?? ''
+  const token = (process.env.JUDGEME_PUBLIC_TOKEN ?? '').replace(/^﻿/, '').trim()
+  const shopDomain = (process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN ?? '').replace(/^﻿/, '').trim()
   if (!token || !shopDomain) return []
 
   const reviews: JudgemeReview[] = []
