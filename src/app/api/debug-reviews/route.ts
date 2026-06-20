@@ -12,11 +12,13 @@ export async function GET() {
 
   try {
     const url = `https://judge.me/api/v1/reviews?api_token=${token}&shop_domain=${shopDomain}&per_page=100&page=1`
+    // eslint-disable-next-line no-console
+    console.log('[debug-reviews] shopDomain:', shopDomain, 'tokenLen:', token.length)
     const res = await fetch(url, { cache: 'no-store' })
     const status = res.status
     if (!res.ok) {
       const text = await res.text()
-      return NextResponse.json({ error: 'API error', status, body: text })
+      return NextResponse.json({ error: 'API error', status, body: text, shopDomain, tokenLen: token.length })
     }
     const data = await res.json()
     const reviews = data.reviews ?? []
