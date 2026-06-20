@@ -5,6 +5,7 @@ import { getSiteSettings } from '@/lib/site-settings'
 import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
 import reviewsData from '@/data/reviews.json'
 import { storefront } from '@/lib/shopify'
+import { fetchJudgemeReviews } from '@/lib/judgeme'
 
 export const metadata: Metadata = {
   title: 'Reviews',
@@ -75,19 +76,22 @@ async function fetchProductReviews(handle: string): Promise<{
   productTitle: string
   reviews: (StaticReview | CustomerReview)[]
 }> {
-  const allStatic = reviewsData as Record<string, StaticReview[]>
-  const staticReviews: StaticReview[] = allStatic[handle] ?? []
+  // Fetch from Judge.me (real reviews), local static, and admin-submitted — in parallel
+  const [judgemeReviews, customerReviews] = await Promise.all([
+    fetchJudgemeReviews(handle),
+    adminConfigured()
+      ? adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_CUSTOMER_REVIEWS)
+          .then((data) => {
+            const all: Record<string, CustomerReview[]> = JSON.parse(data.shop?.metafield?.value ?? '{}')
+            return all[handle] ?? []
+          })
+          .catch(() => [] as CustomerReview[])
+      : Promise.resolve([] as CustomerReview[]),
+  ])
 
-  let customerReviews: CustomerReview[] = []
-  if (adminConfigured()) {
-    try {
-      const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(GET_CUSTOMER_REVIEWS)
-      const all: Record<string, CustomerReview[]> = JSON.parse(data.shop?.metafield?.value ?? '{}')
-      customerReviews = all[handle] ?? []
-    } catch {
-      // silently fall back
-    }
-  }
+  // If Judge.me returned reviews, use them as the source of truth (skip local static)
+  const allStatic = reviewsData as Record<string, StaticReview[]>
+  const staticReviews: StaticReview[] = judgemeReviews.length === 0 ? (allStatic[handle] ?? []) : []
 
   let productTitle = handle.replace(/-/g, ' ')
   try {
@@ -102,7 +106,7 @@ async function fetchProductReviews(handle: string): Promise<{
 
   return {
     productTitle,
-    reviews: [...customerReviews, ...staticReviews],
+    reviews: [...customerReviews, ...judgemeReviews, ...staticReviews],
   }
 }
 

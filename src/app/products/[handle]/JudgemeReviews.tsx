@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import reviewsData from '@/data/reviews.json'
 import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
+import { fetchJudgemeReviews } from '@/lib/judgeme'
 import ReviewForm from './ReviewForm'
 
 interface StaticReview {
@@ -121,11 +122,16 @@ interface Props {
 }
 
 export default async function JudgemeReviews({ productHandle, ratingValue, ratingCount }: Props) {
-  const allStaticReviews = reviewsData as Record<string, StaticReview[]>
-  const staticReviews: StaticReview[] = allStaticReviews[productHandle] ?? []
-  const customerReviews = await fetchCustomerReviews(productHandle)
+  const [judgemeReviews, customerReviews] = await Promise.all([
+    fetchJudgemeReviews(productHandle),
+    fetchCustomerReviews(productHandle),
+  ])
 
-  const allReviews: AnyReview[] = [...customerReviews, ...staticReviews]
+  // Use Judge.me reviews if available; fall back to local static data
+  const allStaticReviews = reviewsData as Record<string, StaticReview[]>
+  const staticReviews: StaticReview[] = judgemeReviews.length === 0 ? (allStaticReviews[productHandle] ?? []) : []
+
+  const allReviews: AnyReview[] = [...customerReviews, ...judgemeReviews, ...staticReviews]
   const totalCount = allReviews.length
 
   const allRatings = allReviews.map((r) => r.rating)
