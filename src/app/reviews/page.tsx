@@ -106,15 +106,26 @@ async function fetchProductReviews(handle: string): Promise<{
   }
 }
 
+const PAGE_SIZE = 5
+
 export default async function ReviewsPage({
   searchParams,
 }: {
-  searchParams: { product?: string }
+  searchParams: { product?: string; page?: string }
 }) {
   const productHandle = searchParams.product ?? null
 
   if (productHandle) {
     const { productTitle, reviews } = await fetchProductReviews(productHandle)
+
+    const totalCount = reviews.length
+    const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
+    const currentPage = Math.min(Math.max(1, parseInt(searchParams.page ?? '1', 10)), totalPages)
+    const pageReviews = reviews.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+    const showingFrom = totalCount === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1
+    const showingTo = Math.min(currentPage * PAGE_SIZE, totalCount)
+
+    const pageUrl = (p: number) => `/reviews?product=${productHandle}&page=${p}`
 
     return (
       <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
@@ -132,11 +143,11 @@ export default async function ReviewsPage({
             <h1 className="font-display font-semibold text-4xl md:text-5xl text-brand-dark">
               {productTitle}
             </h1>
-            {reviews.length > 0 && (
+            {totalCount > 0 && (
               <div className="flex items-center justify-center gap-3 mt-4">
                 <Stars />
                 <p className="font-body text-sm text-brand-muted">
-                  {reviews.length} review{reviews.length !== 1 ? 's' : ''}
+                  {totalCount} review{totalCount !== 1 ? 's' : ''}
                 </p>
               </div>
             )}
@@ -144,7 +155,7 @@ export default async function ReviewsPage({
         </div>
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
-          {reviews.length === 0 ? (
+          {totalCount === 0 ? (
             <div className="text-center py-16 border border-brand-warm">
               <p className="font-body text-brand-muted">No reviews yet for this product.</p>
               <Link
@@ -155,36 +166,78 @@ export default async function ReviewsPage({
               </Link>
             </div>
           ) : (
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div
-                  key={review.id}
-                  className="bg-white border border-brand-warm p-6 sm:p-8"
-                >
-                  <div className="flex items-start justify-between gap-4 mb-3">
-                    <div className="space-y-1.5">
-                      <Stars rating={review.rating} size="w-4 h-4" />
-                      {review.title && (
-                        <p className="font-body font-semibold text-brand-dark text-base leading-snug">
-                          {review.title}
-                        </p>
-                      )}
+            <>
+              {/* Showing X–Y of Z */}
+              <p className="font-body text-xs text-brand-muted mb-6 text-center tracking-wide">
+                Showing {showingFrom}–{showingTo} of {totalCount} reviews
+              </p>
+
+              <div className="space-y-4">
+                {pageReviews.map((review) => (
+                  <div
+                    key={review.id}
+                    className="bg-white border border-brand-warm p-6 sm:p-8"
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <div className="space-y-1.5">
+                        <Stars rating={review.rating} size="w-4 h-4" />
+                        {review.title && (
+                          <p className="font-body font-semibold text-brand-dark text-base leading-snug">
+                            {review.title}
+                          </p>
+                        )}
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
+                        {review.verified && (
+                          <span className="inline-block mt-1.5 font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-2 py-0.5">
+                            Verified
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
-                      {review.verified && (
-                        <span className="inline-block mt-1.5 font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-2 py-0.5">
-                          Verified
-                        </span>
-                      )}
-                    </div>
+                    {review.body && (
+                      <p className="font-body text-sm text-brand-muted leading-relaxed">{review.body}</p>
+                    )}
                   </div>
-                  {review.body && (
-                    <p className="font-body text-sm text-brand-muted leading-relaxed">{review.body}</p>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-10 flex items-center justify-center gap-2 flex-wrap">
+                  {currentPage > 1 && (
+                    <Link
+                      href={pageUrl(currentPage - 1)}
+                      className="px-4 py-2 font-body text-xs tracking-widest uppercase border border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-brand-cream transition-colors"
+                    >
+                      ← Prev
+                    </Link>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <Link
+                      key={p}
+                      href={pageUrl(p)}
+                      className={`w-9 h-9 flex items-center justify-center font-body text-xs transition-colors ${
+                        p === currentPage
+                          ? 'bg-brand-dark text-brand-cream'
+                          : 'border border-brand-warm text-brand-muted hover:border-brand-dark hover:text-brand-dark'
+                      }`}
+                    >
+                      {p}
+                    </Link>
+                  ))}
+                  {currentPage < totalPages && (
+                    <Link
+                      href={pageUrl(currentPage + 1)}
+                      className="px-4 py-2 font-body text-xs tracking-widest uppercase border border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-brand-cream transition-colors"
+                    >
+                      Next →
+                    </Link>
                   )}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
 
           <div className="mt-10 text-center">
