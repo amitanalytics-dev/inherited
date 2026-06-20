@@ -55,8 +55,8 @@ export default function Hero({
         muted
         playsInline
         onEnded={handleVideoEnded}
-        className="absolute inset-0 w-full h-full object-cover object-right transition-opacity duration-1000"
-        style={{ opacity: showVideo ? 1 : 0 }}
+        className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000"
+        style={{ opacity: showVideo ? 1 : 0, minWidth: '100%', minHeight: '100%' }}
       />
 
       {/* Soft cream gradient on the left so dark text stays readable */}
