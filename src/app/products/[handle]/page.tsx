@@ -216,10 +216,10 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
 
           {/* Details */}
-          <div className="lg:pt-4">
+          <div className="lg:pt-4 lg:text-center">
             {/* Tags */}
             {product.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mb-4">
+              <div className="flex flex-wrap gap-1.5 mb-4 lg:justify-center">
                 {product.tags.slice(0, 3).map((tag) => (
                   <span key={tag} className="font-body text-[10px] tracking-widest uppercase text-brand-amber bg-brand-amber/10 px-2.5 py-1">
                     {tag}
@@ -234,7 +234,7 @@ export default async function ProductPage({ params }: PageProps) {
 
             {/* Star rating */}
             {ratingValue !== null && ratingCount !== null && ratingCount > 0 && (
-              <a href="#reviews" className="flex items-center gap-2 mb-4 w-fit hover:opacity-75 transition-opacity">
+              <a href="#reviews" className="flex items-center gap-2 mb-4 w-fit hover:opacity-75 transition-opacity lg:mx-auto">
                 <div className="flex items-center gap-0.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg key={star} className="w-4 h-4" viewBox="0 0 20 20" fill={star <= Math.round(ratingValue) ? '#C8923A' : 'none'} stroke="#C8923A" strokeWidth="1.5">
@@ -248,7 +248,7 @@ export default async function ProductPage({ params }: PageProps) {
             )}
 
             {/* Price */}
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6 lg:justify-center">
               <span className="font-body text-xl sm:text-2xl font-medium text-brand-dark">
                 {formattedPrice}
               </span>
@@ -317,7 +317,7 @@ export default async function ProductPage({ params }: PageProps) {
 
             {/* Benefit icons */}
             {benefitIcons.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2 lg:justify-center">
                 {benefitIcons.map((label: string) => (
                   <span
                     key={label}

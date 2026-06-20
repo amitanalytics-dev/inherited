@@ -66,7 +66,7 @@ export async function GET() {
 }
 
 // Write via Admin API — requires write_content scope on the Shopify app.
-const ARTICLE_UPDATE = `mutation articleUpdate($id: ID!, $article: ArticleInput!) {
+const ARTICLE_UPDATE = `mutation articleUpdate($id: ID!, $article: ArticleUpdateInput!) {
   articleUpdate(id: $id, article: $article) {
     article { id title publishedAt }
     userErrors { field message }

@@ -44,7 +44,7 @@ export default async function CollectionsPage() {
         {collections.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {collections.map((col) => (
-              <Link key={col.id} href={`/collections/${col.handle}`} className="group block">
+              <Link key={col.id} href={`/collections/${col.handle}`} className="group block text-center">
                 <div className="relative aspect-square overflow-hidden bg-brand-warm mb-4">
                   {col.image ? (
                     <Image
@@ -76,7 +76,7 @@ export default async function CollectionsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {fallbackCollections.map((col) => (
-              <Link key={col.handle} href={`/collections/${col.handle}`} className="group block">
+              <Link key={col.handle} href={`/collections/${col.handle}`} className="group block text-center">
                 <div className="relative aspect-square overflow-hidden bg-brand-warm mb-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

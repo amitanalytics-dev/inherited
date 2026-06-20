@@ -57,7 +57,7 @@ export default async function ProductsPage() {
               { img: '9_hand_foot_bundle_HERO.jpg', title: 'Hand & Foot Cream Bundle', price: '£40.00', type: 'Bundle', handle: 'hand-and-foot-cream-bundle' },
               { img: '10_night_time_bundle_HERO.jpg', title: 'Night Time Bundle', price: '£40.00', type: 'Bundle', handle: 'night-time-bundle' },
             ].map((item) => (
-              <a key={item.handle} href={`/products/${item.handle}`} className="group block">
+              <a key={item.handle} href={`/products/${item.handle}`} className="group block text-center">
                 <div className="relative aspect-[4/5] bg-brand-warm overflow-hidden mb-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

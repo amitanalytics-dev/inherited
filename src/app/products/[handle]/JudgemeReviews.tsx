@@ -22,8 +22,10 @@ interface CustomerReview {
   verified: boolean
 }
 
-function Stars({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md' }) {
-  const dim = size === 'md' ? 'w-5 h-5' : 'w-4 h-4'
+type AnyReview = StaticReview | CustomerReview
+
+function Stars({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md' | 'lg' }) {
+  const dim = size === 'lg' ? 'w-7 h-7' : size === 'md' ? 'w-5 h-5' : 'w-4 h-4'
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((s) => (
@@ -35,14 +37,36 @@ function Stars({ rating, size = 'sm' }: { rating: number; size?: 'sm' | 'md' }) 
   )
 }
 
-function ReviewCard({ review }: { review: StaticReview | CustomerReview }) {
+function RatingBar({ star, count, total }: { star: number; count: number; total: number }) {
+  const pct = total > 0 ? Math.round((count / total) * 100) : 0
   return (
-    <div className="bg-white border border-brand-warm p-6 sm:p-8">
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <div className="space-y-1.5">
+    <div className="flex items-center gap-2.5">
+      <span className="font-body text-xs text-brand-muted w-3 text-right flex-shrink-0">{star}</span>
+      <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="#C8923A">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+      </svg>
+      <div className="flex-1 h-2 bg-brand-warm rounded-full overflow-hidden">
+        <div
+          className="h-full bg-brand-amber rounded-full"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <span className="font-body text-xs text-brand-muted w-5 text-right flex-shrink-0">{count}</span>
+    </div>
+  )
+}
+
+function ReviewCard({ review }: { review: AnyReview }) {
+  const date = 'createdAt' in review
+    ? new Date(review.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    : null
+  return (
+    <div className="border-b border-brand-warm py-6 last:border-b-0">
+      <div className="flex items-start justify-between gap-4 mb-2">
+        <div>
           <Stars rating={review.rating} />
           {review.title && (
-            <p className="font-body font-semibold text-brand-dark text-base leading-snug">
+            <p className="font-body font-semibold text-brand-dark text-sm mt-1.5 leading-snug">
               {review.title}
             </p>
           )}
@@ -50,10 +74,14 @@ function ReviewCard({ review }: { review: StaticReview | CustomerReview }) {
         <div className="text-right flex-shrink-0">
           <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
           {review.verified && (
-            <span className="inline-block mt-1.5 font-body text-[10px] tracking-widest uppercase text-brand-green bg-brand-green/10 px-2 py-0.5">
-              Verified
-            </span>
+            <div className="flex items-center justify-end gap-1 mt-1">
+              <svg className="w-3.5 h-3.5 text-brand-green" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="font-body text-[10px] tracking-widest uppercase text-brand-green">Verified</span>
+            </div>
           )}
+          {date && <p className="font-body text-[11px] text-brand-muted mt-0.5">{date}</p>}
         </div>
       </div>
       {review.body && (
@@ -97,12 +125,10 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
   const staticReviews: StaticReview[] = allStaticReviews[productHandle] ?? []
   const customerReviews = await fetchCustomerReviews(productHandle)
 
-  const totalCount = staticReviews.length + customerReviews.length
-  const allRatings = [
-    ...staticReviews.map((r) => r.rating),
-    ...customerReviews.map((r) => r.rating),
-  ]
+  const allReviews: AnyReview[] = [...customerReviews, ...staticReviews]
+  const totalCount = allReviews.length
 
+  const allRatings = allReviews.map((r) => r.rating)
   const displayCount = ratingCount ?? totalCount
   const displayRating =
     ratingValue ??
@@ -110,34 +136,102 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
       ? Math.round((allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length) * 10) / 10
       : null)
 
+  // Compute per-star distribution from local reviews
+  const distribution = [5, 4, 3, 2, 1].map((star) => ({
+    star,
+    count: allReviews.filter((r) => r.rating === star).length,
+  }))
+  const distributionTotal = distribution.reduce((s, d) => s + d.count, 0)
+
   return (
     <div className="mt-16" id="reviews">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
-        <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark">
-          Customer Reviews
-        </h2>
-        {displayRating !== null && displayCount > 0 && (
-          <div className="flex items-center gap-2">
-            <Stars rating={Math.round(displayRating)} size="md" />
-            <span className="font-body font-semibold text-brand-dark">{displayRating.toFixed(1)}</span>
-            <span className="font-body text-sm text-brand-muted">({displayCount} reviews)</span>
+
+      {/* Summary card — Judge.me style */}
+      {displayRating !== null && displayCount > 0 && (
+        <div className="border border-brand-warm p-6 sm:p-8 mb-8">
+          {/* Title row */}
+          <div className="flex items-start justify-between gap-4 mb-6">
+            <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark">
+              Customer Reviews
+            </h2>
+            {/* Judge.me verified badge */}
+            <a
+              href="https://judge.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 flex flex-col items-center gap-0.5 group"
+              title="Verified by Judge.me"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://cdn.judge.me/assets/badges/judgment_day_seal_v2_on_transparent.png"
+                alt="Judge.me verified reviews seal"
+                width={56}
+                height={56}
+                className="opacity-90 group-hover:opacity-100 transition-opacity"
+              />
+            </a>
           </div>
-        )}
+
+          {/* Score + bars */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+            {/* Overall score */}
+            <div className="flex flex-col items-center text-center">
+              <div className="font-display text-5xl sm:text-6xl font-semibold text-brand-dark leading-none mb-3">
+                {displayRating.toFixed(2)}
+              </div>
+              <Stars rating={Math.round(displayRating)} size="md" />
+              <p className="font-body text-sm text-brand-muted mt-2">
+                {displayRating.toFixed(2)} out of 5
+              </p>
+              <div className="flex items-center gap-1.5 mt-1">
+                <svg className="w-4 h-4 text-brand-green" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-body text-xs text-brand-green">
+                  Based on {displayCount} review{displayCount !== 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+
+            {/* Rating bars */}
+            <div className="space-y-2.5">
+              {distribution.map(({ star, count }) => (
+                <RatingBar
+                  key={star}
+                  star={star}
+                  count={count}
+                  total={distributionTotal}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reviews list header + write button */}
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-display font-semibold text-xl text-brand-dark">
+          {totalCount > 0 ? `${totalCount} Review${totalCount !== 1 ? 's' : ''}` : 'Reviews'}
+        </h3>
+        <a
+          href="#review-form"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-dark text-brand-cream font-body text-xs tracking-widest uppercase hover:bg-brand-amber transition-colors"
+        >
+          Write a Review
+        </a>
       </div>
 
+      {/* Review cards */}
       {totalCount > 0 ? (
-        <div className="space-y-4">
-          {customerReviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-          {staticReviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+        <div>
+          {allReviews.map((review) => (
+            <ReviewCard key={String(review.id)} review={review} />
           ))}
           {displayCount > totalCount && (
             <Link
               href={`/reviews?product=${productHandle}`}
-              className="pt-2 font-body text-sm text-brand-amber hover:underline underline-offset-2"
+              className="block pt-4 font-body text-sm text-brand-amber hover:underline underline-offset-2"
             >
               Showing {totalCount} of {displayCount} reviews — see all
             </Link>

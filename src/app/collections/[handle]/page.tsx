@@ -64,7 +64,7 @@ export default async function CollectionPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         {collection.products.length > 0 ? (
           <>
-            <p className="font-body text-xs text-brand-muted mb-8">
+            <p className="font-body text-xs text-brand-muted mb-8 text-center">
               {collection.products.length} product{collection.products.length !== 1 ? 's' : ''}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">

@@ -74,7 +74,12 @@ export default function CartPage() {
         quantity <= 0
           ? await cartLinesRemove(cart.id, [lineId])
           : await cartLinesUpdate(cart.id, [{ id: lineId, quantity }])
-      if (updated) setCart(updated)
+      if (updated) {
+        setCart(updated)
+        const newCount = updated.lines.edges.reduce((sum, e) => sum + e.node.quantity, 0)
+        localStorage.setItem('cart_count', newCount.toString())
+        window.dispatchEvent(new Event('cart-updated'))
+      }
     } catch {
       setError('Could not update your bag — please try again.')
     } finally {
