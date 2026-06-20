@@ -85,11 +85,12 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing article id.' }, { status: 400 })
     }
 
+    // ArticleUpdateInput uses body/summary/isPublished (not bodyHtml/summaryHtml/published)
     const input: Record<string, unknown> = {}
     if (typeof title === 'string') input.title = title
-    if (typeof bodyHtml === 'string') input.bodyHtml = bodyHtml
-    if (typeof summaryHtml === 'string') input.summaryHtml = summaryHtml
-    if (typeof published === 'boolean') input.published = published
+    if (typeof bodyHtml === 'string') input.body = bodyHtml
+    if (typeof summaryHtml === 'string') input.summary = summaryHtml
+    if (typeof published === 'boolean') input.isPublished = published
 
     const result = await adminQuery<{
       articleUpdate: { userErrors: { message: string }[] }
