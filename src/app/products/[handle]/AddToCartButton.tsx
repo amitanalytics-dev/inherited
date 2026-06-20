@@ -55,7 +55,7 @@ export default function AddToCartButton({ variantId, available }: AddToCartButto
       }
 
       localStorage.setItem('cart_id', newCartId)
-      localStorage.setItem('cart_count', String(lineCount || 1))
+      localStorage.setItem('cart_count', String(lineCount))
       window.dispatchEvent(new Event('cart-updated'))
 
       setAdded(true)

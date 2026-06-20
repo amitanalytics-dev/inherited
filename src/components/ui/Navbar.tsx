@@ -47,8 +47,14 @@ export default function Navbar({
   }, [])
 
   // Cart count — reads from localStorage, updates on cart-updated event
+  // If no cart_id exists (first-time visitor or cleared cart), force count to 0
   useEffect(() => {
     const update = () => {
+      if (!localStorage.getItem('cart_id')) {
+        localStorage.removeItem('cart_count')
+        setCartCount(0)
+        return
+      }
       const n = parseInt(localStorage.getItem('cart_count') ?? '0', 10)
       setCartCount(isNaN(n) ? 0 : n)
     }
