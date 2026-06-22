@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import reviewsData from '@/data/reviews.json'
 import { adminConfigured, adminQuery } from '@/lib/admin-shopify'
 import { fetchJudgemeReviews } from '@/lib/judgeme'
 import ReviewForm from './ReviewForm'
+import ReviewListClient from './ReviewListClient'
 
 interface StaticReview {
   id: number
@@ -57,40 +57,7 @@ function RatingBar({ star, count, total }: { star: number; count: number; total:
   )
 }
 
-function ReviewCard({ review }: { review: AnyReview }) {
-  const date = 'createdAt' in review
-    ? new Date(review.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-    : null
-  return (
-    <div className="border-b border-brand-warm py-6 last:border-b-0">
-      <div className="flex items-start justify-between gap-4 mb-2">
-        <div>
-          <Stars rating={review.rating} />
-          {review.title && (
-            <p className="font-body font-semibold text-brand-dark text-sm mt-1.5 leading-snug">
-              {review.title}
-            </p>
-          )}
-        </div>
-        <div className="text-right flex-shrink-0">
-          <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
-          {review.verified && (
-            <div className="flex items-center justify-end gap-1 mt-1">
-              <svg className="w-3.5 h-3.5 text-brand-green" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="font-body text-[10px] tracking-widest uppercase text-brand-green">Verified</span>
-            </div>
-          )}
-          {date && <p className="font-body text-[11px] text-brand-muted mt-0.5">{date}</p>}
-        </div>
-      </div>
-      {review.body && (
-        <p className="font-body text-sm text-brand-muted leading-relaxed">{review.body}</p>
-      )}
-    </div>
-  )
-}
+
 
 const GET_CUSTOMER_REVIEWS = `
   query getCustomerReviews {
@@ -238,21 +205,17 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
         </a>
       </div>
 
-      {/* Review cards */}
+      {/* Paginated review cards */}
       {totalCount > 0 ? (
-        <div>
-          {allReviews.map((review) => (
-            <ReviewCard key={String(review.id)} review={review} />
-          ))}
-          {displayCount > totalCount && (
-            <Link
-              href={`/reviews?product=${productHandle}`}
-              className="block pt-4 font-body text-sm text-brand-amber hover:underline underline-offset-2"
-            >
-              Showing {totalCount} of {displayCount} reviews — see all
-            </Link>
-          )}
-        </div>
+        <ReviewListClient reviews={allReviews.map((r) => ({
+          id: r.id,
+          authorName: r.authorName,
+          rating: r.rating,
+          title: r.title,
+          body: r.body,
+          verified: r.verified,
+          createdAt: 'createdAt' in r ? r.createdAt : undefined,
+        }))} />
       ) : (
         <div className="py-8 border border-brand-warm text-center">
           <p className="font-body text-brand-muted">No reviews yet — be the first!</p>

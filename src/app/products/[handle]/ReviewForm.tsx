@@ -69,7 +69,7 @@ export default function ReviewForm({ productHandle }: { productHandle: string })
   }
 
   return (
-    <div className="mt-10 pt-10 border-t border-brand-warm">
+    <div id="review-form" className="mt-10 pt-10 border-t border-brand-warm">
       <h3 className="font-display font-semibold text-xl text-brand-dark mb-6">Write a Review</h3>
       <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
         {/* Rating */}
