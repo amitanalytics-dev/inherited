@@ -135,7 +135,7 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
   const totalCount = allReviews.length
 
   const allRatings = allReviews.map((r) => r.rating)
-  const displayCount = ratingCount ?? totalCount
+  const displayCount = totalCount > 0 ? totalCount : (ratingCount ?? 0)
   const displayRating =
     ratingValue ??
     (allRatings.length > 0
