@@ -4,7 +4,6 @@ import Script from 'next/script'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
-import EmailPopup from '@/components/ui/EmailPopup'
 import { getSiteSettings } from '@/lib/site-settings'
 import { SITE_URL } from '@/lib/site-url'
 
@@ -150,7 +149,6 @@ export default async function RootLayout({
         <Navbar announcement={settings.announcementBar} />
         <main className="min-h-screen">{children}</main>
         <Footer />
-        <EmailPopup />
       </body>
     </html>
   )

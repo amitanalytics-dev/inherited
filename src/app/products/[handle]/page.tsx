@@ -10,6 +10,7 @@ import ProductImageGallery from './ProductImageGallery'
 import JudgemeReviews from './JudgemeReviews'
 import RichText from '@/components/ui/RichText'
 import Accordion from '@/components/ui/Accordion'
+import ProductFAQ from './ProductFAQ'
 import { SITE_URL } from '@/lib/site-url'
 import type { Product } from '@/types'
 
@@ -357,6 +358,9 @@ export default async function ProductPage({ params }: PageProps) {
         <div className="max-w-3xl mt-12">
           <Accordion items={accordionItems} />
         </div>
+
+        {/* FAQs */}
+        <ProductFAQ />
 
         {/* Customer reviews */}
         <div className="max-w-3xl">
