@@ -1,22 +1,16 @@
 'use client'
 
-const MARQUEE_TEXT =
+const SEGMENT =
   'Ghee-Powered Skincare · Ayurvedic Rituals · Made in the UK · CPSR Safety Tested · Cruelty Free · Natural Ingredients · '
 
-const items = Array.from({ length: 3 }, (_, i) => (
-  <span key={i} className="whitespace-nowrap">
-    {MARQUEE_TEXT}
-  </span>
-))
-
+// Two identical copies; CSS scrolls exactly -50% so the second copy
+// aligns seamlessly with where the first started — no visible jump.
 export default function MarqueeBand() {
   return (
     <div className="bg-brand-amber overflow-hidden py-3.5 select-none">
-      <div className="flex">
-        <div className="marquee-track font-body text-[11px] tracking-[0.2em] uppercase text-brand-dark font-medium">
-          {items}
-          {items}
-        </div>
+      <div className="marquee-track font-body text-[11px] tracking-[0.2em] uppercase text-brand-dark font-medium">
+        <span className="whitespace-nowrap">{SEGMENT.repeat(6)}</span>
+        <span className="whitespace-nowrap" aria-hidden="true">{SEGMENT.repeat(6)}</span>
       </div>
     </div>
   )

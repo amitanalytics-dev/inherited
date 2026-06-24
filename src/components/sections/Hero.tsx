@@ -29,8 +29,11 @@ export default function Hero({
   const handleVideoEnded = () => {
     setShowVideo(false)
     setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0
+        videoRef.current.play()
+      }
       setShowVideo(true)
-      videoRef.current?.play()
     }, PHOTO_HOLD_MS)
   }
 
@@ -54,9 +57,10 @@ export default function Hero({
         src={video}
         muted
         playsInline
+        preload="auto"
         onEnded={handleVideoEnded}
-        className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000"
-        style={{ opacity: showVideo ? 1 : 0, minWidth: '100%', minHeight: '100%' }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto transition-opacity duration-1000"
+        style={{ opacity: showVideo ? 1 : 0 }}
       />
 
       {/* Soft cream gradient on the left so dark text stays readable */}

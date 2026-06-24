@@ -85,6 +85,10 @@ h1, h2, h3, h4 {
 :root {
   --marquee-speed: 60s;
 }
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 .marquee-track {
   display: flex;
   width: max-content;
