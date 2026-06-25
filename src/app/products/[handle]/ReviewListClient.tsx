@@ -26,7 +26,7 @@ function Stars({ rating }: { rating: number }) {
 
 const PAGE_SIZE = 6
 
-export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
+export default function ReviewListClient({ reviews, nameOverrides = {} }: { reviews: Review[]; nameOverrides?: Record<string, string> }) {
   const [page, setPage] = useState(1)
   const totalPages = Math.max(1, Math.ceil(reviews.length / PAGE_SIZE))
   const pageReviews = reviews.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -43,7 +43,8 @@ export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
         const date = review.createdAt
           ? new Date(review.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
           : null
-        const displayName = /^suruchi\b/i.test(review.authorName.trim()) ? 'Customer' : review.authorName
+        const rawName = /^suruchi\b/i.test(review.authorName.trim()) ? 'Customer' : review.authorName
+        const displayName = nameOverrides[String(review.id)] ?? rawName
         return (
           <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0 md:last:border-b md:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
             <div className="flex items-start justify-between gap-4 mb-2">

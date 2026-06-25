@@ -378,7 +378,7 @@ export default async function ProductPage({ params }: PageProps) {
 
         {/* Product info accordion */}
         <div className="max-w-3xl mt-12">
-          <Accordion items={accordionItems} />
+          <Accordion items={accordionItems} expandAllOnDesktop />
         </div>
 
         {/* FAQs */}

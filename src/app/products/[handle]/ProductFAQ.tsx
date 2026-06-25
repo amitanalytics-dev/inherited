@@ -113,7 +113,7 @@ export default function ProductFAQ() {
       <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark mb-6">
         Frequently Asked Questions
       </h2>
-      <Accordion items={FAQ_ITEMS} />
+      <Accordion items={FAQ_ITEMS} expandAllOnDesktop />
     </div>
   )
 }

@@ -88,10 +88,23 @@ interface Props {
   ratingCount: number | null
 }
 
+async function fetchReviewOverrides(): Promise<Record<string, string>> {
+  if (!adminConfigured()) return {}
+  try {
+    const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(`
+      query { shop { metafield(namespace: "site", key: "review_name_overrides") { value } } }
+    `)
+    return JSON.parse(data.shop?.metafield?.value ?? '{}')
+  } catch {
+    return {}
+  }
+}
+
 export default async function JudgemeReviews({ productHandle, ratingValue, ratingCount }: Props) {
-  const [judgemeReviews, customerReviews] = await Promise.all([
+  const [judgemeReviews, customerReviews, nameOverrides] = await Promise.all([
     fetchJudgemeReviews(productHandle),
     fetchCustomerReviews(productHandle),
+    fetchReviewOverrides(),
   ])
 
   // Use Judge.me reviews if available; fall back to local static data
@@ -207,15 +220,18 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
 
       {/* Paginated review cards */}
       {totalCount > 0 ? (
-        <ReviewListClient reviews={allReviews.map((r) => ({
-          id: r.id,
-          authorName: r.authorName,
-          rating: r.rating,
-          title: r.title,
-          body: r.body,
-          verified: r.verified,
-          createdAt: 'createdAt' in r ? r.createdAt : undefined,
-        }))} />
+        <ReviewListClient
+          nameOverrides={nameOverrides}
+          reviews={allReviews.map((r) => ({
+            id: r.id,
+            authorName: r.authorName,
+            rating: r.rating,
+            title: r.title,
+            body: r.body,
+            verified: r.verified,
+            createdAt: 'createdAt' in r ? r.createdAt : undefined,
+          }))}
+        />
       ) : (
         <div className="py-8 border border-brand-warm text-center">
           <p className="font-body text-brand-muted">No reviews yet — be the first!</p>
