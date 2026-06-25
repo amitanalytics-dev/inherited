@@ -43,6 +43,7 @@ export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
         const date = review.createdAt
           ? new Date(review.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
           : null
+        const displayName = /^suruchi\b/i.test(review.authorName.trim()) ? 'Customer' : review.authorName
         return (
           <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0 md:last:border-b md:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
             <div className="flex items-start justify-between gap-4 mb-2">
@@ -55,7 +56,7 @@ export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
                 )}
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="font-body text-sm font-medium text-brand-dark">{review.authorName}</p>
+                <p className="font-body text-sm font-medium text-brand-dark">{displayName}</p>
                 {review.verified && (
                   <div className="flex items-center justify-end gap-1 mt-1">
                     <svg className="w-3.5 h-3.5 text-brand-green" fill="currentColor" viewBox="0 0 20 20">
