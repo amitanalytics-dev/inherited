@@ -78,7 +78,6 @@ export default async function HomePage() {
         headline2={settings.heroHeadline2}
         subline={settings.heroSubline}
         image={settings.images.hero}
-        video={settings.heroVideo}
       />
       {order.map(renderSection)}
       <PressCarousel />

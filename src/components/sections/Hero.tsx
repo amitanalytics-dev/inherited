@@ -1,18 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
-const PHOTO_HOLD_MS = 5000 // how long the photo shows between video plays
 
 type HeroProps = {
   headline1?: string
   headline2?: string
   subline?: string
   image?: string
-  video?: string
 }
 
 export default function Hero({
@@ -20,30 +16,10 @@ export default function Hero({
   headline2 = 'Inherited It.',
   subline = 'Ghee-powered Ayurvedic skincare. Handmade in the UK.',
   image = '/images/brand/hero_lifestyle.jpg',
-  video: videoProp = '',
 }: HeroProps) {
-  const video = videoProp?.trim() || '/videos/hero.mov'
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [showVideo, setShowVideo] = useState(true)
-
-  const handleVideoEnded = () => {
-    setShowVideo(false)
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0
-        videoRef.current.play()
-      }
-      setShowVideo(true)
-    }, PHOTO_HOLD_MS)
-  }
-
-  useEffect(() => {
-    videoRef.current?.play()
-  }, [])
-
   return (
     <section className="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
-      {/* Background — image always present; video fades over it */}
+      {/* Background image */}
       <Image
         src={image}
         alt="Warm ghee poured into a marble bowl beside the Deep Nourishing Cream on its pomegranate box"
@@ -51,16 +27,6 @@ export default function Hero({
         priority
         sizes="100vw"
         className="object-cover object-center sm:object-right"
-      />
-      <video
-        ref={videoRef}
-        src={video}
-        muted
-        playsInline
-        preload="auto"
-        onEnded={handleVideoEnded}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
-        style={{ opacity: showVideo ? 1 : 0 }}
       />
 
       {/* Soft cream gradient on the left so dark text stays readable */}

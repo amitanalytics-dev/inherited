@@ -244,6 +244,7 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
             body: r.body,
             verified: r.verified,
             createdAt: 'createdAt' in r ? r.createdAt : undefined,
+            pictures: 'pictures' in r ? (r.pictures as string[]) : undefined,
           }))}
         />
       ) : (

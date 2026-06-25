@@ -10,6 +10,7 @@ interface Review {
   body: string
   verified: boolean
   createdAt?: string
+  pictures?: string[]
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -45,7 +46,10 @@ export default function ReviewListClient({ reviews, nameOverrides = {}, mediaOve
           : null
         const rawName = /^suruchi\b/i.test(review.authorName.trim()) ? 'Customer' : review.authorName
         const displayName = nameOverrides[String(review.id)] ?? rawName
-        const media = mediaOverrides[String(review.id)] ?? []
+        // Combine Judge.me pictures + admin-uploaded media, deduplicated
+        const judgePics = review.pictures ?? []
+        const adminMedia = mediaOverrides[String(review.id)] ?? []
+        const media = [...judgePics, ...adminMedia.filter((u) => !judgePics.includes(u))]
         return (
           <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0 md:last:border-b md:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
             <div className="flex items-start justify-between gap-4 mb-2">

@@ -6,6 +6,7 @@ export interface JudgemeReview {
   authorName: string
   createdAt: string
   verified: boolean
+  pictures: string[]
 }
 
 export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview[]> {
@@ -32,9 +33,13 @@ export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview
         reviewer: { name: string; verified_buyer: boolean }
         created_at: string
         product_handle: string
+        pictures?: { urls?: { medium?: string; large?: string; original?: string } }[]
       }>
       for (const r of batch) {
         if (r.product_handle !== handle) continue
+        const pictures = (r.pictures ?? [])
+          .map((p) => p.urls?.large ?? p.urls?.medium ?? p.urls?.original ?? '')
+          .filter(Boolean)
         reviews.push({
           id: r.id,
           title: r.title ?? '',
@@ -43,6 +48,7 @@ export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview
           authorName: r.reviewer?.name ?? 'Customer',
           createdAt: r.created_at,
           verified: r.reviewer?.verified_buyer ?? false,
+          pictures,
         })
       }
       if (batch.length < perPage) break
