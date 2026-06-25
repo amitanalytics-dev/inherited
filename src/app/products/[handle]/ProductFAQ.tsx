@@ -109,11 +109,11 @@ const FAQ_ITEMS = [
 
 export default function ProductFAQ() {
   return (
-    <div className="max-w-3xl mt-16">
+    <div className="mt-16">
       <h2 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark mb-6">
         Frequently Asked Questions
       </h2>
-      <Accordion items={FAQ_ITEMS} expandAllOnDesktop />
+      <Accordion items={FAQ_ITEMS} />
     </div>
   )
 }

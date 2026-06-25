@@ -368,7 +368,7 @@ export default async function ProductPage({ params }: PageProps) {
 
         {/* How to Use */}
         {howToUse?.value && (
-          <div className="mt-10 max-w-3xl">
+          <div className="mt-10">
             <h3 className="font-display font-semibold text-2xl md:text-3xl text-brand-dark mb-4">
               How to Use
             </h3>
@@ -377,8 +377,8 @@ export default async function ProductPage({ params }: PageProps) {
         )}
 
         {/* Product info accordion */}
-        <div className="max-w-3xl mt-12">
-          <Accordion items={accordionItems} expandAllOnDesktop />
+        <div className="mt-12">
+          <Accordion items={accordionItems} />
         </div>
 
         {/* FAQs */}
