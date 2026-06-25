@@ -33,12 +33,13 @@ export async function fetchJudgemeReviews(handle: string): Promise<JudgemeReview
         reviewer: { name: string; verified_buyer: boolean }
         created_at: string
         product_handle: string
-        pictures?: { urls?: { medium?: string; large?: string; original?: string } }[]
+        pictures?: { hidden?: boolean; urls?: { huge?: string; original?: string; small?: string; compact?: string } }[]
       }>
       for (const r of batch) {
         if (r.product_handle !== handle) continue
         const pictures = (r.pictures ?? [])
-          .map((p) => p.urls?.large ?? p.urls?.medium ?? p.urls?.original ?? '')
+          .filter((p) => !p.hidden)
+          .map((p) => p.urls?.huge ?? p.urls?.original ?? '')
           .filter(Boolean)
         reviews.push({
           id: r.id,
