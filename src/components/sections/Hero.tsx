@@ -59,7 +59,7 @@ export default function Hero({
         playsInline
         preload="auto"
         onEnded={handleVideoEnded}
-        className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto transition-opacity duration-1000"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
         style={{ opacity: showVideo ? 1 : 0 }}
       />
 
