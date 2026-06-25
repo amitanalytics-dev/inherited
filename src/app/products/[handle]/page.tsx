@@ -181,6 +181,27 @@ export default async function ProductPage({ params }: PageProps) {
         : 'https://schema.org/OutOfStock',
       seller: { '@type': 'Organization', name: 'Inherited Skincare' },
     },
+    ...(ratingValue !== null && ratingCount !== null && ratingCount > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: ratingValue.toFixed(1),
+        reviewCount: ratingCount,
+        bestRating: '5',
+        worstRating: '1',
+      },
+    } : {}),
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Is ghee really good for skin?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — ghee has been central to Ayurvedic skincare for over 5,000 years. It is rich in vitamins A, D, E and K, essential fatty acids, and natural antioxidants.' } },
+      { '@type': 'Question', name: 'Will ghee-based skincare clog my pores?', acceptedAnswer: { '@type': 'Answer', text: 'No. Pure ghee has one of the lowest comedogenic ratings (0–1) of any fatty ingredient, meaning it is extremely unlikely to block pores.' } },
+      { '@type': 'Question', name: 'Is this suitable for sensitive or reactive skin?', acceptedAnswer: { '@type': 'Answer', text: 'All Inherited Skincare products are formulated without harsh synthetics, artificial fragrances, parabens, or sulphates, and every product is CPSR safety tested.' } },
+      { '@type': 'Question', name: 'Are your products cruelty-free?', acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. We never test on animals at any stage of production.' } },
+      { '@type': 'Question', name: 'Where are your products made?', acceptedAnswer: { '@type': 'Answer', text: 'Every product is handcrafted in small batches in the UK, ensuring the freshest possible formulas and careful quality control at every step.' } },
+    ],
   }
 
   const breadcrumbSchema = {
@@ -197,6 +218,7 @@ export default async function ProductPage({ params }: PageProps) {
     <div className="min-h-screen bg-brand-cream pt-24 md:pt-28">
       <Script id="product-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <Script id="breadcrumb-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <Script id="faq-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav className="flex items-center gap-2 font-body text-xs text-brand-muted">
@@ -308,7 +330,7 @@ export default async function ProductPage({ params }: PageProps) {
                 ].map(({ icon, label }) => (
                   <div key={label} className="flex flex-col items-center text-center gap-1.5 w-1/3 sm:flex-1 px-1">
                     {icon}
-                    <span className="font-body text-[9px] tracking-widest uppercase text-brand-muted leading-tight">
+                    <span className="font-body text-[10px] tracking-widest uppercase text-brand-muted leading-tight">
                       {label}
                     </span>
                   </div>
@@ -362,14 +384,12 @@ export default async function ProductPage({ params }: PageProps) {
         {/* FAQs */}
         <ProductFAQ />
 
-        {/* Customer reviews */}
-        <div className="max-w-3xl">
-          <JudgemeReviews
-            ratingValue={ratingValue}
-            ratingCount={ratingCount}
-            productHandle={product.handle}
-          />
-        </div>
+        {/* Customer reviews — full width */}
+        <JudgemeReviews
+          ratingValue={ratingValue}
+          ratingCount={ratingCount}
+          productHandle={product.handle}
+        />
       </div>
 
       {/* Related products */}

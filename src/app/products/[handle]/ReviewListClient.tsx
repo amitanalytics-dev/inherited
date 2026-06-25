@@ -38,12 +38,13 @@ export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
 
   return (
     <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-x-8">
       {pageReviews.map((review) => {
         const date = review.createdAt
           ? new Date(review.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
           : null
         return (
-          <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0">
+          <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0 md:last:border-b md:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
             <div className="flex items-start justify-between gap-4 mb-2">
               <div>
                 <Stars rating={review.rating} />
@@ -72,6 +73,7 @@ export default function ReviewListClient({ reviews }: { reviews: Review[] }) {
           </div>
         )
       })}
+      </div>
 
       {totalPages > 1 && (
         <div className="mt-6 flex items-center justify-center gap-2 flex-wrap">
