@@ -38,7 +38,15 @@ function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms))
 }
 
+function checkAuth(request: Request): boolean {
+  const password = process.env.ADMIN_PASSWORD
+  if (!password) return false
+  return request.headers.get('Authorization') === `Bearer ${password}`
+}
+
 export async function POST(request: Request) {
+  if (!checkAuth(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
   if (!adminConfigured()) {
     return NextResponse.json(
       { error: 'Shopify is not connected, so uploads are unavailable.' },

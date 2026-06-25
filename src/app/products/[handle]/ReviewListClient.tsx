@@ -26,7 +26,7 @@ function Stars({ rating }: { rating: number }) {
 
 const PAGE_SIZE = 6
 
-export default function ReviewListClient({ reviews, nameOverrides = {} }: { reviews: Review[]; nameOverrides?: Record<string, string> }) {
+export default function ReviewListClient({ reviews, nameOverrides = {}, mediaOverrides = {} }: { reviews: Review[]; nameOverrides?: Record<string, string>; mediaOverrides?: Record<string, string[]> }) {
   const [page, setPage] = useState(1)
   const totalPages = Math.max(1, Math.ceil(reviews.length / PAGE_SIZE))
   const pageReviews = reviews.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -45,6 +45,7 @@ export default function ReviewListClient({ reviews, nameOverrides = {} }: { revi
           : null
         const rawName = /^suruchi\b/i.test(review.authorName.trim()) ? 'Customer' : review.authorName
         const displayName = nameOverrides[String(review.id)] ?? rawName
+        const media = mediaOverrides[String(review.id)] ?? []
         return (
           <div key={String(review.id)} className="border-b border-brand-warm py-6 last:border-b-0 md:last:border-b md:[&:nth-last-child(2):nth-child(odd)]:border-b-0">
             <div className="flex items-start justify-between gap-4 mb-2">
@@ -71,6 +72,29 @@ export default function ReviewListClient({ reviews, nameOverrides = {} }: { revi
             </div>
             {review.body && (
               <p className="font-body text-sm text-brand-muted leading-relaxed">{review.body}</p>
+            )}
+            {media.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {media.map((url, idx) =>
+                  url.match(/\.(mp4|mov|webm|ogg)(\?|$)/i) ? (
+                    <video
+                      key={idx}
+                      src={url}
+                      controls
+                      playsInline
+                      className="w-24 h-24 object-cover rounded border border-brand-warm bg-brand-cream"
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={idx}
+                      src={url}
+                      alt={`Review photo ${idx + 1}`}
+                      className="w-24 h-24 object-cover rounded border border-brand-warm"
+                    />
+                  )
+                )}
+              </div>
             )}
           </div>
         )

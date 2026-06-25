@@ -100,11 +100,24 @@ async function fetchReviewOverrides(): Promise<Record<string, string>> {
   }
 }
 
+async function fetchMediaOverrides(): Promise<Record<string, string[]>> {
+  if (!adminConfigured()) return {}
+  try {
+    const data = await adminQuery<{ shop: { metafield: { value: string } | null } }>(`
+      query { shop { metafield(namespace: "site", key: "review_media") { value } } }
+    `)
+    return JSON.parse(data.shop?.metafield?.value ?? '{}')
+  } catch {
+    return {}
+  }
+}
+
 export default async function JudgemeReviews({ productHandle, ratingValue, ratingCount }: Props) {
-  const [judgemeReviews, customerReviews, nameOverrides] = await Promise.all([
+  const [judgemeReviews, customerReviews, nameOverrides, mediaOverrides] = await Promise.all([
     fetchJudgemeReviews(productHandle),
     fetchCustomerReviews(productHandle),
     fetchReviewOverrides(),
+    fetchMediaOverrides(),
   ])
 
   // Use Judge.me reviews if available; fall back to local static data
@@ -222,6 +235,7 @@ export default async function JudgemeReviews({ productHandle, ratingValue, ratin
       {totalCount > 0 ? (
         <ReviewListClient
           nameOverrides={nameOverrides}
+          mediaOverrides={mediaOverrides}
           reviews={allReviews.map((r) => ({
             id: r.id,
             authorName: r.authorName,
